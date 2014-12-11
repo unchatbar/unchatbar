@@ -24,20 +24,20 @@ angular.module('webrtcApp').directive('messageData', ['broker','$rootScope',
             templateUrl: 'views/peer/connection/message/data.html',
             controller: 'clientMessageData',
             link : function (scope) {
-                scope.connect.on('clientConnection:open',function(){
+                scope.connect.on('open',function(){
                     $rootScope.$apply(function() {
-                        scope.$broadcast('connection:open');
+                        scope.$broadcast('clientConnection:open');
                     });
                 });
-                scope.connect.on('clientConnection:close',function(){
+                scope.connect.on('close',function(){
                     $rootScope.$apply(function() {
-                        scope.$broadcast('connection:open');
+                        scope.$broadcast('clientConnection:open');
                     });
                 });
 
-                scope.connect.on('clientConnection:data',function(data){
+                scope.connect.on('data',function(data){
                     $rootScope.$apply(function() {
-                        scope.$broadcast('connection:data',data);
+                        scope.$broadcast('clientConnection:data',data);
                     });
                 });
             }

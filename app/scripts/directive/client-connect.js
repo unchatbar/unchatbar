@@ -14,12 +14,12 @@
  *
  */
 
-angular.module('webrtcApp').directive('clientConnector', ['broker','$rootScope',
+angular.module('webrtcApp').directive('clientConnect', ['broker','$rootScope',
     function (broker,$rootScope) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/client-connector.html',
-            controller: 'clientConnector'
+            controller: 'clientConnect'
 
         };
     }
