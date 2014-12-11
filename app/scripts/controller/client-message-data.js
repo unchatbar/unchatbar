@@ -58,7 +58,6 @@ angular.module('webrtcApp').controller('clientMessageData', ['$scope', '$rootSco
             $scope.isOpen = true;
         });
 
-
         $scope.$on('close', function () {
             $scope.$emit('connection:close', {connectionIndex: $scope.connectionIndex})
             $scope.isOpen = false;
