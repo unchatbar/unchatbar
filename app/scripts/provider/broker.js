@@ -66,6 +66,7 @@ angular.module('webrtcApp')
          */
         this.$get = ['$q', '$rootScope',
             function ($q, $rootScope) {
+
                 function peerListener() {
                     peer.on('open', peerOpen);
                     peer.on('connection', function (connect) {

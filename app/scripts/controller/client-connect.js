@@ -11,7 +11,7 @@
  * #{@link webrtcApp.clientConnector directive}
  *
  */
-angular.module('webrtcApp').controller('clientConnector', ['$scope', '$rootScope', 'broker',
+angular.module('webrtcApp').controller('clientConnect', ['$scope', '$rootScope', 'broker',
     function ($scope, $rootScope, broker) {
 
         /**

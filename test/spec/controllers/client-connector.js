@@ -12,7 +12,7 @@ describe('Controller: clientConnector', function () {
         brokerService = broker;
 
         clientConnector = function () {
-            $controller('clientConnector', {
+            $controller('clientConnect', {
                 $scope: scope,
                 $rootScope: rootScope,
                 broker: brokerService
