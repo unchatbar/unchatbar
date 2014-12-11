@@ -54,17 +54,17 @@ angular.module('webrtcApp').controller('clientMessageData', ['$scope', '$rootSco
             $scope.message = '';
         };
 
-        $scope.$on('connection:open', function (event) {
+        $scope.$on('clientConnection:open', function (event) {
             $scope.isOpen = true;
         });
 
-        $scope.$on('close', function () {
-            $scope.$emit('connection:close', {connectionIndex: $scope.connectionIndex})
+        $scope.$on('clientConnection:close', function () {
+            $scope.$emit('peer:clientDisconnect', {connectionIndex: $scope.connectionIndex})
             $scope.isOpen = false;
         });
 
         // Receive messages
-        $scope.$on('data', function (event,data) {
+        $scope.$on('clientConnection:data', function (event,data) {
             $scope.messageList.push({own: false, text: data});
 
         });

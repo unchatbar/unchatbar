@@ -18,10 +18,17 @@ angular.module('webrtcApp').controller('clientConnector', ['$scope', '$rootScope
          * @ngdoc property
          * @name peerId
          * @propertyOf webrtcApp.controller:clientConnector
-         * @returns {Boolean} is connect to broker
+         * @returns {String} id from broker
          */
         $scope.peerId = broker.getPeerId();
 
+        /**
+         * @ngdoc property
+         * @name connectId
+         * @propertyOf webrtcApp.controller:clientConnector
+         * @returns {String} client id for connect
+         */
+        $scope.connectId = '';
         /**
          * @ngdoc methode
          * @name connect
@@ -38,7 +45,7 @@ angular.module('webrtcApp').controller('clientConnector', ['$scope', '$rootScope
 
         $scope.$on('peer:open', function (event, message) {
             $rootScope.$apply(function () {
-                $scope.peerId = broker.get().id;
+                $scope.peerId = broker.getPeerId();
             });
         });
 

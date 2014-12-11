@@ -25,7 +25,7 @@ angular.module('webrtcApp').controller('clientMessages', ['$scope',
             $scope.connections[data.connectId] = (data.connection);
         });
 
-        $scope.$on('connection:close',function(event,data){
+        $scope.$on('peer:clientDisconnect',function(event,data){
             delete $scope.connections[data.connectId];
         });
     }]

@@ -23,80 +23,62 @@ describe('Controller: clientConnector', function () {
 
     describe('check init', function () {
         it('should have an empty peerId by init', function () {
-            spyOn(brokerService, 'get').and.returnValue(false);
+            spyOn(brokerService, 'getPeerId').and.returnValue('');
 
             clientConnector();
 
             expect(scope.peerId).toEqual('');
         });
+
+        it('should call `broker.getPeerId`', function () {
+            spyOn(brokerService, 'getPeerId').and.returnValue('');
+
+            clientConnector();
+
+            expect(brokerService.getPeerId).toHaveBeenCalled();
+        });
     });
 
     describe('check methode', function () {
-        describe('init', function () {
-            beforeEach(function () {
-                spyOn(brokerService, 'get').and.returnValue({id: 'test'});
+        beforeEach(function () {
+            spyOn(brokerService, 'getPeerId').and.returnValue('');
+            clientConnector();
+        });
+        describe('connect', function () {
+            it('should call `broker.connectToClient` width `$scope.connectId `', function () {
+                spyOn(brokerService, 'connectToClient').and.returnValue('');
+                scope.connectId = 'test';
 
-                clientConnector();
-                spyOn(scope, 'listenToClientConnect').and.returnValue(true);
+                scope.connect();
 
-
+                expect(brokerService.connectToClient).toHaveBeenCalledWith('test');
             });
+            it('should set `scope.connectId` to empty string ', function () {
+                spyOn(brokerService, 'connectToClient').and.returnValue('');
+                scope.connectId = 'test';
 
-            it('should set `scope.peerId` to id from broker ', function () {
-                scope.init();
+                scope.connect();
 
-                expect(scope.peerId).toBe('test');
-            });
-
-            it('should call `scope.listenToClientConnect` ', function () {
-                scope.init();
-
-                expect(scope.peerId).toBe('test');
+                expect(scope.connectId).toBe('');
             });
         });
+    });
+    describe('check event', function () {
+        describe('peer:open', function () {
+            it('should set `$scope.peerId` to test', function () {
+                var peerId = '';
+                spyOn(brokerService, 'getPeerId').and.callFake(function(){
+                    return peerId;
+                });
+                clientConnector();
+                peerId = 'test';
 
-        describe('listenToClientConnect', function () {
-            var BrokerOnEvent, callbackOnEvent;
-            beforeEach(function () {
-                BrokerOnEvent = {
-                    on: function (event, callback) {
-                        callbackOnEvent = callback;
-                    }
-                };
-                spyOn(brokerService, 'get').and.returnValue(BrokerOnEvent);
+                scope.$broadcast('peer:open', {connectId: 'conId'});
 
-
+                scope.$broadcast('peer:clientConnect', {connectId: 'conId'});
+                expect(scope.peerId).toBe('test');
             })
-            it('should call broker.get', function () {
-                clientConnector();
-
-                scope.init();
-
-                expect(brokerService.get).toHaveBeenCalled();
-            });
-
-            it('should call `Brokere` width name `connection`', function () {
-                spyOn(BrokerOnEvent, 'on').and.returnValue(BrokerOnEvent);
-
-                clientConnector();
-
-                scope.init();
-                expect(BrokerOnEvent.on).toHaveBeenCalledWith('connection', jasmine.any(Function));
-
-            });
-            xit('should call `$rootScope.$apply` after event `connection`', function () {
-                spyOn(BrokerOnEvent, 'on').and.returnValue(BrokerOnEvent);
-
-                clientConnector();
-                spyOn(scope,'broadcastConnection').and.returnValue(true);
-
-                scope.init();
-                callbackOnEvent('connectiondata');
-
-                expect(scope.broadcastConnection).toHaveBeenCalledWith('connectiondata');
-
-            });
-        })
-    })
+        });
+    });
 
 });
