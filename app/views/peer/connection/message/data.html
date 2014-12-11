@@ -1,0 +1,21 @@
+<div>
+    <div class="panel panel-default" ng-show="connect.open">
+        <div class="panel-body">
+            <div ng-repeat="mess in messageList">
+                <p data-ng-class="{'text-left': mess.own === true,'text-right': mess.own === false}">
+                    {{mess.text}}
+                </p>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <input type="text" data-ng-model="message"
+                   placeholder="text"
+                   class="form-control">
+            <button data-ng-click="send()" type="button"
+                    class="btn btn-lg btn-primary btn-block">send
+            </button>
+        </div>
+    </div>
+
+</div>
+
