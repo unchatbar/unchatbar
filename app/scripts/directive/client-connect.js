@@ -19,7 +19,12 @@ angular.module('webrtcApp').directive('clientConnect', ['broker','$rootScope',
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/client-connector.html',
-            controller: 'clientConnect'
+            controller: 'clientConnect',
+            link : function () {
+                _.forEach(broker.getMapOfClientCalled(),function(value,connectionId){
+                    broker.connectToClient(connectionId);
+                })
+            }
 
         };
     }

@@ -17,7 +17,7 @@ angular.module('webrtcApp').directive('clientMessages', ['broker',
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/connection/client-messages.html',
-            controller: 'clientMessages',
+            controller: 'clientMessages'
 
         };
     }

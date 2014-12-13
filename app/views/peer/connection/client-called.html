@@ -1,8 +1,8 @@
-<div>
+<div >
     Liste von Clients
-    <div ng-repeat="item in clientList">
+    <div ng-repeat="(peerId,connection) in clientList">
         <div class="well">
-            name: {{item.name}}
+            name:{{peerId}}
         </div>
     </div>
 </div>

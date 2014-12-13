@@ -8,7 +8,7 @@
  *
  * Main module of the application.
  */
-angular.module('webrtcApp', ['cgNotify'])
+angular.module('webrtcApp', ['cgNotify','ngStorage'])
     .run(['broker', function (broker) {
         broker.connect();
     }

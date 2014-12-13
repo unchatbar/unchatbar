@@ -11,22 +11,24 @@
  * #{@link webrtcApp.clientMessages directive}
  *
  */
-angular.module('webrtcApp').controller('clientMessages', ['$scope',
-    function ($scope) {
+angular.module('webrtcApp').controller('clientMessages', ['$scope','broker',
+    function ($scope,broker) {
         /**
          * @ngdoc property
          * @name connections
          * @propertyOf webrtcApp.controller:clientMessages
          * @returns {Object} map of client connections
          */
-        $scope.connections = {};
+        $scope.connections = broker.getMapOfActiveClients();
+
 
         $scope.$on('peer:clientConnect',function(event,data){
-            $scope.connections[data.connectId] = (data.connection);
+            $scope.connections = broker.getMapOfActiveClients();
         });
 
         $scope.$on('peer:clientDisconnect',function(event,data){
-            delete $scope.connections[data.connectId];
+            $scope.connections = broker.removeClientFromCalledMap(data.connectionId);
+            $scope.connections = broker.getMapOfActiveClients();
         });
     }]
 );

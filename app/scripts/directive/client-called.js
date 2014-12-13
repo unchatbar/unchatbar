@@ -16,7 +16,8 @@ angular.module('webrtcApp').directive('clientCalled', ['broker',
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/connection/client-called.html',
-            controller: 'clientCalled',
+            controller: 'clientCalled'
+
 
         };
     }

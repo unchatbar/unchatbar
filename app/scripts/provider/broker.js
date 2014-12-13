@@ -11,7 +11,7 @@
 angular.module('webrtcApp')
     .provider('broker', function () {
 
-        var peer = '', host = '', port = '', path = '';
+        var peer = '', host = '', port = '', path = '', useLocalStorage = false;
 
         /**
          * @ngdoc methode
@@ -56,6 +56,20 @@ angular.module('webrtcApp')
             path = _path;
         }
 
+        /**
+         * @ngdoc methode
+         * @name setLocalStroage
+         * @methodOf webrtcApp.brokerProvider
+         * @params {String} path set path from peerServer
+         * @description
+         *
+         * use local storage for store peerId
+         *
+         */
+        this.setLocalStroage = function () {
+            useLocalStorage = true;
+        }
+
 
         /**
          * @ngdoc service
@@ -64,13 +78,23 @@ angular.module('webrtcApp')
          * # peer
          * peer service
          */
-        this.$get = ['$q', '$rootScope','notify',
-            function ($q, $rootScope, notify) {
+        this.$get = ['$q', '$rootScope','notify','$localStorage','$sessionStorage',
+            function ($q, $rootScope, notify,$localStorage,$sessionStorage) {
+                var storage = useLocalStorage ? $localStorage : $sessionStorage,
+                    activeConnections= {};
+
+                storage = storage.$default({
+                    broker :{
+                        peerId : '',
+                        connections : {}
+                    }
+                }).broker;
 
                 function peerListener() {
-                    peer.on('open', function() {
-                        $rootScope.$apply(function (id) {
-                            peerOpen(id);
+                    peer.on('open', function(id) {
+                        $rootScope.$apply(function () {
+                            storage.peerId = id;
+                            $rootScope.$broadcast('peer:open', {id: id});
                         });
                     });
                     peer.on('connection', function (connect) {
@@ -88,12 +112,9 @@ angular.module('webrtcApp')
                     });
                 }
 
-                function peerOpen(id) {
-                    $rootScope.$broadcast('peer:open', {id: id});
-
-                }
-
                 function peerClientConnect(connection) {
+                    storage.connections[connection.peer] = true;
+                    activeConnections[connection.peer] = connection;
                     $rootScope.$broadcast('peer:clientConnect', {
                         connectId: connection.peer,
                         connection: connection
@@ -101,6 +122,45 @@ angular.module('webrtcApp')
                 }
 
                 return {
+                    /**
+                     * @ngdoc methode
+                     * @name getMapOfClientCalled
+                     * @methodOf webrtcApp.broker
+                     * @return {Object} map of called client's
+                     * @description
+                     *
+                     * get called connections from storage
+                     *
+                     */
+                    getMapOfClientCalled : function () {
+                        return storage.connections;
+                    },
+                    /**
+                     * @ngdoc methode
+                     * @name getMapOfActiveClients
+                     * @methodOf webrtcApp.broker
+                     * @return {Object} map of active connection
+                     * @description
+                     *
+                     * get map of called called clients
+                     *
+                     */
+                    getMapOfActiveClients : function () {
+                        return activeConnections;
+                    },
+                    /**
+                     * @ngdoc methode
+                     * @name removeClientFromCalledMap
+                     * @params {String} connectionId connection id of client
+                     * @methodOf webrtcApp.broker
+                     * @description
+                     *
+                     * remove connection from active connection list
+                     *
+                     */
+                    removeClientFromCalledMap : function (connectionId) {
+                      delete activeConnections[connectionId];
+                    },
                     /**
                      * @ngdoc methode
                      * @name connect
@@ -112,7 +172,7 @@ angular.module('webrtcApp')
                      *
                      */
                     connect: function () {
-                        peer = new Peer({host: host, port: port, path: path});
+                        peer = new Peer(storage.peerId,{host: host, port: port, path: path});
                         peerListener();
                     },
                     /**
@@ -140,6 +200,13 @@ angular.module('webrtcApp')
                     connectToClient: function (id) {
                         if (peer.id) {
                             peerClientConnect(peer.connect(id));
+                        } else {
+                            notify({
+                                message:'connect to client failed, no peerId',
+                                classes:'alert alert-danger',
+                                templateUrl : ''
+
+                            });
                         }
                     }
                 };

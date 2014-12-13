@@ -14,6 +14,7 @@
 angular.module('webrtcApp').controller('clientConnect', ['$scope', '$rootScope', 'broker',
     function ($scope, $rootScope, broker) {
 
+
         /**
          * @ngdoc property
          * @name peerId
@@ -29,6 +30,8 @@ angular.module('webrtcApp').controller('clientConnect', ['$scope', '$rootScope',
          * @returns {String} client id for connect
          */
         $scope.connectId = '';
+
+
         /**
          * @ngdoc methode
          * @name connect

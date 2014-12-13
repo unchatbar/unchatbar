@@ -11,8 +11,8 @@
  * #{@link webrtcApp.clientMessageData directive}
  *
  */
-angular.module('webrtcApp').controller('clientMessageData', ['$scope', '$rootScope',
-    function ($scope, $rootScope) {
+angular.module('webrtcApp').controller('clientMessageData', ['$scope', '$rootScope', 'notify',
+    function ($scope, $rootScope, notify) {
 
         /**
          * @ngdoc property
@@ -56,18 +56,37 @@ angular.module('webrtcApp').controller('clientMessageData', ['$scope', '$rootSco
 
         $scope.$on('clientConnection:open', function (event) {
             $scope.isOpen = true;
+            notifyOpenConnection();
         });
 
         $scope.$on('clientConnection:close', function () {
-            $scope.$emit('peer:clientDisconnect', {connectionIndex: $scope.connectionIndex})
+            notify({
+                message: 'Xconnect to ' + $scope.connect.peer + ' close',
+                classes: 'alert alert-info',
+                templateUrl: ''
+            });
+            $scope.$emit('peer:clientDisconnect', { connectionId: $scope.connectionIndex})
             $scope.isOpen = false;
         });
 
         // Receive messages
-        $scope.$on('clientConnection:data', function (event,data) {
+        $scope.$on('clientConnection:data', function (event, data) {
             $scope.messageList.push({own: false, text: data});
 
         });
+
+        function notifyOpenConnection() {
+            if ($scope.isOpen) {
+                notify({
+                    message: 'connect to ' + $scope.connect.peer + ' succesfull',
+                    classes: 'alert alert-success',
+                    templateUrl: ''
+                });
+            }
+        }
+
+
+        notifyOpenConnection();
 
     }
 ]);

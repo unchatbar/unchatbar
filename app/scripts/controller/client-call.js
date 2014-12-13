@@ -10,26 +10,22 @@
  * #{@link webrtcApp.clientCalled directive}
  *
  */
-angular.module('webrtcApp').controller('clientCalled', ['$scope',
-    function ($scope) {
+angular.module('webrtcApp').controller('clientCalled', ['$scope','broker',
+    function ($scope,broker) {
         /**
          * @ngdoc property
          * @name username
          * @propertyOf webrtcApp.controller:clientCalled
          * @returns {Object} clientList map of all client connections
          */
-        $scope.clientList = {};
+        $scope.clientList = broker.getMapOfClientCalled();
 
         $scope.$on('peer:clientConnect', function (event, data) {
-            $scope.clientList[data.connectId] = {
-                name: data.connectId
-            };
+            $scope.clientList = broker.getMapOfClientCalled();
 
         });
 
-        $scope.$on('connection:close', function (event, data) {
-            delete $scope.clientList[data.connectId];
-        });
+
 
     }
 ]);

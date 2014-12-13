@@ -1,9 +1,9 @@
 <div class="" >
     Messanger
 
-    <div ng-repeat="item in connections">
+    <div ng-repeat="(connectionId , connection) in connections">
         <div>
-            <message-data connection-index="$index"  connect="item"></message-data>
+            <message-data connection-index="connectionId"  connect="connection"></message-data>
         </div>
     </div>
 </div>
