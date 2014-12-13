@@ -47,12 +47,24 @@ angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'n
          * send message to client
          *
          */
-
         $scope.send = function () {
             $scope.connect.send($scope.message);
             $scope.messageList.push({own: true, text: $scope.message});
             $scope.message = '';
         };
+
+        /**
+         * @ngdoc methode
+         * @name closeConnection
+         * @methodOf webrtcApp.controller:clientMessageData
+         * @description
+         *
+         * close connection to client
+         *
+         */
+        $scope.closeConnection = function () {
+            $scope.connect.close();
+        }
 
         $scope.$on('clientConnection:open', function (event) {
             $scope.isOpen = true;

@@ -1,8 +1,10 @@
 <div >
-    Telefonbuch
     <div ng-repeat="(peerId,connection) in clientList">
         <div class="well">
-            name:{{peerId}}
+           {{peerId}}
+            <span class="glyphicon glyphicon-trash" ng-click="removeClient(peerId)"></span>
+            <span class="glyphicon glyphicon-earphone" ng-click="connectClient(peerId)"></span>
+
         </div>
     </div>
 </div>

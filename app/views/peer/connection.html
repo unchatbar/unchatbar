@@ -2,14 +2,25 @@
 
     <div class="panel panel-default" ng-show="connect.open">
         <div class="panel-heading">
-            <h2 class="panel-title">Connection ID {{connectionIndex}}</h2>
+            <div class="row">
+                <div class="col-xs-9">
+                    <h2 class="panel-title">{{connectionIndex}}</h2>
+                </div>
+                <div class="col-xs-3">
+                    <i data-ng-click="closeConnection()" class="glyphicon glyphicon-remove"></i>
+                </div>
+            </div>
+
+
         </div>
         <div class="panel-body">
             <div ng-repeat="mess in messageList">
-                <p class="well"data-ng-class="{'text-left': mess.own === true,'text-right': mess.own === false}">
+                <p class="well" data-ng-class="{'text-left': mess.own === true,'text-right': mess.own === false}">
                     {{mess.text}}
                 </p>
-                <p class="text-muted" data-ng-class="{'text-left': mess.own === true,'text-right': mess.own === false}" data-ng-show=" mess.own === false">{{connectionIndex}}</p>
+
+                <p class="text-muted" data-ng-class="{'text-left': mess.own === true,'text-right': mess.own === false}"
+                   data-ng-show=" mess.own === false">{{connectionIndex}}</p>
             </div>
         </div>
         <div class="panel-footer">

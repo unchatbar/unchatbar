@@ -135,6 +135,10 @@ angular.module('webrtcApp')
                     getMapOfClientCalled : function () {
                         return storage.connections;
                     },
+                    removeClientCalled : function (peerId) {
+                        return delete storage.connections[peerId];
+                    },
+
                     /**
                      * @ngdoc methode
                      * @name getMapOfActiveClients

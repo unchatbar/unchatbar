@@ -30,9 +30,8 @@ angular.module('webrtcApp').directive('connection', ['broker','$rootScope',
                     });
                 });
                 scope.connect.on('close',function(){
-                    $rootScope.$apply(function() {
-                        scope.$broadcast('clientConnection:close');
-                    });
+                    scope.$broadcast('clientConnection:close');
+
                 });
 
                 scope.connect.on('data',function(data){

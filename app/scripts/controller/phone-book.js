@@ -22,10 +22,36 @@ angular.module('webrtcApp').controller('phoneBook', ['$scope','broker',
 
         $scope.$on('peer:clientConnect', function (event, data) {
             $scope.clientList = broker.getMapOfClientCalled();
-
         });
 
+        /**
+         * @ngdoc methode
+         * @name removeClient
+         * @methodOf webrtcApp.controller:clientCalled
+         * @params  {String} peerId id of client
+         * @description
+         *
+         * remove client from phone book list
+         *
+         */
+        $scope.removeClient = function (peerId) {
+            if (broker.removeClientCalled(peerId)) {
+                $scope.clientList = broker.getMapOfClientCalled();
+            }
+        };
 
-
+        /**
+         * @ngdoc methode
+         * @name removeClient
+         * @methodOf webrtcApp.controller:clientCalled
+         * @params  {String} peerId id of client
+         * @description
+         *
+         * create connection to client
+         *
+         */
+        $scope.connectClient = function (peerId) {
+            broker.connectToClient(peerId);
+        };
     }
 ]);
