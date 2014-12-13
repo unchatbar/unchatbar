@@ -2,13 +2,14 @@
 
     <div class="panel panel-default" ng-show="connect.open">
         <div class="panel-heading">
-            <h3 class="panel-title">Connection ID {{connectionIndex}}</h3>
+            <h2 class="panel-title">Connection ID {{connectionIndex}}</h2>
         </div>
         <div class="panel-body">
             <div ng-repeat="mess in messageList">
-                <p data-ng-class="{'text-left': mess.own === true,'text-right': mess.own === false}">
+                <p class="well"data-ng-class="{'text-left': mess.own === true,'text-right': mess.own === false}">
                     {{mess.text}}
                 </p>
+                <p class="text-muted" data-ng-class="{'text-left': mess.own === true,'text-right': mess.own === false}" data-ng-show=" mess.own === false">{{connectionIndex}}</p>
             </div>
         </div>
         <div class="panel-footer">

@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36c0499c-48f5-4e3e-ac85-4e38e0203c17" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/scripts/controller/client-call.js" afterPath="$PROJECT_DIR$/app/scripts/controller/phone-book.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/scripts/controller/client-connect.js" afterPath="$PROJECT_DIR$/app/scripts/controller/dialer.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/scripts/controller/client-message-data.js" afterPath="$PROJECT_DIR$/app/scripts/controller/connection.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/scripts/controller/client-messages.js" afterPath="$PROJECT_DIR$/app/scripts/controller/connection-center.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/scripts/directive/client-called.js" afterPath="$PROJECT_DIR$/app/scripts/directive/phone-book.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/scripts/directive/client-connect.js" afterPath="$PROJECT_DIR$/app/scripts/directive/dialer.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/scripts/directive/client-message-data.js" afterPath="$PROJECT_DIR$/app/scripts/directive/connection.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/scripts/directive/client-messages.js" afterPath="$PROJECT_DIR$/app/scripts/directive/connection-center.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/views/peer/client-connector.html" afterPath="$PROJECT_DIR$/app/views/peer/dialer.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/views/peer/connection/client-called.html" afterPath="$PROJECT_DIR$/app/views/peer/phone-book.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/views/peer/connection/client-messages.html" afterPath="$PROJECT_DIR$/app/views/peer/connection-center.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/views/peer/connection/message/data.html" afterPath="$PROJECT_DIR$/app/views/peer/connection.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/peer/connection.html" afterPath="$PROJECT_DIR$/app/views/peer/connection.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webrtc.iws" />
@@ -43,8 +31,8 @@
       <file leaf-file-name="connection.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/views/peer/connection.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.16901408" vertical-offset="0" max-vertical-offset="465">
-              <caret line="4" column="67" selection-start-line="4" selection-start-column="67" selection-end-line="4" selection-end-column="67" />
+            <state vertical-scroll-proportion="0.16901408" vertical-offset="0" max-vertical-offset="480">
+              <caret line="4" column="34" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -236,73 +224,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="peer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webrtc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="unchatbar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webrtc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="unchatbar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="provider" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webrtc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="unchatbar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="directive" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -424,7 +346,13 @@
       <option name="project" value="LOCAL" />
       <updated>1418510670431</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="refaktor of controller/directive name">
+      <created>1418511922418</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1418511922418</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -500,7 +428,8 @@
     <MESSAGE value="Bugfix Layout / naming of directiv" />
     <MESSAGE value="add notification Handler" />
     <MESSAGE value="store of peerId / client connections (config. for session/local storage)" />
-    <option name="LAST_COMMIT_MESSAGE" value="store of peerId / client connections (config. for session/local storage)" />
+    <MESSAGE value="refaktor of controller/directive name" />
+    <option name="LAST_COMMIT_MESSAGE" value="refaktor of controller/directive name" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -886,8 +815,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/views/peer/connection.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.16901408" vertical-offset="0" max-vertical-offset="465">
-          <caret line="4" column="67" selection-start-line="4" selection-start-column="67" selection-end-line="4" selection-end-column="67" />
+        <state vertical-scroll-proportion="0.16901408" vertical-offset="0" max-vertical-offset="480">
+          <caret line="4" column="34" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
           <folding />
         </state>
       </provider>
