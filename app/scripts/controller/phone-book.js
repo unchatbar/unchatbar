@@ -10,7 +10,7 @@
  * #{@link webrtcApp.clientCalled directive}
  *
  */
-angular.module('webrtcApp').controller('clientCalled', ['$scope','broker',
+angular.module('webrtcApp').controller('phoneBook', ['$scope','broker',
     function ($scope,broker) {
         /**
          * @ngdoc property

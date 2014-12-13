@@ -1,5 +1,9 @@
 <div>
+
     <div class="panel panel-default" ng-show="connect.open">
+        <div class="panel-heading">
+            <h3 class="panel-title">Connection ID {{connectionIndex}}</h3>
+        </div>
         <div class="panel-body">
             <div ng-repeat="mess in messageList">
                 <p data-ng-class="{'text-left': mess.own === true,'text-right': mess.own === false}">

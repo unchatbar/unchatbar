@@ -11,7 +11,7 @@
  * #{@link webrtcApp.clientMessageData directive}
  *
  */
-angular.module('webrtcApp').controller('clientMessageData', ['$scope', '$rootScope', 'notify',
+angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'notify',
     function ($scope, $rootScope, notify) {
 
         /**

@@ -13,7 +13,7 @@
 
  *
  */
-angular.module('webrtcApp').directive('messageData', ['broker','$rootScope',
+angular.module('webrtcApp').directive('connection', ['broker','$rootScope',
     function(broker,$rootScope) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
@@ -21,8 +21,8 @@ angular.module('webrtcApp').directive('messageData', ['broker','$rootScope',
                 connect: '=',
                 connectionIndex : '='
             },
-            templateUrl: 'views/peer/connection/message/data.html',
-            controller: 'clientMessageData',
+            templateUrl: 'views/peer/connection.html',
+            controller: 'connection',
             link : function (scope) {
                 scope.connect.on('open',function(){
                     $rootScope.$apply(function() {

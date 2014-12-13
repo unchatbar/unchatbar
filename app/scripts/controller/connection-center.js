@@ -11,7 +11,7 @@
  * #{@link webrtcApp.clientMessages directive}
  *
  */
-angular.module('webrtcApp').controller('clientMessages', ['$scope','broker',
+angular.module('webrtcApp').controller('connectionCenter', ['$scope','broker',
     function ($scope,broker) {
         /**
          * @ngdoc property

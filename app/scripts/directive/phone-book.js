@@ -11,14 +11,12 @@
  * # controller definition {@link webrtcApp.controller:clientCalled controller}
  *
  */
-angular.module('webrtcApp').directive('clientCalled', ['broker',
+angular.module('webrtcApp').directive('phoneBook', ['broker',
     function (broker) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
-            templateUrl: 'views/peer/connection/client-called.html',
-            controller: 'clientCalled'
-
-
+            templateUrl: 'views/peer/phone-book.html',
+            controller: 'phoneBook'
         };
     }
 ]);

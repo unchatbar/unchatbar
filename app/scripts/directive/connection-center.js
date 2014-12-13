@@ -12,12 +12,12 @@
  * # controller definition {@link webrtcApp.controller:clientMessages controller}
  *
  */
-angular.module('webrtcApp').directive('clientMessages', ['broker',
+angular.module('webrtcApp').directive('connectionCenter', ['broker',
     function (broker) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
-            templateUrl: 'views/peer/connection/client-messages.html',
-            controller: 'clientMessages'
+            templateUrl: 'views/peer/connection-center.html',
+            controller: 'connectionCenter'
 
         };
     }
