@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36c0499c-48f5-4e3e-ac85-4e38e0203c17" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/provider/broker.js" afterPath="$PROJECT_DIR$/app/scripts/provider/broker.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/peer/connection.html" afterPath="$PROJECT_DIR$/app/views/peer/connection.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/controller/connection.js" afterPath="$PROJECT_DIR$/app/scripts/controller/connection.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/directive/connection.js" afterPath="$PROJECT_DIR$/app/scripts/directive/connection.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/peer/phone-book.html" afterPath="$PROJECT_DIR$/app/views/peer/phone-book.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/controller/phone-book.js" afterPath="$PROJECT_DIR$/app/scripts/controller/phone-book.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webrtc.iws" />
@@ -44,15 +38,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.34929577" vertical-offset="266" max-vertical-offset="1260">
+            <state vertical-scroll-proportion="-5.1666665" vertical-offset="266" max-vertical-offset="1260">
               <caret line="26" column="29" selection-start-line="26" selection-start-column="29" selection-end-line="26" selection-end-column="29" />
               <folding>
                 <marker date="1418514206509" expanded="true" signature="675:828" placeholder="..." />
                 <marker date="1418514206509" expanded="true" signature="768:796" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="connection.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/views/peer/connection.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.3802817" vertical-offset="0" max-vertical-offset="645">
+              <caret line="9" column="64" selection-start-line="9" selection-start-column="64" selection-end-line="9" selection-end-column="64" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -107,9 +111,9 @@
         <option value="$PROJECT_DIR$/app/scripts/controller/phone-book.js" />
         <option value="$PROJECT_DIR$/app/scripts/controller/connection.js" />
         <option value="$PROJECT_DIR$/app/scripts/directive/connection.js" />
-        <option value="$PROJECT_DIR$/app/views/peer/connection.html" />
         <option value="$PROJECT_DIR$/app/views/peer/phone-book.html" />
         <option value="$PROJECT_DIR$/app/index.html" />
+        <option value="$PROJECT_DIR$/app/views/peer/connection.html" />
       </list>
     </option>
   </component>
@@ -434,7 +438,13 @@
       <option name="project" value="LOCAL" />
       <updated>1418512799350</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="close/connection&#10;dial button in Phone book">
+      <created>1418514267615</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1418514267615</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -512,7 +522,8 @@
     <MESSAGE value="store of peerId / client connections (config. for session/local storage)" />
     <MESSAGE value="refaktor of controller/directive name" />
     <MESSAGE value="optimize layout" />
-    <option name="LAST_COMMIT_MESSAGE" value="optimize layout" />
+    <MESSAGE value="close/connection&#10;dial button in Phone book" />
+    <option name="LAST_COMMIT_MESSAGE" value="close/connection&#10;dial button in Phone book" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -877,14 +888,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/peer/connection.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25167784" vertical-offset="0" max-vertical-offset="645">
-          <caret line="5" column="36" selection-start-line="5" selection-start-column="36" selection-end-line="5" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/peer/phone-book.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.625" vertical-offset="0" max-vertical-offset="240">
@@ -895,12 +898,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34929577" vertical-offset="266" max-vertical-offset="1260">
+        <state vertical-scroll-proportion="-5.1666665" vertical-offset="266" max-vertical-offset="1260">
           <caret line="26" column="29" selection-start-line="26" selection-start-column="29" selection-end-line="26" selection-end-column="29" />
           <folding>
             <marker date="1418514206509" expanded="true" signature="675:828" placeholder="..." />
             <marker date="1418514206509" expanded="true" signature="768:796" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/peer/connection.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3802817" vertical-offset="0" max-vertical-offset="645">
+          <caret line="9" column="64" selection-start-line="9" selection-start-column="64" selection-end-line="9" selection-end-column="64" />
+          <folding />
         </state>
       </provider>
     </entry>
