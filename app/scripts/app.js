@@ -8,7 +8,7 @@
  *
  * Main module of the application.
  */
-angular.module('webrtcApp', [])
+angular.module('webrtcApp', ['cgNotify'])
     .run(['broker', function (broker) {
         broker.connect();
     }

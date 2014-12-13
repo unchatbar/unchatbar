@@ -64,22 +64,33 @@ angular.module('webrtcApp')
          * # peer
          * peer service
          */
-        this.$get = ['$q', '$rootScope',
-            function ($q, $rootScope) {
+        this.$get = ['$q', '$rootScope','notify',
+            function ($q, $rootScope, notify) {
 
                 function peerListener() {
-                    peer.on('open', peerOpen);
+                    peer.on('open', function() {
+                        $rootScope.$apply(function (id) {
+                            peerOpen(id);
+                        });
+                    });
                     peer.on('connection', function (connect) {
                         $rootScope.$apply(function () {
                             peerClientConnect(connect);
                         });
                     });
+                    peer.on('error', function (error) {
+                        notify({
+                            message:error.message,
+                            classes:'alert alert-danger',
+                            templateUrl : ''
+
+                        });
+                    });
                 }
 
                 function peerOpen(id) {
-                    $rootScope.$apply(function () {
-                        $rootScope.$broadcast('peer:open', {id: id});
-                    });
+                    $rootScope.$broadcast('peer:open', {id: id});
+
                 }
 
                 function peerClientConnect(connection) {

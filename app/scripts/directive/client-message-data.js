@@ -13,8 +13,8 @@
 
  *
  */
-angular.module('webrtcApp').directive('messageData', ['broker','$rootScope',
-    function(broker,$rootScope) {
+angular.module('webrtcApp').directive('messageData', ['broker','$rootScope','notify',
+    function(broker,$rootScope,notify) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             scope: {
@@ -25,11 +25,21 @@ angular.module('webrtcApp').directive('messageData', ['broker','$rootScope',
             controller: 'clientMessageData',
             link : function (scope) {
                 scope.connect.on('open',function(){
+                    notify({
+                        message:'connect to ' + scope.connect.peer + ' succesfull',
+                        classes:'alert alert-success',
+                        templateUrl : ''
+                    });
                     $rootScope.$apply(function() {
                         scope.$broadcast('clientConnection:open');
                     });
                 });
                 scope.connect.on('close',function(){
+                    notify({
+                        message:'connect to ' + scope.connect.peer + ' closed',
+                        classes:'alert alert-info',
+                        templateUrl : ''
+                    });
                     $rootScope.$apply(function() {
                         scope.$broadcast('clientConnection:open');
                     });
