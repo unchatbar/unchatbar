@@ -2,10 +2,14 @@
     <div class="panel-heading" data-ng-init="minimize=false">
         <div class="row">
             <div class="col-xs-9">
-                <h2 class="panel-title">{{connectionIndex}}</h2>
+                <h2 class="panel-title">{{connectionIndex}}
+                    <i class="badge" data-ng-show="unreadMessageCounter > 0 && minimize === true ">
+                    {{unreadMessageCounter}}
+                </i></h2>
+
             </div>
             <div class="col-xs-3 text-right">
-                <i data-ng-click="minimize =!minimize" class="glyphicon glyphicon-minus"></i>
+                <i data-ng-click="toogleMinimize();" class="glyphicon glyphicon-minus"></i>
                 <i data-ng-click="closeConnection()" class="glyphicon glyphicon-remove"></i>
             </div>
         </div>

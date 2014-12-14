@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36c0499c-48f5-4e3e-ac85-4e38e0203c17" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/peer/connection-center.html" afterPath="$PROJECT_DIR$/app/views/peer/connection-center.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/peer/connection.html" afterPath="$PROJECT_DIR$/app/views/peer/connection.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/controller/connection.js" afterPath="$PROJECT_DIR$/app/scripts/controller/connection.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webrtc.iws" />
@@ -52,20 +52,30 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="connection.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/peer/connection.html">
+      <file leaf-file-name="connection.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/scripts/controller/connection.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-15.0" vertical-offset="0" max-vertical-offset="585">
-              <caret line="24" column="54" selection-start-line="24" selection-start-column="54" selection-end-line="24" selection-end-column="54" />
+            <state vertical-scroll-proportion="0.69920844" vertical-offset="1625" max-vertical-offset="2160">
+              <caret line="126" column="24" selection-start-line="126" selection-start-column="24" selection-end-line="126" selection-end-column="24" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="connection-center.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="connection.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views/peer/connection.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.125" vertical-offset="0" max-vertical-offset="645">
+              <caret line="5" column="79" selection-start-line="5" selection-start-column="79" selection-end-line="5" selection-end-column="79" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="connection-center.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/views/peer/connection-center.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="355">
+            <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="165">
               <caret line="0" column="6" selection-start-line="0" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
               <folding />
             </state>
@@ -120,12 +130,12 @@
         <option value="$PROJECT_DIR$/app/views/peer/client-center.html" />
         <option value="$PROJECT_DIR$/app/scripts/provider/broker.js" />
         <option value="$PROJECT_DIR$/app/scripts/controller/phone-book.js" />
-        <option value="$PROJECT_DIR$/app/scripts/controller/connection.js" />
         <option value="$PROJECT_DIR$/app/scripts/directive/connection.js" />
         <option value="$PROJECT_DIR$/app/index.html" />
         <option value="$PROJECT_DIR$/app/views/peer/phone-book.html" />
-        <option value="$PROJECT_DIR$/app/views/peer/connection.html" />
         <option value="$PROJECT_DIR$/app/views/peer/connection-center.html" />
+        <option value="$PROJECT_DIR$/app/views/peer/connection.html" />
+        <option value="$PROJECT_DIR$/app/scripts/controller/connection.js" />
       </list>
     </option>
   </component>
@@ -468,7 +478,13 @@
       <option name="project" value="LOCAL" />
       <updated>1418514445135</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="minimize connection">
+      <created>1418514677571</created>
+      <option name="number" value="00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1418514677571</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -549,7 +565,8 @@
     <MESSAGE value="close/connection&#10;dial button in Phone book" />
     <MESSAGE value="fix position close button in connection view" />
     <MESSAGE value="fix phone book view" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix phone book view" />
+    <MESSAGE value="minimize connection" />
+    <option name="LAST_COMMIT_MESSAGE" value="minimize connection" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -890,22 +907,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/directive/connection.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="159" max-vertical-offset="765">
-          <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/controller/connection.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="821" max-vertical-offset="1635">
-          <caret line="65" column="12" selection-start-line="65" selection-start-column="12" selection-end-line="65" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.1666665" vertical-offset="266" max-vertical-offset="1260">
@@ -925,18 +926,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/peer/connection.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.0" vertical-offset="0" max-vertical-offset="585">
-          <caret line="24" column="54" selection-start-line="24" selection-start-column="54" selection-end-line="24" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/peer/connection-center.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="355">
           <caret line="0" column="6" selection-start-line="0" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/directive/connection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8469657" vertical-offset="159" max-vertical-offset="765">
+          <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/peer/connection.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.125" vertical-offset="0" max-vertical-offset="645">
+          <caret line="5" column="79" selection-start-line="5" selection-start-column="79" selection-end-line="5" selection-end-column="79" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/controller/connection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.69920844" vertical-offset="1625" max-vertical-offset="2160">
+          <caret line="126" column="24" selection-start-line="126" selection-start-column="24" selection-end-line="126" selection-end-column="24" />
           <folding />
         </state>
       </provider>

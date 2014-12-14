@@ -39,6 +39,22 @@ angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'n
         $scope.messageList = [];
 
         /**
+         * @ngdoc property
+         * @name minimize
+         * @propertyOf webrtcApp.controller:clientMessageData
+         * @returns {Boolean} is view minimze
+         */
+        $scope.minimize = false;
+
+        /**
+         * @ngdoc property
+         * @name unreadMessageCounter
+         * @propertyOf webrtcApp.controller:clientMessageData
+         * @returns {Number} number of unread messages
+         */
+        $scope.unreadMessageCounter = 0;
+
+        /**
          * @ngdoc methode
          * @name send
          * @methodOf webrtcApp.controller:clientMessageData
@@ -66,6 +82,22 @@ angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'n
             $scope.connect.close();
         }
 
+        /**
+         * @ngdoc methode
+         * @name closeConnection
+         * @methodOf webrtcApp.controller:clientMessageData
+         * @description
+         *
+         * close connection to client
+         *
+         */
+        $scope.toogleMinimize = function () {
+            $scope.minimize =!$scope.minimize;
+            if ($scope.minimize === false) {
+                $scope.unreadMessageCounter = 0;
+            }
+        }
+
         $scope.$on('clientConnection:open', function (event) {
             $scope.isOpen = true;
             notifyOpenConnection();
@@ -83,6 +115,9 @@ angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'n
 
         // Receive messages
         $scope.$on('clientConnection:data', function (event, data) {
+            if ($scope.minimize === true) {
+                $scope.unreadMessageCounter++;
+            }
             $scope.messageList.push({own: false, text: data});
 
         });
