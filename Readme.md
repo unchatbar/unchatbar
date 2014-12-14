@@ -1,13 +1,17 @@
 # Unchatbar
-[![Build Status](https://travis-ci.org/unchatbar/unchatbar.svg?branch=master)](https://travis-ci.org/unchatbar/unchatbar)
+[![Build Status](https://travis-ci.org/unchtbar/unchatbar.svg?branch=master)](https://travis-ci.org/unchatbar/unchatbar)
+
+Peer to peer chat application using WebRTC technologies
 
 ## Requirements
 * Node.js 0.10+
+* Chrome 26+ or Firefox 23+
 
-# Installation
-* Install Bower (`npm install -g bower`)
-* Install Gunt CLI (`npm install -g grunt-cli`)
-* Run `npm install` to install required Node.js modules
+## Installation
+* Install Bower: `npm install -g bower`
+* Install Gunt CLI: `npm install -g grunt-cli`
+* Clone repository `git clone https://github.com/unchatbar/unchatbar.git`
+* Run `npm install` to install required ode.js modules
 * Run `bower install` to install required Bower components
 
 ## Usage
