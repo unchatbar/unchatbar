@@ -89,6 +89,28 @@ angular.module('unchatbar')
                     }
                 }).broker;
 
+                function makePeerHeartbeater ( peer ) {
+                    var timeoutId = 0;
+                    function heartbeat () {
+                        timeoutId = setTimeout( heartbeat, 20000 );
+                        if ( peer.socket._wsOpen() ) {
+                            peer.socket.send( {type:'HEARTBEAT'} );
+                        }
+                    }
+                    // Start
+                    heartbeat();
+                    // return
+                    return {
+                        start : function () {
+                            if ( timeoutId === 0 ) { heartbeat(); }
+                        },
+                        stop : function () {
+                            clearTimeout( timeoutId );
+                            timeoutId = 0;
+                        }
+                    };
+                }
+
                 function peerListener() {
                     peer.on('open', function(id) {
                         $rootScope.$apply(function () {
@@ -177,6 +199,8 @@ angular.module('unchatbar')
                     connect: function () {
                         peer = new Peer(storage.peerId,{host: host, port: port, path: path});
                         peerListener();
+                        makePeerHeartbeater( peer );
+
                     },
                     /**
                      * @ngdoc methode
