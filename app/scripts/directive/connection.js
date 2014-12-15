@@ -3,17 +3,17 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name webrtcApp.messageData
+ * @name unchatbar.messageData
  * @restrict E
  * @description
  *
  * # activeConnection
  * message box for text-data
- * # controller definition {@link webrtcApp.controller:clientMessageData controller}
+ * # controller definition {@link unchatbar.controller:clientMessageData controller}
 
  *
  */
-angular.module('webrtcApp').directive('connection', ['broker','$rootScope',
+angular.module('unchatbar').directive('connection', ['broker','$rootScope',
     function(broker,$rootScope) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment

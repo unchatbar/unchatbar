@@ -1,6 +1,6 @@
 /**
  * @ngdoc controller
- * @name  webrtcApp.controller:clientMessageData
+ * @name  unchatbar.controller:clientMessageData
  * @require $scope
  * @require $rootScope
  * @require broker
@@ -8,16 +8,16 @@
  *
  *  Test Message Dialog
  * #controller of this directive
- * #{@link webrtcApp.clientMessageData directive}
+ * #{@link unchatbar.clientMessageData directive}
  *
  */
-angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'notify',
+angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'notify',
     function ($scope, $rootScope, notify) {
 
         /**
          * @ngdoc property
          * @name isOpen
-         * @propertyOf webrtcApp.controller:clientMessageData
+         * @propertyOf unchatbar.controller:clientMessageData
          * @returns {Boolean} is connection open
          */
         $scope.isOpen = $scope.connect.open ? true : false;
@@ -25,7 +25,7 @@ angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc property
          * @name message
-         * @propertyOf webrtcApp.controller:clientMessageData
+         * @propertyOf unchatbar.controller:clientMessageData
          * @returns {String} user message text
          */
         $scope.message = '';
@@ -33,7 +33,7 @@ angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc property
          * @name message
-         * @propertyOf webrtcApp.controller:clientMessageData
+         * @propertyOf unchatbar.controller:clientMessageData
          * @returns {Array} list of all messages
          */
         $scope.messageList = [];
@@ -41,7 +41,7 @@ angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc property
          * @name minimize
-         * @propertyOf webrtcApp.controller:clientMessageData
+         * @propertyOf unchatbar.controller:clientMessageData
          * @returns {Boolean} is view minimze
          */
         $scope.minimize = false;
@@ -49,7 +49,7 @@ angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc property
          * @name unreadMessageCounter
-         * @propertyOf webrtcApp.controller:clientMessageData
+         * @propertyOf unchatbar.controller:clientMessageData
          * @returns {Number} number of unread messages
          */
         $scope.unreadMessageCounter = 0;
@@ -57,7 +57,7 @@ angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc methode
          * @name send
-         * @methodOf webrtcApp.controller:clientMessageData
+         * @methodOf unchatbar.controller:clientMessageData
          * @description
          *
          * send message to client
@@ -72,7 +72,7 @@ angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc methode
          * @name closeConnection
-         * @methodOf webrtcApp.controller:clientMessageData
+         * @methodOf unchatbar.controller:clientMessageData
          * @description
          *
          * close connection to client
@@ -85,7 +85,7 @@ angular.module('webrtcApp').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc methode
          * @name closeConnection
-         * @methodOf webrtcApp.controller:clientMessageData
+         * @methodOf unchatbar.controller:clientMessageData
          * @description
          *
          * close connection to client

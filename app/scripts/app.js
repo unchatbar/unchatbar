@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc overview
- * @name webrtcApp
+ * @name unchatbar
  * @description
- * # webrtcApp
+ * # unchatbar
  *
  * Main module of the application.
  */
-angular.module('webrtcApp', ['cgNotify','ngStorage'])
+angular.module('unchatbar', ['cgNotify','ngStorage'])
     .run(['broker', function (broker) {
         broker.connect();
     }

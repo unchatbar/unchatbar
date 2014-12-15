@@ -3,12 +3,12 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc service
- * @name webrtcApp.brokerProvider
+ * @name unchatbar.brokerProvider
  * @description
  * # peer
  * config peer connection
  */
-angular.module('webrtcApp')
+angular.module('unchatbar')
     .provider('broker', function () {
 
         var peer = '', host = '', port = '', path = '', useLocalStorage = false;
@@ -16,7 +16,7 @@ angular.module('webrtcApp')
         /**
          * @ngdoc methode
          * @name setHost
-         * @methodOf webrtcApp.brokerProvider
+         * @methodOf unchatbar.brokerProvider
          * @params {String} _host set host from peer server
          * @description
          *
@@ -30,7 +30,7 @@ angular.module('webrtcApp')
         /**
          * @ngdoc methode
          * @name setPort
-         * @methodOf webrtcApp.brokerProvider
+         * @methodOf unchatbar.brokerProvider
          * @params {Number} port set port for peer server
          * @description
          *
@@ -44,7 +44,7 @@ angular.module('webrtcApp')
         /**
          * @ngdoc methode
          * @name setPath
-         * @methodOf webrtcApp.brokerProvider
+         * @methodOf unchatbar.brokerProvider
          * @params {String} path set path from peerServer
          * @description
          *
@@ -59,7 +59,7 @@ angular.module('webrtcApp')
         /**
          * @ngdoc methode
          * @name setLocalStroage
-         * @methodOf webrtcApp.brokerProvider
+         * @methodOf unchatbar.brokerProvider
          * @params {String} path set path from peerServer
          * @description
          *
@@ -73,7 +73,7 @@ angular.module('webrtcApp')
 
         /**
          * @ngdoc service
-         * @name webrtcApp.broker
+         * @name unchatbar.broker
          * @description
          * # peer
          * peer service
@@ -125,7 +125,7 @@ angular.module('webrtcApp')
                     /**
                      * @ngdoc methode
                      * @name getMapOfClientCalled
-                     * @methodOf webrtcApp.broker
+                     * @methodOf unchatbar.broker
                      * @return {Object} map of called client's
                      * @description
                      *
@@ -142,7 +142,7 @@ angular.module('webrtcApp')
                     /**
                      * @ngdoc methode
                      * @name getMapOfActiveClients
-                     * @methodOf webrtcApp.broker
+                     * @methodOf unchatbar.broker
                      * @return {Object} map of active connection
                      * @description
                      *
@@ -156,7 +156,7 @@ angular.module('webrtcApp')
                      * @ngdoc methode
                      * @name removeClientFromCalledMap
                      * @params {String} connectionId connection id of client
-                     * @methodOf webrtcApp.broker
+                     * @methodOf unchatbar.broker
                      * @description
                      *
                      * remove connection from active connection list
@@ -168,7 +168,7 @@ angular.module('webrtcApp')
                     /**
                      * @ngdoc methode
                      * @name connect
-                     * @methodOf webrtcApp.broker
+                     * @methodOf unchatbar.broker
                      * @description
                      *
                      * # peer
@@ -182,7 +182,7 @@ angular.module('webrtcApp')
                     /**
                      * @ngdoc methode
                      * @name getPeerId
-                     * @methodOf webrtcApp.broker
+                     * @methodOf unchatbar.broker
                      * @description
                      *
                      * get peer id
@@ -195,7 +195,7 @@ angular.module('webrtcApp')
                      * @ngdoc methode
                      * @name connectToClient
                      * @params {String} id peer id from client
-                     * @methodOf webrtcApp.broker
+                     * @methodOf unchatbar.broker
                      * @description
                      *
                      * connect to client by client peer id

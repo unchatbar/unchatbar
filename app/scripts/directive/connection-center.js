@@ -3,16 +3,16 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name webrtcApp.clientMessages
+ * @name unchatbar.clientMessages
  * @restrict E
  * @description
  *
  * # activeConnection
  * contains all called clients
- * # controller definition {@link webrtcApp.controller:clientMessages controller}
+ * # controller definition {@link unchatbar.controller:clientMessages controller}
  *
  */
-angular.module('webrtcApp').directive('connectionCenter', ['broker',
+angular.module('unchatbar').directive('connectionCenter', ['broker',
     function (broker) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment

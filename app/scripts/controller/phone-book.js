@@ -1,21 +1,21 @@
 /**
  * @ngdoc controller
- * @name  webrtcApp.controller:clientCalled
+ * @name  unchatbar.controller:clientCalled
  * @require $scope
  * @require broker
  * @description
  *
  * show all client connections
  * #controller of this directive
- * #{@link webrtcApp.clientCalled directive}
+ * #{@link unchatbar.clientCalled directive}
  *
  */
-angular.module('webrtcApp').controller('phoneBook', ['$scope','broker',
+angular.module('unchatbar').controller('phoneBook', ['$scope','broker',
     function ($scope,broker) {
         /**
          * @ngdoc property
          * @name username
-         * @propertyOf webrtcApp.controller:clientCalled
+         * @propertyOf unchatbar.controller:clientCalled
          * @returns {Object} clientList map of all client connections
          */
         $scope.clientList = broker.getMapOfClientCalled();
@@ -27,7 +27,7 @@ angular.module('webrtcApp').controller('phoneBook', ['$scope','broker',
         /**
          * @ngdoc methode
          * @name removeClient
-         * @methodOf webrtcApp.controller:clientCalled
+         * @methodOf unchatbar.controller:clientCalled
          * @params  {String} peerId id of client
          * @description
          *
@@ -43,7 +43,7 @@ angular.module('webrtcApp').controller('phoneBook', ['$scope','broker',
         /**
          * @ngdoc methode
          * @name removeClient
-         * @methodOf webrtcApp.controller:clientCalled
+         * @methodOf unchatbar.controller:clientCalled
          * @params  {String} peerId id of client
          * @description
          *

@@ -3,18 +3,18 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name webrtcApp.clientConnector
+ * @name unchatbar.clientConnector
  * @restrict E
  * @description
  *
  * # activeConnection
  * dialog for client connection
- * # controller definition {@link webrtcApp.controller:clientConnector controller}
+ * # controller definition {@link unchatbar.controller:clientConnector controller}
 
  *
  */
 
-angular.module('webrtcApp').directive('dialer', ['broker', '$rootScope',
+angular.module('unchatbar').directive('dialer', ['broker', '$rootScope',
     function (broker, $rootScope) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment

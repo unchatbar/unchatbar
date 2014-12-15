@@ -3,15 +3,15 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name webrtcApp.clientCalled
+ * @name unchatbar.clientCalled
  * @restrict E
  * @description
  *
  * include messageBox for all client connection
- * # controller definition {@link webrtcApp.controller:clientCalled controller}
+ * # controller definition {@link unchatbar.controller:clientCalled controller}
  *
  */
-angular.module('webrtcApp').directive('phoneBook', ['broker',
+angular.module('unchatbar').directive('phoneBook', ['broker',
     function (broker) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment

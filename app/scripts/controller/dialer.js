@@ -1,6 +1,6 @@
 /**
  * @ngdoc controller
- * @name  webrtcApp.controller:clientConnector
+ * @name  unchatbar.controller:clientConnector
  * @require $scope
  * @require $rootScope
  * @require broker
@@ -8,17 +8,17 @@
  *
  * connect to client dialog
  * #controller of this directive
- * #{@link webrtcApp.clientConnector directive}
+ * #{@link unchatbar.clientConnector directive}
  *
  */
-angular.module('webrtcApp').controller('dialer', ['$scope', '$rootScope', 'broker',
+angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'broker',
     function ($scope, $rootScope, broker) {
 
 
         /**
          * @ngdoc property
          * @name peerId
-         * @propertyOf webrtcApp.controller:clientConnector
+         * @propertyOf unchatbar.controller:clientConnector
          * @returns {String} id from broker
          */
         $scope.peerId = broker.getPeerId();
@@ -26,7 +26,7 @@ angular.module('webrtcApp').controller('dialer', ['$scope', '$rootScope', 'broke
         /**
          * @ngdoc property
          * @name connectId
-         * @propertyOf webrtcApp.controller:clientConnector
+         * @propertyOf unchatbar.controller:clientConnector
          * @returns {String} client id for connect
          */
         $scope.connectId = '';
@@ -35,7 +35,7 @@ angular.module('webrtcApp').controller('dialer', ['$scope', '$rootScope', 'broke
         /**
          * @ngdoc methode
          * @name connect
-         * @methodOf webrtcApp.controller:clientConnector
+         * @methodOf unchatbar.controller:clientConnector
          * @description
          *
          * connect to client
