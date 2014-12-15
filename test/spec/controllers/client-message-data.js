@@ -1,19 +1,21 @@
 'use strict';
 
-describe('Controller: clientMessageData', function () {
+describe('Controller: connection', function () {
 
-    beforeEach(module('webrtcApp'));
+    beforeEach(module('unchatbar'));
 
-    var clientMessageData, scope, rootScope;
+    var connectionCTRL, scope, rootScope, notifyService;
 
-    beforeEach(inject(function ($controller, $rootScope) {
+    beforeEach(inject(function ($controller, $rootScope,notify) {
         scope = $rootScope.$new();
         rootScope = $rootScope;
+        notifyService = notify;
 
-        clientMessageData = function () {
-            $controller('clientMessageData', {
+        connectionCTRL = function () {
+            $controller('connection', {
                 $scope: scope,
-                $rootScope: rootScope
+                $rootScope: rootScope,
+                notify: notifyService
             });
         }
     }));
@@ -23,29 +25,45 @@ describe('Controller: clientMessageData', function () {
             scope.connect = {
                 open: false
             }
-            clientMessageData();
+            connectionCTRL();
             expect(scope.isOpen).toBeFalsy();
         });
         it('should set `$scope.isOpen` to true, if connect.open is true', function () {
             scope.connect = {
                 open: true
             }
-            clientMessageData();
+            connectionCTRL();
             expect(scope.isOpen).toBeTruthy();
         });
         it('should set `$scope.message` to empty string', function () {
             scope.connect = {
                 open: false
             };
-            clientMessageData();
+            connectionCTRL();
             expect(scope.message).toBe('');
         });
         it('should set `$scope.messageList` to empty array', function () {
             scope.connect = {
                 open: false
             };
-            clientMessageData();
+            connectionCTRL();
             expect(scope.messageList).toEqual([]);
+        });
+
+        it('should set `$scope.minimize` to false', function () {
+            scope.connect = {
+                open: false
+            };
+            connectionCTRL();
+            expect(scope.minimize).toBeFalsy();
+        });
+
+        it('should set `$scope.unreadMessageCounter` to 0', function () {
+            scope.connect = {
+                open: false
+            };
+            connectionCTRL();
+            expect(scope.unreadMessageCounter).toBe(0);
         });
     });
 
@@ -56,13 +74,13 @@ describe('Controller: clientMessageData', function () {
                 send: function () {
                 }
             };
+            connectionCTRL();
         });
+
         describe('send', function () {
             beforeEach(function () {
                 spyOn(scope.connect, 'send').and.returnValue(true);
-                clientMessageData();
-
-            })
+            });
             it('should call `$scope.connect.send` width `$scope.message`', function () {
                 scope.message = 'test';
 
@@ -85,7 +103,52 @@ describe('Controller: clientMessageData', function () {
 
                 expect(scope.message).toBe('');
             });
-        })
+        });
+
+        describe('close', function () {
+            beforeEach(function () {
+                scope.connect.close = function () {
+                }
+            })
+            it('should call `$scope.connect.close()`', function () {
+                spyOn(scope.connect, 'close').and.returnValue(true);
+
+                scope.closeConnection();
+
+                expect(scope.connect.close).toHaveBeenCalled();
+            });
+        });
+
+        describe('toogleMinimize', function () {
+            it("should set `$scope.minimize` to true, when `$scope.minimize` is false", function () {
+                scope.minimize = false;
+
+                scope.toogleMinimize();
+
+                expect(scope.minimize).toBeTruthy();
+            });
+            it("should set `$scope.minimize` to false, when `$scope.minimize` is true", function () {
+                scope.minimize = true;
+
+                scope.toogleMinimize();
+
+                expect(scope.minimize).toBeFalsy();
+            });
+            it("should set `$scope.unreadMessageCounter` to 0, when `$scope.minimize` is true", function () {
+                scope.minimize = true;
+                scope.unreadMessageCounter = 20;
+                scope.toogleMinimize();
+
+                expect(scope.unreadMessageCounter).toBe(0);
+            });
+            it("should not set `$scope.unreadMessageCounter` to 0, when `$scope.minimize` is false", function () {
+                scope.minimize = false;
+                scope.unreadMessageCounter = 20;
+                scope.toogleMinimize();
+
+                expect(scope.unreadMessageCounter).toBe(20);
+            });
+        });
     });
     describe('check event', function () {
         beforeEach(function () {
@@ -94,7 +157,7 @@ describe('Controller: clientMessageData', function () {
                 send: function () {
                 }
             };
-            clientMessageData();
+            connectionCTRL();
         });
         describe('clientConnection:open', function () {
             it('should set `$scope.isOpen` to true', function () {
@@ -109,20 +172,18 @@ describe('Controller: clientMessageData', function () {
             it('should set `$scope.isOpen` to false', function () {
                 scope.isOpen = false;
 
-
-
                 scope.$broadcast('clientConnection:close', {});
 
                 expect(scope.isOpen).toBeFalsy();
             });
 
             it('should call scope.$emit', function () {
-                spyOn(scope,'$emit').and.returnValue(true);
+                spyOn(scope, '$emit').and.returnValue(true);
                 scope.connectionIndex = 1;
 
                 scope.$broadcast('clientConnection:close', {});
 
-                expect(scope.$emit).toHaveBeenCalledWith('peer:clientDisconnect', {connectionIndex: 1});
+                expect(scope.$emit).toHaveBeenCalledWith('peer:clientDisconnect', {connectionId: 1});
             });
         });
         describe('clientConnection:data', function () {

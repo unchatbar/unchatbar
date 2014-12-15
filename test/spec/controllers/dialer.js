@@ -1,18 +1,18 @@
 'use strict';
 
-describe('Controller: clientConnector', function () {
+describe('Controller: dialer', function () {
 
-    beforeEach(module('webrtcApp'));
+    beforeEach(module('unchatbar'));
 
-    var clientConnector, scope, rootScope, brokerService;
+    var dialerCTRL, scope, rootScope, brokerService;
 
     beforeEach(inject(function ($controller, $rootScope, broker) {
         scope = $rootScope.$new();
         rootScope = $rootScope;
         brokerService = broker;
 
-        clientConnector = function () {
-            $controller('clientConnect', {
+        dialerCTRL = function () {
+            $controller('dialer', {
                 $scope: scope,
                 $rootScope: rootScope,
                 broker: brokerService
@@ -25,7 +25,7 @@ describe('Controller: clientConnector', function () {
         it('should have an empty peerId by init', function () {
             spyOn(brokerService, 'getPeerId').and.returnValue('');
 
-            clientConnector();
+            dialerCTRL();
 
             expect(scope.peerId).toEqual('');
         });
@@ -33,16 +33,24 @@ describe('Controller: clientConnector', function () {
         it('should call `broker.getPeerId`', function () {
             spyOn(brokerService, 'getPeerId').and.returnValue('');
 
-            clientConnector();
+            dialerCTRL();
 
             expect(brokerService.getPeerId).toHaveBeenCalled();
+        });
+
+        it('should set scope.connectId to empty string', function () {
+            spyOn(brokerService, 'getPeerId').and.returnValue('');
+
+            dialerCTRL();
+
+            expect(scope.connectId).toBe('');
         });
     });
 
     describe('check methode', function () {
         beforeEach(function () {
             spyOn(brokerService, 'getPeerId').and.returnValue('');
-            clientConnector();
+            dialerCTRL();
         });
         describe('connect', function () {
             it('should call `broker.connectToClient` width `$scope.connectId `', function () {
@@ -70,12 +78,11 @@ describe('Controller: clientConnector', function () {
                 spyOn(brokerService, 'getPeerId').and.callFake(function(){
                     return peerId;
                 });
-                clientConnector();
+                dialerCTRL();
                 peerId = 'test';
 
-                scope.$broadcast('peer:open', {connectId: 'conId'});
+                scope.$broadcast('peer:open', {});
 
-                scope.$broadcast('peer:clientConnect', {connectId: 'conId'});
                 expect(scope.peerId).toBe('test');
             })
         });

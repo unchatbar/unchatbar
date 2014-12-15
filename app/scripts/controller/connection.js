@@ -1,6 +1,6 @@
 /**
  * @ngdoc controller
- * @name  unchatbar.controller:clientMessageData
+ * @name  unchatbar.controller:connection
  * @require $scope
  * @require $rootScope
  * @require broker
@@ -17,7 +17,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc property
          * @name isOpen
-         * @propertyOf unchatbar.controller:clientMessageData
+         * @propertyOf unchatbar.controller:connection
          * @returns {Boolean} is connection open
          */
         $scope.isOpen = $scope.connect.open ? true : false;
@@ -25,7 +25,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc property
          * @name message
-         * @propertyOf unchatbar.controller:clientMessageData
+         * @propertyOf unchatbar.controller:connection
          * @returns {String} user message text
          */
         $scope.message = '';
@@ -33,7 +33,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc property
          * @name message
-         * @propertyOf unchatbar.controller:clientMessageData
+         * @propertyOf unchatbar.controller:connection
          * @returns {Array} list of all messages
          */
         $scope.messageList = [];
@@ -41,7 +41,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc property
          * @name minimize
-         * @propertyOf unchatbar.controller:clientMessageData
+         * @propertyOf unchatbar.controller:connection
          * @returns {Boolean} is view minimze
          */
         $scope.minimize = false;
@@ -49,7 +49,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc property
          * @name unreadMessageCounter
-         * @propertyOf unchatbar.controller:clientMessageData
+         * @propertyOf unchatbar.controller:connection
          * @returns {Number} number of unread messages
          */
         $scope.unreadMessageCounter = 0;
@@ -57,7 +57,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc methode
          * @name send
-         * @methodOf unchatbar.controller:clientMessageData
+         * @methodOf unchatbar.controller:connection
          * @description
          *
          * send message to client
@@ -72,7 +72,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc methode
          * @name closeConnection
-         * @methodOf unchatbar.controller:clientMessageData
+         * @methodOf unchatbar.controller:connection
          * @description
          *
          * close connection to client
@@ -85,7 +85,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
         /**
          * @ngdoc methode
          * @name closeConnection
-         * @methodOf unchatbar.controller:clientMessageData
+         * @methodOf unchatbar.controller:connection
          * @description
          *
          * close connection to client
@@ -105,7 +105,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
 
         $scope.$on('clientConnection:close', function () {
             notify({
-                message: 'Xconnect to ' + $scope.connect.peer + ' close',
+                message: 'connect to ' + $scope.connect.peer + ' close',
                 classes: 'alert alert-info',
                 templateUrl: ''
             });
@@ -131,9 +131,6 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
                 });
             }
         }
-
-
         notifyOpenConnection();
-
     }
 ]);

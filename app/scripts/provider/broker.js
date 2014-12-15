@@ -82,7 +82,6 @@ angular.module('unchatbar')
             function ($q, $rootScope, notify,$localStorage,$sessionStorage) {
                 var storage = useLocalStorage ? $localStorage : $sessionStorage,
                     activeConnections= {};
-
                 storage = storage.$default({
                     broker :{
                         peerId : '',

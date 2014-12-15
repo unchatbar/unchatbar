@@ -1,6 +1,6 @@
 /**
  * @ngdoc controller
- * @name  unchatbar.controller:clientMessages
+ * @name  unchatbar.controller:connectionCenter
  * @require $scope
  * @require $rootScope
  * @require broker
@@ -16,7 +16,7 @@ angular.module('unchatbar').controller('connectionCenter', ['$scope','broker',
         /**
          * @ngdoc property
          * @name connections
-         * @propertyOf unchatbar.controller:clientMessages
+         * @propertyOf unchatbar.controller:connectionCenter
          * @returns {Object} map of client connections
          */
         $scope.connections = broker.getMapOfActiveClients();
@@ -27,7 +27,7 @@ angular.module('unchatbar').controller('connectionCenter', ['$scope','broker',
         });
 
         $scope.$on('peer:clientDisconnect',function(event,data){
-            $scope.connections = broker.removeClientFromCalledMap(data.connectionId);
+            broker.removeClientFromCalledMap(data.connectionId);
             $scope.connections = broker.getMapOfActiveClients();
         });
     }]

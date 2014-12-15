@@ -1,6 +1,6 @@
 /**
  * @ngdoc controller
- * @name  unchatbar.controller:clientCalled
+ * @name  unchatbar.controller:phoneBook
  * @require $scope
  * @require broker
  * @description
@@ -15,19 +15,16 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','broker',
         /**
          * @ngdoc property
          * @name username
-         * @propertyOf unchatbar.controller:clientCalled
+         * @propertyOf unchatbar.controller:phoneBook
          * @returns {Object} clientList map of all client connections
          */
         $scope.clientList = broker.getMapOfClientCalled();
 
-        $scope.$on('peer:clientConnect', function (event, data) {
-            $scope.clientList = broker.getMapOfClientCalled();
-        });
-
+     
         /**
          * @ngdoc methode
          * @name removeClient
-         * @methodOf unchatbar.controller:clientCalled
+         * @methodOf unchatbar.controller:phoneBook
          * @params  {String} peerId id of client
          * @description
          *
@@ -43,7 +40,7 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','broker',
         /**
          * @ngdoc methode
          * @name removeClient
-         * @methodOf unchatbar.controller:clientCalled
+         * @methodOf unchatbar.controller:phoneBook
          * @params  {String} peerId id of client
          * @description
          *
@@ -53,5 +50,10 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','broker',
         $scope.connectClient = function (peerId) {
             broker.connectToClient(peerId);
         };
+
+        $scope.$on('peer:clientConnect', function (event, data) {
+            $scope.clientList = broker.getMapOfClientCalled();
+        });
+
     }
 ]);

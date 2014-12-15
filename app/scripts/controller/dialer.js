@@ -1,6 +1,6 @@
 /**
  * @ngdoc controller
- * @name  unchatbar.controller:clientConnector
+ * @name  unchatbar.controller:dialer
  * @require $scope
  * @require $rootScope
  * @require broker
@@ -18,7 +18,7 @@ angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'broke
         /**
          * @ngdoc property
          * @name peerId
-         * @propertyOf unchatbar.controller:clientConnector
+         * @propertyOf unchatbar.controller:dialer
          * @returns {String} id from broker
          */
         $scope.peerId = broker.getPeerId();
@@ -26,7 +26,7 @@ angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'broke
         /**
          * @ngdoc property
          * @name connectId
-         * @propertyOf unchatbar.controller:clientConnector
+         * @propertyOf unchatbar.controller:dialer
          * @returns {String} client id for connect
          */
         $scope.connectId = '';
@@ -35,7 +35,7 @@ angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'broke
         /**
          * @ngdoc methode
          * @name connect
-         * @methodOf unchatbar.controller:clientConnector
+         * @methodOf unchatbar.controller:dialer
          * @description
          *
          * connect to client
@@ -47,9 +47,9 @@ angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'broke
         };
 
         $scope.$on('peer:open', function (event, message) {
-            $rootScope.$apply(function () {
+
                 $scope.peerId = broker.getPeerId();
-            });
+
         });
 
     }
