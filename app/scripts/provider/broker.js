@@ -199,7 +199,9 @@ angular.module('unchatbar')
                     connect: function () {
                         peer = new Peer(storage.peerId,{host: host, port: port, path: path});
                         peerListener();
-                        makePeerHeartbeater( peer );
+                        if (peer.socket) {
+                            makePeerHeartbeater(peer);
+                        }
 
                     },
                     /**

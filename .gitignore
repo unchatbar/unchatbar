@@ -1,5 +1,6 @@
 .idea/workspace.xml
 .sass-cache
 .tmp
+app/scripts/constants.js
 bower_components
 node_modules

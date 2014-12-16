@@ -410,6 +410,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'clean:server',
+        'ngconstant:dev',
         'concurrent:test',
         'autoprefixer',
         'connect:test',

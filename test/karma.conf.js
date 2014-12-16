@@ -24,6 +24,7 @@ module.exports = function (config) {
             'bower_components/ngstorage/ngStorage.js',
             'bower_components/lodash/dist/lodash.compat.js',
             'bower_components/angular-mocks/angular-mocks.js',
+            'app/scripts/constants.js',
             'app/scripts/**/*.js',
             'test/mock/**/*.js',
             'test/spec/**/*.js'
