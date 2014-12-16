@@ -8,7 +8,7 @@
  *
  * Main module of the application.
  */
-angular.module('unchatbar', ['cgNotify','ngStorage'])
+angular.module('unchatbar', ['constants','cgNotify','ngStorage'])
     .run(['broker', function (broker) {
         broker.connect();
     }

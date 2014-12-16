@@ -330,7 +330,26 @@ module.exports = function (grunt) {
                 src: '{,*/}*.css'
             }
         },
-
+        ngconstant: {
+            dist: {
+                options: {
+                    dest: '<%= yeoman.app %>/scripts/constants.js',
+                    name: 'constants'
+                },
+                constants: {
+                    LOCALSTORAGE: true
+                }
+            },
+            dev: {
+                options: {
+                    dest: '<%= yeoman.app %>/scripts/constants.js',
+                    name: 'constants'
+                },
+                constants: {
+                    LOCALSTORAGE: false
+                }
+            }
+        },
         // Run some tasks in parallel to speed up the build process
         concurrent: {
             server: [
@@ -374,6 +393,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'ngconstant:dev',
             'wiredep',
             'concurrent:server',
             'autoprefixer',
@@ -398,6 +418,7 @@ module.exports = function (grunt) {
     grunt.registerTask('doku', ['ngdocs']);
     grunt.registerTask('build', [
         'clean:dist',
+        'ngconstant:dist',
         'wiredep',
         'useminPrepare',
         'concurrent:dist',
