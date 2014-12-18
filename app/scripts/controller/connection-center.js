@@ -11,24 +11,24 @@
  * #{@link unchatbar.clientMessages directive}
  *
  */
-angular.module('unchatbar').controller('connectionCenter', ['$scope','broker',
-    function ($scope,broker) {
+angular.module('unchatbar').controller('connectionCenter', ['$scope','DataConnection',
+    function ($scope,DataConnection) {
         /**
          * @ngdoc property
          * @name connections
          * @propertyOf unchatbar.controller:connectionCenter
          * @returns {Object} map of client connections
          */
-        $scope.connections = broker.getMapOfActiveClients();
+        $scope.connections = DataConnection.getMapOfActiveClients();
 
 
         $scope.$on('peer:clientConnect',function(event,data){
-            $scope.connections = broker.getMapOfActiveClients();
+            $scope.connections = DataConnection.getMapOfActiveClients();
         });
 
         $scope.$on('peer:clientDisconnect',function(event,data){
-            broker.removeClientFromCalledMap(data.connectionId);
-            $scope.connections = broker.getMapOfActiveClients();
+            DataConnection.removeClientFromCalledMap(data.connectionId);
+            $scope.connections = DataConnection.getMapOfActiveClients();
         });
     }]
 );

@@ -12,12 +12,15 @@
  * # controller definition {@link unchatbar.controller:clientMessages controller}
  *
  */
-angular.module('unchatbar').directive('connectionCenter', ['broker',
-    function (broker) {
+angular.module('unchatbar').directive('connectionCenter', ['DataConnection',
+    function (DataConnection) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/connection-center.html',
-            controller: 'connectionCenter'
+            controller: 'connectionCenter',
+            link : function(){
+                DataConnection.init();
+            }
 
         };
     }

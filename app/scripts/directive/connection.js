@@ -13,8 +13,8 @@
 
  *
  */
-angular.module('unchatbar').directive('connection', ['broker','$rootScope',
-    function(broker,$rootScope) {
+angular.module('unchatbar').directive('connection', ['$rootScope',
+    function($rootScope) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             scope: {

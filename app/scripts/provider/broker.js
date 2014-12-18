@@ -9,9 +9,9 @@
  * config peer connection
  */
 angular.module('unchatbar')
-    .provider('broker', function () {
+    .provider('Broker', function () {
 
-        var peer = '', host = '', port = '', path = '', useLocalStorage = false;
+        var host = '', port = '', path = '', useLocalStorage = false;
 
         /**
          * @ngdoc methode
@@ -58,7 +58,7 @@ angular.module('unchatbar')
 
         /**
          * @ngdoc methode
-         * @name setLocalStroage
+         * @name setLocalStorage
          * @methodOf unchatbar.brokerProvider
          * @params {String} path set path from peerServer
          * @description
@@ -66,7 +66,7 @@ angular.module('unchatbar')
          * use local storage for store peerId
          *
          */
-        this.setLocalStroage = function () {
+        this.setLocalStorage = function () {
             useLocalStorage = true;
         }
 
@@ -78,114 +78,46 @@ angular.module('unchatbar')
          * # peer
          * peer service
          */
-        this.$get = ['$q', '$rootScope','notify','$localStorage','$sessionStorage',
-            function ($q, $rootScope, notify,$localStorage,$sessionStorage) {
+        this.$get = ['$q', '$rootScope', 'notify', '$localStorage', '$sessionStorage', 'BrokerHeartbeat','peer',
+            function ($q, $rootScope, notify, $localStorage, $sessionStorage, BrokerHeartbeat, peerService) {
                 var storage = useLocalStorage ? $localStorage : $sessionStorage,
-                    activeConnections= {};
+                    peer = peerService.get();
+
                 storage = storage.$default({
-                    broker :{
-                        peerId : '',
-                        connections : {}
+                    broker: {
+                        peerId: ''
                     }
                 }).broker;
 
-                function makePeerHeartbeater ( peer ) {
-                    var timeoutId = 0;
-                    function heartbeat () {
-                        timeoutId = setTimeout( heartbeat, 20000 );
-                        if ( peer.socket._wsOpen() ) {
-                            peer.socket.send( {type:'HEARTBEAT'} );
-                        }
-                    }
-                    // Start
-                    heartbeat();
-                    // return
-                    return {
-                        start : function () {
-                            if ( timeoutId === 0 ) { heartbeat(); }
-                        },
-                        stop : function () {
-                            clearTimeout( timeoutId );
-                            timeoutId = 0;
-                        }
-                    };
-                }
+
 
                 function peerListener() {
-                    peer.on('open', function(id) {
+                    peer.on('open', function (id) {
                         $rootScope.$apply(function () {
                             storage.peerId = id;
                             $rootScope.$broadcast('peer:open', {id: id});
                         });
                     });
+
                     peer.on('connection', function (connect) {
                         $rootScope.$apply(function () {
-                            peerClientConnect(connect);
+                            $rootScope.$broadcast('client:connect', {connection: connect});
                         });
                     });
+
                     peer.on('error', function (error) {
                         notify({
-                            message:error.message,
-                            classes:'alert alert-danger',
-                            templateUrl : ''
+                            message: error.message,
+                            classes: 'alert alert-danger',
+                            templateUrl: ''
 
                         });
                     });
                 }
 
-                function peerClientConnect(connection) {
-                    storage.connections[connection.peer] = true;
-                    activeConnections[connection.peer] = connection;
-                    $rootScope.$broadcast('peer:clientConnect', {
-                        connectId: connection.peer,
-                        connection: connection
-                    });
-                }
 
                 return {
-                    /**
-                     * @ngdoc methode
-                     * @name getMapOfClientCalled
-                     * @methodOf unchatbar.broker
-                     * @return {Object} map of called client's
-                     * @description
-                     *
-                     * get called connections from storage
-                     *
-                     */
-                    getMapOfClientCalled : function () {
-                        return storage.connections;
-                    },
-                    removeClientCalled : function (peerId) {
-                        return delete storage.connections[peerId];
-                    },
 
-                    /**
-                     * @ngdoc methode
-                     * @name getMapOfActiveClients
-                     * @methodOf unchatbar.broker
-                     * @return {Object} map of active connection
-                     * @description
-                     *
-                     * get map of called called clients
-                     *
-                     */
-                    getMapOfActiveClients : function () {
-                        return activeConnections;
-                    },
-                    /**
-                     * @ngdoc methode
-                     * @name removeClientFromCalledMap
-                     * @params {String} connectionId connection id of client
-                     * @methodOf unchatbar.broker
-                     * @description
-                     *
-                     * remove connection from active connection list
-                     *
-                     */
-                    removeClientFromCalledMap : function (connectionId) {
-                      delete activeConnections[connectionId];
-                    },
                     /**
                      * @ngdoc methode
                      * @name connect
@@ -196,13 +128,18 @@ angular.module('unchatbar')
                      * connect to broker server
                      *
                      */
-                    connect: function () {
-                        peer = new Peer(storage.peerId,{host: host, port: port, path: path});
+                    connectServer: function () {
+                        peer = new Peer(storage.peerId, {host: host, port: port, path: path});
                         peerListener();
-                        if (peer.socket) {
-                            makePeerHeartbeater(peer);
-                        }
+                        BrokerHeartbeat.heartbeater(peer);
 
+
+                    },
+                    connect : function (id){
+                        return peer.connect(id);
+                    },
+                    getPeer: function () {
+                        return peer;
                     },
                     /**
                      * @ngdoc methode
@@ -215,30 +152,10 @@ angular.module('unchatbar')
                      */
                     getPeerId: function () {
                         return peer.id || '';
-                    },
-                    /**
-                     * @ngdoc methode
-                     * @name connectToClient
-                     * @params {String} id peer id from client
-                     * @methodOf unchatbar.broker
-                     * @description
-                     *
-                     * connect to client by client peer id
-                     *
-                     */
-                    connectToClient: function (id) {
-                        if (peer.id) {
-                            peerClientConnect(peer.connect(id));
-                        } else {
-                            notify({
-                                message:'connect to client failed, no peerId',
-                                classes:'alert alert-danger',
-                                templateUrl : ''
-
-                            });
-                        }
                     }
+
                 };
             }
         ]
-    });
+    }
+);

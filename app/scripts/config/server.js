@@ -1,8 +1,9 @@
 angular.module('unchatbar')
-    .config(['brokerProvider','LOCALSTORAGE', function (brokerProvider,LOCALSTORAGE) {
-        if(LOCALSTORAGE === true) {
-            brokerProvider.setLocalStroage();
+    .config(['BrokerProvider', 'PhoneBookProvider', 'LOCALSTORAGE', function (BrokerProvider, PhoneBookProvider, LOCALSTORAGE) {
+        if (LOCALSTORAGE === true) {
+            BrokerProvider.setLocalStorage();
+            PhoneBookProvider.setLocalStorage();
         }
-        brokerProvider.setHost('unchatbar-server.herokuapp.com');
-        brokerProvider.setPort(80);
+        BrokerProvider.setHost('unchatbar-server.herokuapp.com');
+        BrokerProvider.setPort(80);
     }]);

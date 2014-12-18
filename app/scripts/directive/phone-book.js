@@ -11,8 +11,8 @@
  * # controller definition {@link unchatbar.controller:clientCalled controller}
  *
  */
-angular.module('unchatbar').directive('phoneBook', ['broker',
-    function (broker) {
+angular.module('unchatbar').directive('phoneBook', [
+    function () {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/phone-book.html',

@@ -4,6 +4,7 @@
  * @author Lars Wiedemann
  * @ngdoc directive
  * @name unchatbar.clientConnector
+ * @param {autocall-from-phonebook} call all from phonebook automaticly
  * @restrict E
  * @description
  *
@@ -14,8 +15,8 @@
  *
  */
 
-angular.module('unchatbar').directive('dialer', ['broker', '$rootScope',
-    function (broker, $rootScope) {
+angular.module('unchatbar').directive('dialer', ['$rootScope', 'DataConnection', 'PhoneBook',
+    function (broker, $rootScope, DataConnection, PhoneBook) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/dialer.html',
@@ -25,8 +26,8 @@ angular.module('unchatbar').directive('dialer', ['broker', '$rootScope',
             },
             link: function (scope, element, attr) {
                 if (scope.autocallFromPhonebook === true) {
-                    _.forEach(broker.getMapOfClientCalled(), function (value, connectionId) {
-                        broker.connectToClient(connectionId);
+                    _.forEach(PhoneBook.getMap(), function (value, connectionId) {
+                        DataConnection.connect(connectionId);
                     })
                 }
             }
