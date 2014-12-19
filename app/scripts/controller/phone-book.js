@@ -10,8 +10,8 @@
  * #{@link unchatbar.clientCalled directive}
  *
  */
-angular.module('unchatbar').controller('phoneBook', ['$scope','DataConnection','PhoneBook',
-    function ($scope,DataConnection,PhoneBook) {
+angular.module('unchatbar').controller('phoneBook', ['$scope','Broker','PhoneBook',
+    function ($scope,Broker,PhoneBook) {
         /**
          * @ngdoc property
          * @name username
@@ -48,7 +48,7 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','DataConnection','
          *
          */
         $scope.connectClient = function (peerId) {
-            DataConnection.connect(peerId);
+            Broker.connect(peerId);
         };
 
         $scope.$on('peer:clientConnect', function (event, data) {

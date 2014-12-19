@@ -3,13 +3,14 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc service
- * @name unchatbar.brokerProvider
+ * @name unchatbar.Peer
  * @description
- * # peer
- * config peer connection
+ *
+ * Wrapper for window.peer lib
+ *
  */
 angular.module('unchatbar')
-    .service('peer',['$window',
+    .service('Peer',['$window',
         function ($window) {
             var activeConnections = {};
             return {

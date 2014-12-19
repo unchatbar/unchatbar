@@ -3,10 +3,11 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc service
- * @name unchatbar.brokerProvider
+ * @name unchatbar.DataConnection
  * @description
- * # peer
- * config peer connection
+ *
+ * handle data connection
+ *
  */
 angular.module('unchatbar')
     .service('DataConnection', ['$rootScope', 'Broker', 'PhoneBook',
@@ -14,22 +15,29 @@ angular.module('unchatbar')
             var activeConnections = {};
 
             return {
+                /**
+                 * @ngdoc methode
+                 * @name connectServer
+                 * @methodOf unchatbar.DataConnection
+                 * @description
+                 *
+                 * init listener for client data connection's
+                 *
+                 */
                 init: function () {
                     $rootScope.$on('client:connect', function (event, data) {
                         this.addConnection(data.connection);
                     }.bind(this));
                 },
-                connect: function (id) {
-                    this.addConnection(Broker.connect(id));
-                },
+
                 /**
                  * @ngdoc methode
-                 * @name connectToClient
-                 * @params {String} id peer id from client
-                 * @methodOf unchatbar.broker
+                 * @name addConnection
+                 * @methodOf unchatbar.DataConnection
+                 * @param {Object} connection client connection
                  * @description
                  *
-                 * connect to client by client peer id
+                 * store new connection
                  *
                  */
                 addConnection: function (connection) {
@@ -43,11 +51,11 @@ angular.module('unchatbar')
                 /**
                  * @ngdoc methode
                  * @name getMapOfActiveClients
-                 * @methodOf unchatbar.broker
-                 * @return {Object} map of active connection
+                 * @methodOf unchatbar.DataConnection
+                 * @return {Object} map of active connection's
                  * @description
                  *
-                 * get map of called called clients
+                 * store new connection
                  *
                  */
                 getMapOfActiveClients: function () {
@@ -56,8 +64,8 @@ angular.module('unchatbar')
                 /**
                  * @ngdoc methode
                  * @name removeClientFromCalledMap
-                 * @params {String} connectionId connection id of client
-                 * @methodOf unchatbar.broker
+                 * @methodOf unchatbar.DataConnection
+                 * @return {String} connection id
                  * @description
                  *
                  * remove connection from active connection list

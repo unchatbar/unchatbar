@@ -11,8 +11,8 @@
  * #{@link unchatbar.clientConnector directive}
  *
  */
-angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'Broker', 'DataConnection',
-    function ($scope, $rootScope, Broker, DataConnection) {
+angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'Broker',
+    function ($scope, $rootScope, Broker) {
 
 
         /**
@@ -42,7 +42,7 @@ angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'Broke
          *
          */
         $scope.connect = function () {
-            var connection = DataConnection.connect($scope.connectId);
+            var connection = Broker.connect($scope.connectId);
             $scope.connectId = '';
         };
 

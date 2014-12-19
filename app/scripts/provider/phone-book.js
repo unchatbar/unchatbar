@@ -24,7 +24,13 @@ angular.module('unchatbar')
         this.setLocalStorage = function () {
             useLocalStorage = true;
         }
-
+        /**
+         * @ngdoc service
+         * @name unchatbar.PhoneBook
+         * @description
+         * # peer
+         * peer service
+         */
         this.$get = ['$localStorage', '$sessionStorage',
             function ($localStorage, $sessionStorage) {
                 var storage = useLocalStorage ? $localStorage : $sessionStorage,
@@ -37,21 +43,44 @@ angular.module('unchatbar')
                 return {
                     /**
                      * @ngdoc methode
-                     * @name getMapOfClientCalled
-                     * @methodOf unchatbar.broker
+                     * @name getMap
+                     * @methodOf unchatbar.PhoneBook
                      * @return {Object} map of called client's
                      * @description
                      *
                      * get called connections from storage
                      *
                      */
-                    //Rename in getMap
                     getMap: function () {
                         return storage.connections;
                     },
+
+                    /**
+                     * @ngdoc methode
+                     * @name remove
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String] perrId Peerid from Client
+                     * @return {Object} remove was successfull
+                     * @description
+                     *
+                     * remove Client from phone book
+                     *
+                     */
                     remove: function (peerId) {
                         return delete storage.connections[peerId];
                     },
+
+                    /**
+                     * @ngdoc methode
+                     * @name add
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String] perrId Peerid from Client
+                     * @return {Object} remove was successfull
+                     * @description
+                     *
+                     * add Client to phone book
+                     *
+                     */
                     add: function (peerId) {
                         storage.connections[peerId] = true;
                     }

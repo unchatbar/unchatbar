@@ -3,15 +3,24 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc service
- * @name unchatbar.brokerProvider
+ * @name unchatbar.BrokerHeartbeat
  * @description
- * # peer
- * config peer connection
+ *
+ * heartbeate to server
  */
 angular.module('unchatbar')
     .service('BrokerHeartbeat', ['$localStorage', '$sessionStorage', '$rootScope',
         function ($localStorage, $sessionStorage, $rootScope) {
             return {
+                /**
+                 * @ngdoc methode
+                 * @name heartbeater
+                 * @methodOf unchatbar.Broker
+                 * @description
+                 *
+                 * heartbeater to broker server
+                 *
+                 */
                 heartbeater: function (peer) {
                     var timeoutId = 0;
 

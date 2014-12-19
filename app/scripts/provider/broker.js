@@ -3,7 +3,7 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc service
- * @name unchatbar.brokerProvider
+ * @name unchatbar.BrokerProvider
  * @description
  * # peer
  * config peer connection
@@ -16,7 +16,7 @@ angular.module('unchatbar')
         /**
          * @ngdoc methode
          * @name setHost
-         * @methodOf unchatbar.brokerProvider
+         * @methodOf unchatbar.BrokerProvider
          * @params {String} _host set host from peer server
          * @description
          *
@@ -30,7 +30,7 @@ angular.module('unchatbar')
         /**
          * @ngdoc methode
          * @name setPort
-         * @methodOf unchatbar.brokerProvider
+         * @methodOf unchatbar.BrokerProvider
          * @params {Number} port set port for peer server
          * @description
          *
@@ -44,7 +44,7 @@ angular.module('unchatbar')
         /**
          * @ngdoc methode
          * @name setPath
-         * @methodOf unchatbar.brokerProvider
+         * @methodOf unchatbar.BrokerProvider
          * @params {String} path set path from peerServer
          * @description
          *
@@ -59,7 +59,7 @@ angular.module('unchatbar')
         /**
          * @ngdoc methode
          * @name setLocalStorage
-         * @methodOf unchatbar.brokerProvider
+         * @methodOf unchatbar.BrokerProvider
          * @params {String} path set path from peerServer
          * @description
          *
@@ -73,13 +73,13 @@ angular.module('unchatbar')
 
         /**
          * @ngdoc service
-         * @name unchatbar.broker
+         * @name unchatbar.Broker
          * @description
          * # peer
          * peer service
          */
-        this.$get = ['$q', '$rootScope', 'notify', '$localStorage', '$sessionStorage', 'BrokerHeartbeat','peer',
-            function ($q, $rootScope, notify, $localStorage, $sessionStorage, BrokerHeartbeat, peerService) {
+        this.$get = [ '$rootScope', 'notify', '$localStorage', '$sessionStorage', 'BrokerHeartbeat','Peer',
+            function ($rootScope, notify, $localStorage, $sessionStorage, BrokerHeartbeat, peerService) {
                 var storage = useLocalStorage ? $localStorage : $sessionStorage,
                     peer = peerService.get();
 
@@ -110,7 +110,6 @@ angular.module('unchatbar')
                             message: error.message,
                             classes: 'alert alert-danger',
                             templateUrl: ''
-
                         });
                     });
                 }
@@ -120,12 +119,11 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
-                     * @name connect
-                     * @methodOf unchatbar.broker
+                     * @name connectServer
+                     * @methodOf unchatbar.Broker
                      * @description
                      *
-                     * # peer
-                     * connect to broker server
+                     * connect to server
                      *
                      */
                     connectServer: function () {
@@ -135,16 +133,27 @@ angular.module('unchatbar')
 
 
                     },
+                    /**
+                     * @ngdoc methode
+                     * @name connect
+                     * @methodOf unchatbar.Broker
+                     * @return {Object} connection
+                     * @description
+                     *
+                     * connect to client
+                     *
+                     */
                     connect : function (id){
-                        return peer.connect(id);
+                        $rootScope.$broadcast('client:connect', {
+                            connection: peer.connect(id)
+                        });
                     },
-                    getPeer: function () {
-                        return peer;
-                    },
+
                     /**
                      * @ngdoc methode
                      * @name getPeerId
-                     * @methodOf unchatbar.broker
+                     * @methodOf unchatbar.Broker
+                     * @return {String} own peer id
                      * @description
                      *
                      * get peer id
