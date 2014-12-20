@@ -12,10 +12,9 @@
 angular.module('unchatbar')
     .service('Peer',['$window',
         function ($window) {
-            var activeConnections = {};
             return {
                get : function () {
-                   return $window.peer || {};
+                   return $window.Peer || {};
                }
             };
         }

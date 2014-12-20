@@ -25,7 +25,7 @@ angular.module('unchatbar')
          */
         this.setHost = function (_host) {
             host = _host;
-        }
+        };
 
         /**
          * @ngdoc methode
@@ -39,7 +39,7 @@ angular.module('unchatbar')
          */
         this.setPort = function (_port) {
             port = _port;
-        }
+        };
 
         /**
          * @ngdoc methode
@@ -54,7 +54,7 @@ angular.module('unchatbar')
          */
         this.setPath = function (_path) {
             path = _path;
-        }
+        };
 
         /**
          * @ngdoc methode
@@ -68,7 +68,7 @@ angular.module('unchatbar')
          */
         this.setLocalStorage = function () {
             useLocalStorage = true;
-        }
+        };
 
 
         /**
@@ -78,42 +78,15 @@ angular.module('unchatbar')
          * # peer
          * peer service
          */
-        this.$get = [ '$rootScope', 'notify', '$localStorage', '$sessionStorage', 'BrokerHeartbeat','Peer',
+        this.$get = ['$rootScope', 'notify', '$localStorage', '$sessionStorage', 'BrokerHeartbeat', 'Peer',
             function ($rootScope, notify, $localStorage, $sessionStorage, BrokerHeartbeat, peerService) {
                 var storage = useLocalStorage ? $localStorage : $sessionStorage,
-                    peer = peerService.get();
-
+                    peer = {};
                 storage = storage.$default({
                     broker: {
                         peerId: ''
                     }
                 }).broker;
-
-
-
-                function peerListener() {
-                    peer.on('open', function (id) {
-                        $rootScope.$apply(function () {
-                            storage.peerId = id;
-                            $rootScope.$broadcast('peer:open', {id: id});
-                        });
-                    });
-
-                    peer.on('connection', function (connect) {
-                        $rootScope.$apply(function () {
-                            $rootScope.$broadcast('client:connect', {connection: connect});
-                        });
-                    });
-
-                    peer.on('error', function (error) {
-                        notify({
-                            message: error.message,
-                            classes: 'alert alert-danger',
-                            templateUrl: ''
-                        });
-                    });
-                }
-
 
                 return {
 
@@ -127,11 +100,35 @@ angular.module('unchatbar')
                      *
                      */
                     connectServer: function () {
+                        var Peer = peerService.get();
                         peer = new Peer(storage.peerId, {host: host, port: port, path: path});
-                        peerListener();
+                        this._peerListener();
                         BrokerHeartbeat.heartbeater(peer);
 
 
+                    },
+
+                    _peerListener: function () {
+                        peer.on('open', function (id) {
+                            $rootScope.$apply(function () {
+                                storage.peerId = id;
+                                $rootScope.$broadcast('peer:open', {id: id});
+                            });
+                        });
+
+                        peer.on('connection', function (connect) {
+                            $rootScope.$apply(function () {
+                                $rootScope.$broadcast('client:connect', {connection: connect});
+                            });
+                        });
+
+                        peer.on('error', function (error) {
+                            notify({
+                                message: error.message,
+                                classes: 'alert alert-danger',
+                                templateUrl: ''
+                            });
+                        });
                     },
                     /**
                      * @ngdoc methode
@@ -143,7 +140,7 @@ angular.module('unchatbar')
                      * connect to client
                      *
                      */
-                    connect : function (id){
+                    connect: function (id) {
                         $rootScope.$broadcast('client:connect', {
                             connection: peer.connect(id)
                         });
@@ -165,6 +162,6 @@ angular.module('unchatbar')
 
                 };
             }
-        ]
+        ];
     }
 );

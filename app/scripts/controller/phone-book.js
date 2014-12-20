@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @ngdoc controller
  * @name  unchatbar.controller:phoneBook
@@ -10,15 +12,20 @@
  * #{@link unchatbar.clientCalled directive}
  *
  */
-angular.module('unchatbar').controller('phoneBook', ['$scope','Broker','PhoneBook',
-    function ($scope,Broker,PhoneBook) {
+angular.module('unchatbar').controller('phoneBook', ['$scope','Broker','$localStorage',
+    function ($scope,Broker,$localStorage) {
+        var storagePhoneBook = $localStorage.$default({
+            phoneBook: {
+                connections: {}
+            }
+        }).phoneBook
         /**
          * @ngdoc property
          * @name username
          * @propertyOf unchatbar.controller:phoneBook
          * @returns {Object} clientList map of all client connections
          */
-        $scope.clientList = PhoneBook.getMap();
+        $scope.clientList = storagePhoneBook.connections;
 
      
         /**
@@ -32,9 +39,7 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','Broker','PhoneBoo
          *
          */
         $scope.removeClient = function (peerId) {
-            if (PhoneBook.remove(peerId)) {
-                $scope.clientList = PhoneBook.getMap();
-            }
+            delete $scope.clientList[peerId];
         };
 
         /**
@@ -51,8 +56,9 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','Broker','PhoneBoo
             Broker.connect(peerId);
         };
 
-        $scope.$on('peer:clientConnect', function (event, data) {
-            $scope.clientList = PhoneBook.getMap();
+        $scope.$on('client:connect', function (event, data) {
+            $scope.clientList[data.connection.peer] = true;
+
         });
 
     }
