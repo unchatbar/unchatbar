@@ -9,7 +9,7 @@
  * Main module of the application.
  */
 angular.module('unchatbar', ['constants','cgNotify','ngStorage'])
-    .run(['broker', function (broker) {
-        broker.connect();
+    .run(['Broker', function (Broker) {
+        Broker.connectServer();
     }
     ]);

@@ -1,14 +1,14 @@
+'use strict';
+
 /**
  * @ngdoc controller
  * @name  unchatbar.controller:connection
  * @require $scope
  * @require $rootScope
- * @require broker
+ * @require notify
  * @description
  *
- *  Test Message Dialog
- * #controller of this directive
- * #{@link unchatbar.clientMessageData directive}
+ * single client connection
  *
  */
 angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'notify',
@@ -80,7 +80,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
          */
         $scope.closeConnection = function () {
             $scope.connect.close();
-        }
+        };
 
         /**
          * @ngdoc methode
@@ -96,9 +96,9 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
             if ($scope.minimize === false) {
                 $scope.unreadMessageCounter = 0;
             }
-        }
+        };
 
-        $scope.$on('clientConnection:open', function (event) {
+        $scope.$on('clientConnection:open', function () {
             $scope.isOpen = true;
             notifyOpenConnection();
         });
@@ -109,7 +109,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
                 classes: 'alert alert-info',
                 templateUrl: ''
             });
-            $scope.$emit('peer:clientDisconnect', { connectionId: $scope.connectionIndex})
+            $scope.$emit('peer:clientDisconnect', { connectionId: $scope.connectionIndex});
             $scope.isOpen = false;
         });
 

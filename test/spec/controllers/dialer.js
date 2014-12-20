@@ -6,19 +6,19 @@ describe('Controller: dialer', function () {
 
     var dialerCTRL, scope, rootScope, brokerService;
 
-    beforeEach(inject(function ($controller, $rootScope, broker) {
+    beforeEach(inject(function ($controller, $rootScope, Broker) {
         scope = $rootScope.$new();
         rootScope = $rootScope;
-        brokerService = broker;
+        brokerService = Broker;
 
         dialerCTRL = function () {
             $controller('dialer', {
                 $scope: scope,
                 $rootScope: rootScope,
-                broker: brokerService
+                Broker: brokerService
 
             });
-        }
+        };
     }));
 
     describe('check init', function () {
@@ -53,16 +53,16 @@ describe('Controller: dialer', function () {
             dialerCTRL();
         });
         describe('connect', function () {
-            it('should call `broker.connectToClient` width `$scope.connectId `', function () {
-                spyOn(brokerService, 'connectToClient').and.returnValue('');
+            it('should call `broker.connect` width `$scope.connectId `', function () {
+                spyOn(brokerService, 'connect').and.returnValue('');
                 scope.connectId = 'test';
 
                 scope.connect();
 
-                expect(brokerService.connectToClient).toHaveBeenCalledWith('test');
+                expect(brokerService.connect).toHaveBeenCalledWith('test');
             });
             it('should set `scope.connectId` to empty string ', function () {
-                spyOn(brokerService, 'connectToClient').and.returnValue('');
+                spyOn(brokerService, 'connect').and.returnValue('');
                 scope.connectId = 'test';
 
                 scope.connect();
