@@ -9,21 +9,21 @@
  * heartbeate to server
  */
 angular.module('unchatbar')
-    .service('BrokerHeartbeat', ['$localStorage', '$sessionStorage', '$rootScope',
-        function ($localStorage, $sessionStorage, $rootScope) {
+    .service('BrokerHeartbeat', ['Peer',
+        function (Peer) {
             return {
                 /**
                  * @ngdoc methode
                  * @name heartbeater
-                 * @methodOf unchatbar.Broker
+                 * @methodOf unchatbar.BrokerHeartbeat
                  * @description
                  *
                  * heartbeater to broker server
                  *
                  */
-                heartbeater: function (peer) {
+                start: function () {
                     var timeoutId = 0;
-
+                    var peer = Peer.get();
                     function heartbeat() {
                         timeoutId = setTimeout(heartbeat, 20000);
                         if (peer.socket._wsOpen()) {

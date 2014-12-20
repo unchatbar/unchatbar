@@ -3,13 +3,11 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name unchatbar.clientMessages
+ * @name unchatbar.directive:connectionCenter
  * @restrict E
  * @description
  *
- * # activeConnection
- * contains all called clients
- * # controller definition {@link unchatbar.controller:clientMessages controller}
+ *  handle all connection
  *
  */
 angular.module('unchatbar').directive('connectionCenter', [
@@ -18,8 +16,6 @@ angular.module('unchatbar').directive('connectionCenter', [
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/connection-center.html',
             controller: 'connectionCenter'
-
-
         };
     }
 ]);

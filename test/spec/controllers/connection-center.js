@@ -4,77 +4,49 @@ describe('Controller: connectionCenter', function () {
 
     beforeEach(module('unchatbar'));
 
-    var connectionCenterCTRL, scope, brokerService;
+    var connectionCenterCTRL, scope;
 
-    beforeEach(inject(function ($controller, $rootScope, broker) {
+    beforeEach(inject(function ($controller, $rootScope) {
         scope = $rootScope.$new();
-        brokerService = broker;
+
         connectionCenterCTRL = function () {
             $controller('connectionCenter', {
-                $scope: scope,
-                broker: brokerService
+                $scope: scope
+
             });
-        }
+        };
     }));
 
     describe('check init', function () {
         beforeEach(function () {
-            spyOn(brokerService,'getMapOfActiveClients').and.returnValue({activeClient:''})
             connectionCenterCTRL();
         });
-        it('should call `broker.getMapOfActiveClients`' , function (){
-            expect(brokerService.getMapOfActiveClients).toHaveBeenCalled();
-        });
-        it('should set `scope.connections` to return value from `broker.getMapOfActiveClients`', function () {
-            expect(scope.connections).toEqual({activeClient:''});
+
+        it('should set `scope.connections` to empty object', function () {
+            expect(scope.connections).toEqual({});
         });
     });
 
     describe('check event', function () {
-        describe('peer:clientConnect', function () {
-            it('should call ` broker.getMapOfActiveClients` ', function () {
-                connectionCenterCTRL();
-                spyOn(brokerService,'getMapOfActiveClients').and.returnValue({activeClient:''})
+        beforeEach(function(){
+            connectionCenterCTRL();
+        });
+        describe('client:connect', function () {
+            it('should add `$scope.connections` with connection.peer and connection ', function () {
+                scope.connections = {};
+                scope.$broadcast('client:connect',{connection:{peer:'testPeerId',send : 'function'}});
+                scope.$apply();
 
-                scope.$broadcast('peer:clientConnect', {});
-
-                expect(brokerService.getMapOfActiveClients).toHaveBeenCalled();
-            });
-            it('should set ` $scope.connections`  to return value from `broker.getMapOfActiveClients`', function () {
-                connectionCenterCTRL();
-                spyOn(brokerService,'getMapOfActiveClients').and.returnValue({activeClient:''})
-
-                scope.$broadcast('peer:clientConnect', {});
-
-                expect(scope.connections).toEqual({activeClient:''});
+                expect(scope.connections).toEqual({testPeerId: {peer:'testPeerId',send : 'function'}});
             });
         });
         describe('peer:clientDisconnect', function () {
-            it('should call `broker.removeClientFromCalledMap` width ConnectionId from event message', function () {
-                connectionCenterCTRL();
-                spyOn(brokerService,'removeClientFromCalledMap').and.returnValue(true);
+            it('should remove key `deleteItem` from  `$scope.connections`', function () {
+                scope.connections = {'deleteItem': 'test', 'noDelete': 'test'};
+                scope.$broadcast('peer:clientDisconnect', {connectionId: 'deleteItem'});
+                scope.$apply();
 
-                scope.$broadcast('peer:clientDisconnect', {connectionId: 'conId'});
-
-                expect(brokerService.removeClientFromCalledMap).toHaveBeenCalledWith('conId');
-            });
-            it('should call `broker.getMapOfActiveClients`', function () {
-                connectionCenterCTRL();
-                spyOn(brokerService,'removeClientFromCalledMap').and.returnValue(true);
-                spyOn(brokerService,'getMapOfActiveClients').and.returnValue({});
-
-                scope.$broadcast('peer:clientDisconnect', {connectionId: 'conId'});
-
-                expect(brokerService.getMapOfActiveClients).toHaveBeenCalled();
-            });
-            it('should set `$scope.connections` to return value from `broker.getMapOfActiveClients`', function () {
-                connectionCenterCTRL();
-                spyOn(brokerService,'removeClientFromCalledMap').and.returnValue(true);
-                spyOn(brokerService,'getMapOfActiveClients').and.returnValue({dataNew:''});
-
-                scope.$broadcast('peer:clientDisconnect', {connectionId: 'conId'});
-
-                expect(scope.connections).toEqual({dataNew:''});
+                expect(scope.connections).toEqual({'noDelete': 'test'});
             });
         });
 

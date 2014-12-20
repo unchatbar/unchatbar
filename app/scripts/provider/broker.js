@@ -80,8 +80,8 @@ angular.module('unchatbar')
          */
         this.$get = ['$rootScope', 'notify', '$localStorage', '$sessionStorage', 'BrokerHeartbeat', 'Peer',
             function ($rootScope, notify, $localStorage, $sessionStorage, BrokerHeartbeat, peerService) {
-                var storage = useLocalStorage ? $localStorage : $sessionStorage,
-                    peer = {};
+
+                var storage = useLocalStorage ? $localStorage : $sessionStorage;
                 storage = storage.$default({
                     broker: {
                         peerId: ''
@@ -89,7 +89,6 @@ angular.module('unchatbar')
                 }).broker;
 
                 return {
-
                     /**
                      * @ngdoc methode
                      * @name connectServer
@@ -100,15 +99,13 @@ angular.module('unchatbar')
                      *
                      */
                     connectServer: function () {
-                        var Peer = peerService.get();
-                        peer = new Peer(storage.peerId, {host: host, port: port, path: path});
+                        peerService.init(storage.peerId, {host: host, port: port, path: path});
                         this._peerListener();
-                        BrokerHeartbeat.heartbeater(peer);
-
-
+                        BrokerHeartbeat.start();
                     },
 
                     _peerListener: function () {
+                        var peer = peerService.get();
                         peer.on('open', function (id) {
                             $rootScope.$apply(function () {
                                 storage.peerId = id;
@@ -141,6 +138,7 @@ angular.module('unchatbar')
                      *
                      */
                     connect: function (id) {
+                        var peer = peerService.get();
                         $rootScope.$broadcast('client:connect', {
                             connection: peer.connect(id)
                         });
@@ -157,7 +155,7 @@ angular.module('unchatbar')
                      *
                      */
                     getPeerId: function () {
-                        return peer.id || '';
+                        return peerService.get().id || '';
                     }
 
                 };

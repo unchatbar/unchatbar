@@ -1,14 +1,14 @@
+'use strict';
+
 /**
  * @ngdoc controller
  * @name  unchatbar.controller:dialer
  * @require $scope
  * @require $rootScope
- * @require broker
+ * @require Broker
  * @description
  *
- * connect to client dialog
- * #controller of this directive
- * #{@link unchatbar.clientConnector directive}
+ * build client connection
  *
  */
 angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'Broker',
@@ -42,11 +42,11 @@ angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'Broke
          *
          */
         $scope.connect = function () {
-            var connection = Broker.connect($scope.connectId);
+            Broker.connect($scope.connectId);
             $scope.connectId = '';
         };
 
-        $scope.$on('peer:open', function (event, message) {
+        $scope.$on('peer:open', function () {
             $scope.peerId = Broker.getPeerId();
 
         });

@@ -4,21 +4,20 @@
  * @ngdoc controller
  * @name  unchatbar.controller:phoneBook
  * @require $scope
- * @require broker
+ * @require $localStorage
+ * @require Broker
  * @description
  *
- * show all client connections
- * #controller of this directive
- * #{@link unchatbar.clientCalled directive}
+ * save client connections , for recall
  *
  */
-angular.module('unchatbar').controller('phoneBook', ['$scope','Broker','$localStorage',
-    function ($scope,Broker,$localStorage) {
+angular.module('unchatbar').controller('phoneBook', ['$scope','$localStorage','Broker',
+    function ($scope,$localStorage, Broker) {
         var storagePhoneBook = $localStorage.$default({
             phoneBook: {
                 connections: {}
             }
-        }).phoneBook
+        }).phoneBook;
         /**
          * @ngdoc property
          * @name username

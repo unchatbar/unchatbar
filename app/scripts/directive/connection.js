@@ -3,14 +3,11 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name unchatbar.messageData
+ * @name unchatbar.directive:messageData
  * @restrict E
  * @description
  *
- * # activeConnection
- * message box for text-data
- * # controller definition {@link unchatbar.controller:clientMessageData controller}
-
+ * single client connection
  *
  */
 angular.module('unchatbar').directive('connection', ['$rootScope',

@@ -4,13 +4,9 @@
  * @ngdoc controller
  * @name  unchatbar.controller:connectionCenter
  * @require $scope
- * @require $rootScope
- * @require broker
  * @description
  *
- *  Test Message Dialog
- * #controller of this directive
- * #{@link unchatbar.clientMessages directive}
+ *  handle all connection
  *
  */
 angular.module('unchatbar').controller('connectionCenter', ['$scope',
