@@ -3,16 +3,15 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name unchatbar.clientCalled
+ * @name unchatbar.directive:phoneBook
  * @restrict E
  * @description
  *
- * include messageBox for all client connection
- * # controller definition {@link unchatbar.controller:clientCalled controller}
+ * save client connections , for recall
  *
  */
-angular.module('unchatbar').directive('phoneBook', ['broker',
-    function (broker) {
+angular.module('unchatbar').directive('phoneBook', [
+    function () {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/phone-book.html',

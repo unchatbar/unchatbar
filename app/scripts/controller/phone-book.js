@@ -1,24 +1,30 @@
+'use strict';
+
 /**
  * @ngdoc controller
  * @name  unchatbar.controller:phoneBook
  * @require $scope
- * @require broker
+ * @require $localStorage
+ * @require Broker
  * @description
  *
- * show all client connections
- * #controller of this directive
- * #{@link unchatbar.clientCalled directive}
+ * save client connections , for recall
  *
  */
-angular.module('unchatbar').controller('phoneBook', ['$scope','broker',
-    function ($scope,broker) {
+angular.module('unchatbar').controller('phoneBook', ['$scope','$localStorage','Broker',
+    function ($scope,$localStorage, Broker) {
+        var storagePhoneBook = $localStorage.$default({
+            phoneBook: {
+                connections: {}
+            }
+        }).phoneBook;
         /**
          * @ngdoc property
          * @name username
          * @propertyOf unchatbar.controller:phoneBook
          * @returns {Object} clientList map of all client connections
          */
-        $scope.clientList = broker.getMapOfClientCalled();
+        $scope.clientList = storagePhoneBook.connections;
 
      
         /**
@@ -32,9 +38,7 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','broker',
          *
          */
         $scope.removeClient = function (peerId) {
-            if (broker.removeClientCalled(peerId)) {
-                $scope.clientList = broker.getMapOfClientCalled();
-            }
+            delete $scope.clientList[peerId];
         };
 
         /**
@@ -48,11 +52,12 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','broker',
          *
          */
         $scope.connectClient = function (peerId) {
-            broker.connectToClient(peerId);
+            Broker.connect(peerId);
         };
 
-        $scope.$on('peer:clientConnect', function (event, data) {
-            $scope.clientList = broker.getMapOfClientCalled();
+        $scope.$on('client:connect', function (event, data) {
+            $scope.clientList[data.connection.peer] = true;
+
         });
 
     }

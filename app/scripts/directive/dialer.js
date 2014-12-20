@@ -2,35 +2,21 @@
 
 /**
  * @author Lars Wiedemann
- * @ngdoc directive
- * @name unchatbar.clientConnector
+ * @ngdoc service
+ * @name unchatbar.directive:clientConnector
  * @restrict E
  * @description
  *
- * # activeConnection
- * dialog for client connection
- * # controller definition {@link unchatbar.controller:clientConnector controller}
-
+ * build client connection
  *
  */
 
-angular.module('unchatbar').directive('dialer', ['broker', '$rootScope',
-    function (broker, $rootScope) {
+angular.module('unchatbar').directive('dialer', [
+    function ( ) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/dialer.html',
-            controller: 'dialer',
-            scope: {
-                autocallFromPhonebook: '='
-            },
-            link: function (scope, element, attr) {
-                if (scope.autocallFromPhonebook === true) {
-                    _.forEach(broker.getMapOfClientCalled(), function (value, connectionId) {
-                        broker.connectToClient(connectionId);
-                    })
-                }
-            }
-
+            controller: 'dialer'
         };
     }
 ]);

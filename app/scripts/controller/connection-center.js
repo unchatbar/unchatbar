@@ -1,34 +1,30 @@
+'use strict';
+
 /**
  * @ngdoc controller
  * @name  unchatbar.controller:connectionCenter
  * @require $scope
- * @require $rootScope
- * @require broker
  * @description
  *
- *  Test Message Dialog
- * #controller of this directive
- * #{@link unchatbar.clientMessages directive}
+ *  handle all connection
  *
  */
-angular.module('unchatbar').controller('connectionCenter', ['$scope','broker',
-    function ($scope,broker) {
+angular.module('unchatbar').controller('connectionCenter', ['$scope',
+    function ($scope) {
         /**
          * @ngdoc property
          * @name connections
          * @propertyOf unchatbar.controller:connectionCenter
          * @returns {Object} map of client connections
          */
-        $scope.connections = broker.getMapOfActiveClients();
+        $scope.connections = {};
 
-
-        $scope.$on('peer:clientConnect',function(event,data){
-            $scope.connections = broker.getMapOfActiveClients();
+        $scope.$on('client:connect', function (event, data) {
+            $scope.connections[data.connection.peer] = data.connection;
         });
 
         $scope.$on('peer:clientDisconnect',function(event,data){
-            broker.removeClientFromCalledMap(data.connectionId);
-            $scope.connections = broker.getMapOfActiveClients();
+            delete $scope.connections[data.connectionId];
         });
     }]
 );

@@ -3,20 +3,20 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc service
- * @name unchatbar.brokerProvider
+ * @name unchatbar.BrokerProvider
  * @description
  * # peer
  * config peer connection
  */
 angular.module('unchatbar')
-    .provider('broker', function () {
+    .provider('Broker', function () {
 
-        var peer = '', host = '', port = '', path = '', useLocalStorage = false;
+        var host = '', port = '', path = '', useLocalStorage = false;
 
         /**
          * @ngdoc methode
          * @name setHost
-         * @methodOf unchatbar.brokerProvider
+         * @methodOf unchatbar.BrokerProvider
          * @params {String} _host set host from peer server
          * @description
          *
@@ -25,12 +25,12 @@ angular.module('unchatbar')
          */
         this.setHost = function (_host) {
             host = _host;
-        }
+        };
 
         /**
          * @ngdoc methode
          * @name setPort
-         * @methodOf unchatbar.brokerProvider
+         * @methodOf unchatbar.BrokerProvider
          * @params {Number} port set port for peer server
          * @description
          *
@@ -39,12 +39,12 @@ angular.module('unchatbar')
          */
         this.setPort = function (_port) {
             port = _port;
-        }
+        };
 
         /**
          * @ngdoc methode
          * @name setPath
-         * @methodOf unchatbar.brokerProvider
+         * @methodOf unchatbar.BrokerProvider
          * @params {String} path set path from peerServer
          * @description
          *
@@ -54,191 +54,112 @@ angular.module('unchatbar')
          */
         this.setPath = function (_path) {
             path = _path;
-        }
+        };
 
         /**
          * @ngdoc methode
-         * @name setLocalStroage
-         * @methodOf unchatbar.brokerProvider
+         * @name setLocalStorage
+         * @methodOf unchatbar.BrokerProvider
          * @params {String} path set path from peerServer
          * @description
          *
          * use local storage for store peerId
          *
          */
-        this.setLocalStroage = function () {
+        this.setLocalStorage = function () {
             useLocalStorage = true;
-        }
+        };
 
 
         /**
          * @ngdoc service
-         * @name unchatbar.broker
+         * @name unchatbar.Broker
          * @description
          * # peer
          * peer service
          */
-        this.$get = ['$q', '$rootScope','notify','$localStorage','$sessionStorage',
-            function ($q, $rootScope, notify,$localStorage,$sessionStorage) {
-                var storage = useLocalStorage ? $localStorage : $sessionStorage,
-                    activeConnections= {};
+        this.$get = ['$rootScope', 'notify', '$localStorage', '$sessionStorage', 'BrokerHeartbeat', 'Peer',
+            function ($rootScope, notify, $localStorage, $sessionStorage, BrokerHeartbeat, peerService) {
+
+                var storage = useLocalStorage ? $localStorage : $sessionStorage;
                 storage = storage.$default({
-                    broker :{
-                        peerId : '',
-                        connections : {}
+                    broker: {
+                        peerId: ''
                     }
                 }).broker;
-
-                function makePeerHeartbeater ( peer ) {
-                    var timeoutId = 0;
-                    function heartbeat () {
-                        timeoutId = setTimeout( heartbeat, 20000 );
-                        if ( peer.socket._wsOpen() ) {
-                            peer.socket.send( {type:'HEARTBEAT'} );
-                        }
-                    }
-                    // Start
-                    heartbeat();
-                    // return
-                    return {
-                        start : function () {
-                            if ( timeoutId === 0 ) { heartbeat(); }
-                        },
-                        stop : function () {
-                            clearTimeout( timeoutId );
-                            timeoutId = 0;
-                        }
-                    };
-                }
-
-                function peerListener() {
-                    peer.on('open', function(id) {
-                        $rootScope.$apply(function () {
-                            storage.peerId = id;
-                            $rootScope.$broadcast('peer:open', {id: id});
-                        });
-                    });
-                    peer.on('connection', function (connect) {
-                        $rootScope.$apply(function () {
-                            peerClientConnect(connect);
-                        });
-                    });
-                    peer.on('error', function (error) {
-                        notify({
-                            message:error.message,
-                            classes:'alert alert-danger',
-                            templateUrl : ''
-
-                        });
-                    });
-                }
-
-                function peerClientConnect(connection) {
-                    storage.connections[connection.peer] = true;
-                    activeConnections[connection.peer] = connection;
-                    $rootScope.$broadcast('peer:clientConnect', {
-                        connectId: connection.peer,
-                        connection: connection
-                    });
-                }
 
                 return {
                     /**
                      * @ngdoc methode
-                     * @name getMapOfClientCalled
-                     * @methodOf unchatbar.broker
-                     * @return {Object} map of called client's
+                     * @name connectServer
+                     * @methodOf unchatbar.Broker
                      * @description
                      *
-                     * get called connections from storage
+                     * connect to server
                      *
                      */
-                    getMapOfClientCalled : function () {
-                        return storage.connections;
-                    },
-                    removeClientCalled : function (peerId) {
-                        return delete storage.connections[peerId];
+                    connectServer: function () {
+                        peerService.init(storage.peerId, {host: host, port: port, path: path});
+                        this._peerListener();
+                        BrokerHeartbeat.start();
                     },
 
-                    /**
-                     * @ngdoc methode
-                     * @name getMapOfActiveClients
-                     * @methodOf unchatbar.broker
-                     * @return {Object} map of active connection
-                     * @description
-                     *
-                     * get map of called called clients
-                     *
-                     */
-                    getMapOfActiveClients : function () {
-                        return activeConnections;
-                    },
-                    /**
-                     * @ngdoc methode
-                     * @name removeClientFromCalledMap
-                     * @params {String} connectionId connection id of client
-                     * @methodOf unchatbar.broker
-                     * @description
-                     *
-                     * remove connection from active connection list
-                     *
-                     */
-                    removeClientFromCalledMap : function (connectionId) {
-                      delete activeConnections[connectionId];
+                    _peerListener: function () {
+                        var peer = peerService.get();
+                        peer.on('open', function (id) {
+                            $rootScope.$apply(function () {
+                                storage.peerId = id;
+                                $rootScope.$broadcast('peer:open', {id: id});
+                            });
+                        });
+
+                        peer.on('connection', function (connect) {
+                            $rootScope.$apply(function () {
+                                $rootScope.$broadcast('client:connect', {connection: connect});
+                            });
+                        });
+
+                        peer.on('error', function (error) {
+                            notify({
+                                message: error.message,
+                                classes: 'alert alert-danger',
+                                templateUrl: ''
+                            });
+                        });
                     },
                     /**
                      * @ngdoc methode
                      * @name connect
-                     * @methodOf unchatbar.broker
+                     * @methodOf unchatbar.Broker
+                     * @return {Object} connection
                      * @description
                      *
-                     * # peer
-                     * connect to broker server
+                     * connect to client
                      *
                      */
-                    connect: function () {
-                        peer = new Peer(storage.peerId,{host: host, port: port, path: path});
-                        peerListener();
-                        if (peer.socket) {
-                            makePeerHeartbeater(peer);
-                        }
-
+                    connect: function (id) {
+                        var peer = peerService.get();
+                        $rootScope.$broadcast('client:connect', {
+                            connection: peer.connect(id)
+                        });
                     },
+
                     /**
                      * @ngdoc methode
                      * @name getPeerId
-                     * @methodOf unchatbar.broker
+                     * @methodOf unchatbar.Broker
+                     * @return {String} own peer id
                      * @description
                      *
                      * get peer id
                      *
                      */
                     getPeerId: function () {
-                        return peer.id || '';
-                    },
-                    /**
-                     * @ngdoc methode
-                     * @name connectToClient
-                     * @params {String} id peer id from client
-                     * @methodOf unchatbar.broker
-                     * @description
-                     *
-                     * connect to client by client peer id
-                     *
-                     */
-                    connectToClient: function (id) {
-                        if (peer.id) {
-                            peerClientConnect(peer.connect(id));
-                        } else {
-                            notify({
-                                message:'connect to client failed, no peerId',
-                                classes:'alert alert-danger',
-                                templateUrl : ''
-
-                            });
-                        }
+                        return peerService.get().id || '';
                     }
+
                 };
             }
-        ]
-    });
+        ];
+    }
+);

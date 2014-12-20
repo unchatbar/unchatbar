@@ -3,18 +3,15 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name unchatbar.messageData
+ * @name unchatbar.directive:messageData
  * @restrict E
  * @description
  *
- * # activeConnection
- * message box for text-data
- * # controller definition {@link unchatbar.controller:clientMessageData controller}
-
+ * single client connection
  *
  */
-angular.module('unchatbar').directive('connection', ['broker','$rootScope',
-    function(broker,$rootScope) {
+angular.module('unchatbar').directive('connection', ['$rootScope',
+    function($rootScope) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             scope: {

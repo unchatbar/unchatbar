@@ -8,5 +8,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="angularjs-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="unchatbar node_modules" level="project" />
+    <orderEntry type="library" name="node_modules" level="project" />
   </component>
 </module>
