@@ -51,7 +51,8 @@ module.exports = function (config) {
         // Which plugins to enable
         plugins: [
             'karma-phantomjs-launcher',
-            'karma-jasmine'
+            'karma-jasmine',
+            'karma-coverage'
         ],
 
         // Continuous Integration mode
@@ -62,8 +63,22 @@ module.exports = function (config) {
 
         // level of logging
         // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-        logLevel: config.LOG_INFO
+        logLevel: config.LOG_INFO,
 
+        reporters: ['progress', 'coverage'],
+
+        preprocessors: {
+            // source files, that you wanna generate coverage for
+            // do not include tests or libraries
+            // (these files will be instrumented by Istanbul)
+            'app/scripts/**/*.js': ['coverage']
+        },
+
+        // optionally, configure the reporter
+        coverageReporter: {
+            type : 'html',
+            dir : '.tmp/coverage/'
+        }
         // Uncomment the following lines if you are using grunt's server to run the tests
         // proxies: {
         //   '/': 'http://localhost:9000/'

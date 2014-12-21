@@ -24,8 +24,11 @@
 <!-- Add your site or application content here -->
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <dialer autocall-from-phonebook="false"></dialer>
+        </div>
+        <div class="col-md-6">
+        <profile ></profile>
         </div>
     </div>
     <div class="row">
@@ -65,11 +68,13 @@
 <script src="scripts/app.js"></script>
 
 <script src="scripts/provider/broker.js"></script>
+<script src="scripts/provider/profile.js"></script>
 <script src="scripts/config/server.js"></script>
 <script src="scripts/controller/phone-book.js"></script>
 <script src="scripts/controller/dialer.js"></script>
 <script src="scripts/controller/connection.js"></script>
 <script src="scripts/controller/connection-center.js"></script>
+<script src="scripts/controller/profile.js"></script>
 
 <script src="scripts/service/BrokerHeartbeat.js"></script>
 <script src="scripts/service/peer.js"></script>
@@ -78,6 +83,7 @@
 <script src="scripts/directive/connection.js"></script>
 <script src="scripts/directive/connection-center.js"></script>
 <script src="scripts/directive/phone-book.js"></script>
+<script src="scripts/directive/profile.js"></script>
 <!-- endbuild -->
 </body>
 </html>
