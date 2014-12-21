@@ -64,7 +64,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
          *
          */
         $scope.send = function () {
-            $scope.connect.send($scope.message);
+            $scope.connect.send({'action': 'textMessage',message : $scope.message});
             $scope.messageList.push({own: true, text: $scope.message});
             $scope.message = '';
         };

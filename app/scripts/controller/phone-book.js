@@ -56,9 +56,15 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$localStorage','B
         };
 
         $scope.$on('client:connect', function (event, data) {
-            $scope.clientList[data.connection.peer] = true;
-
+            if(!$scope.clientList[data.connection.peer]) {
+                $scope.clientList[data.connection.peer] = {};
+            }
         });
 
+        $scope.$on('client:sendProfile', function (event, data) {
+            if($scope.clientList[data.peer]) {
+                $scope.clientList[data.peer] = data.profile;
+            }
+        });
     }
 ]);

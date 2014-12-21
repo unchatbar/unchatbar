@@ -1,7 +1,7 @@
 <div >
     <div ng-repeat="(peerId,connection) in clientList">
         <div class="well">
-           {{peerId}}<br />
+           {{connection.name || peerId}}<br />
 
             <span class="glyphicon glyphicon-trash" ng-click="removeClient(peerId)"></span>
             <span class="glyphicon glyphicon-earphone" ng-click="connectClient(peerId)"></span>

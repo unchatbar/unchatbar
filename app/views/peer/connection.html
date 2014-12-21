@@ -2,7 +2,7 @@
     <div class="panel-heading" data-ng-init="minimize=false">
         <div class="row">
             <div class="col-xs-9">
-                <h2 class="panel-title">{{connectionIndex}}
+                <h2 class="panel-title">{{profile.name || connectionIndex}}
                     <i class="badge" data-ng-show="unreadMessageCounter > 0 && minimize === true ">
                     {{unreadMessageCounter}}
                 </i></h2>

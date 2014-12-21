@@ -73,7 +73,19 @@ describe('Controller: phoneBook', function () {
             });
             it('should add connection to  `$scope.clientList`', function () {
                 scope.$broadcast('client:connect', {connection : {peer: 'conId','send': 'function'}});
-                expect(scope.clientList).toEqual({conId: true});
+                expect(scope.clientList).toEqual({conId: {}});
+            });
+        });
+
+        describe('client:sendProfile', function () {
+            beforeEach(function () {
+                phoneBookCTRL();
+                scope.clientList = {};
+            });
+            it('should update clientList with profile', function () {
+                scope.clientList = {'test' : {}};
+                scope.$broadcast('client:sendProfile',  {peer: 'test','profile': {name:'test'}});
+                expect(scope.clientList).toEqual({test : {name:'test'}});
             });
 
         });

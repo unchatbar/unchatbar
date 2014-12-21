@@ -71,6 +71,7 @@ angular.module('unchatbar')
                      */
                     set: function (profile) {
                         storage.profile = profile;
+                        $rootScope.$broadcast('changeProfile',{});
                     }
 
 

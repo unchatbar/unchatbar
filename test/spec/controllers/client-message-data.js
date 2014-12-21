@@ -86,7 +86,7 @@ describe('Controller: connection', function () {
 
                 scope.send();
 
-                expect(scope.connect.send).toHaveBeenCalledWith('test');
+                expect(scope.connect.send).toHaveBeenCalledWith({ action: 'textMessage', message: 'test' });
             });
             it('should push `$scope.messageLst` width `$scope.message` and property `own` true', function () {
                 scope.message = 'test';
