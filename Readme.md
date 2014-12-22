@@ -15,7 +15,7 @@ Peer to peer chat application using WebRTC technologies
 * Run `bower install` to install required Bower components
 
 ## Usage
-* Start PeerJS server `node_modules/.bin/peerjs --port 9000 --key peerjs`
+* Start PeerJS server `npm start`
 * Run `grunt serve` to start application server
 * Invoke application: http://localhost:8080
 * Visit documentation: http://localhost:8080/docs
