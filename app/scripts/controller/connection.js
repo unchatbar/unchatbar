@@ -11,8 +11,8 @@
  * single client connection
  *
  */
-angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'notify',
-    function ($scope, $rootScope, notify) {
+angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'notify','Connection',
+    function ($scope, $rootScope, notify,Connection) {
 
         /**
          * @ngdoc property
@@ -64,61 +64,14 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
          *
          */
         $scope.send = function () {
-            $scope.connect.send({'action': 'textMessage',message : $scope.message});
+            Connection.send($scope.message);
             $scope.messageList.push({own: true, text: $scope.message});
             $scope.message = '';
         };
 
-        /**
-         * @ngdoc methode
-         * @name closeConnection
-         * @methodOf unchatbar.controller:connection
-         * @description
-         *
-         * close connection to client
-         *
-         */
-        $scope.closeConnection = function () {
-            $scope.connect.close();
-        };
-
-        /**
-         * @ngdoc methode
-         * @name closeConnection
-         * @methodOf unchatbar.controller:connection
-         * @description
-         *
-         * close connection to client
-         *
-         */
-        $scope.toogleMinimize = function () {
-            $scope.minimize =!$scope.minimize;
-            if ($scope.minimize === false) {
-                $scope.unreadMessageCounter = 0;
-            }
-        };
-
-        $scope.$on('clientConnection:open', function () {
-            $scope.isOpen = true;
-            notifyOpenConnection();
-        });
-
-        $scope.$on('clientConnection:close', function () {
-            notify({
-                message: 'connect to ' + $scope.connect.peer + ' close',
-                classes: 'alert alert-info',
-                templateUrl: ''
-            });
-            $scope.$emit('peer:clientDisconnect', { connectionId: $scope.connectionIndex});
-            $scope.isOpen = false;
-        });
-
         // Receive messages
-        $scope.$on('clientConnection:data', function (event, data) {
-            if ($scope.minimize === true) {
-                $scope.unreadMessageCounter++;
-            }
-            $scope.messageList.push({own: false, text: data});
+        $scope.$on('getMessage', function (event, data) {
+            $scope.messageList.push({own: false, text: data.message});
 
         });
 
@@ -131,6 +84,9 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
                 });
             }
         }
+        $scope.init = function (){
+            Connection.register($scope);
+        };
         notifyOpenConnection();
     }
 ]);

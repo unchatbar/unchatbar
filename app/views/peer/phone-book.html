@@ -1,10 +1,12 @@
-<div >
-    <div ng-repeat="(peerId,connection) in clientList">
-        <div class="well">
+<div data-ng-init="init();">
+    Auswahl <b>{{selectClient}}</b>
+    <div data-ng-click="showList=!showList">PhoneBook</div>
+    <div data-ng-show="showList" ng-repeat="(peerId,connection) in clientList" >
+        <div >
            {{connection.name || peerId}}<br />
 
             <span class="glyphicon glyphicon-trash" ng-click="removeClient(peerId)"></span>
-            <span class="glyphicon glyphicon-earphone" ng-click="connectClient(peerId)"></span>
+            <span class="glyphicon glyphicon-earphone" ng-click="selectClient(peerId)"></span>
 
         </div>
     </div>

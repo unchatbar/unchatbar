@@ -107,6 +107,7 @@ angular.module('unchatbar')
                     _peerListener: function () {
                         var peer = peerService.get();
                         peer.on('open', function (id) {
+                            console.log("INI BR");
                             $rootScope.$apply(function () {
                                 storage.peerId = id;
                                 $rootScope.$broadcast('peer:open', {id: id});
@@ -138,9 +139,9 @@ angular.module('unchatbar')
                      *
                      */
                     connect: function (id) {
-                        var peer = peerService.get();
+                        var connection = peerService.get().connect(id);
                         $rootScope.$broadcast('client:connect', {
-                            connection: peer.connect(id)
+                            connection:connection
                         });
                     },
 

@@ -11,8 +11,8 @@
  * save client connections , for recall
  *
  */
-angular.module('unchatbar').controller('phoneBook', ['$scope','$localStorage','Broker',
-    function ($scope,$localStorage, Broker) {
+angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$sessionStorage','Broker','Connection',
+    function ($scope,$rootScope,$localStorage, Broker, Connection) {
         var storagePhoneBook = $localStorage.$default({
             phoneBook: {
                 connections: {}
@@ -26,7 +26,7 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$localStorage','B
          */
         $scope.clientList = storagePhoneBook.connections;
 
-     
+     $scope.selectClient = 'no selection';
         /**
          * @ngdoc methode
          * @name removeClient
@@ -51,11 +51,25 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$localStorage','B
          * create connection to client
          *
          */
-        $scope.connectClient = function (peerId) {
-            Broker.connect(peerId);
+        $scope.$on('peer:open', function () {
+            $scope.init();
+        });
+        $scope.init = function () {
+            _.forEach($scope.clientList, function (item, peer) {
+                Broker.connect(peer);
+            });
+            $scope.showList = false;
         };
 
+        $scope.selectClient = function (peerId) {
+            $scope.selectClient = $scope.clientList[peerId].name || peerId;
+            Connection.setClient(peerId);
+            $scope.showList = false;
+        };
+
+
         $scope.$on('client:connect', function (event, data) {
+            Connection.add(data.connection);
             if(!$scope.clientList[data.connection.peer]) {
                 $scope.clientList[data.connection.peer] = {};
             }

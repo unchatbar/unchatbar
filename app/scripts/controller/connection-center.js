@@ -17,7 +17,7 @@ angular.module('unchatbar').controller('connectionCenter', ['$scope',
          * @propertyOf unchatbar.controller:connectionCenter
          * @returns {Object} map of client connections
          */
-        $scope.connections = {};
+        /*$scope.connections = {};
 
         $scope.$on('client:connect', function (event, data) {
             $scope.connections[data.connection.peer] = data.connection;
@@ -25,6 +25,6 @@ angular.module('unchatbar').controller('connectionCenter', ['$scope',
 
         $scope.$on('peer:clientDisconnect',function(event,data){
             delete $scope.connections[data.connectionId];
-        });
+        });*/
     }]
 );
