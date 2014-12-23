@@ -31,7 +31,7 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$ses
          */
         $scope.clientList = storagePhoneBook.connections;
         $scope.groupList = storagePhoneBook.groups;
-        $scope.groupName = '';
+        $scope.label = '';
         $scope.selection = {
             type:'',
             data: ''
@@ -62,7 +62,7 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$ses
                     users: [],
                     owner: Broker.getPeerId()
                 };
-                $scope.groupName = '';
+                $scope.label = '';
             }
         };
 
