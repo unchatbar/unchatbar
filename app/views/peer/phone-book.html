@@ -1,13 +1,41 @@
-<div data-ng-init="init();">
-    Auswahl <b>{{selectClient}}</b>
+<div data-ng-init="init();bookShow = 'user'">
+    Filter <b>{{selection.data.label}}</b>
+
     <div data-ng-click="showList=!showList">PhoneBook</div>
-    <div data-ng-show="showList" ng-repeat="(peerId,connection) in clientList" >
-        <div >
-           {{connection.name || peerId}}<br />
+    <div data-ng-show="showList">
+        <div role="tabpanel">
 
-            <span class="glyphicon glyphicon-trash" ng-click="removeClient(peerId)"></span>
-            <span class="glyphicon glyphicon-earphone" ng-click="selectClient(peerId)"></span>
-
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" ng-class="{'active' : bookShow === 'user'}">
+                    <a data-ng-click="bookShow='user'">User</a>
+                </li>
+                <li role="presentation" ng-class="{'active' : bookShow === 'group'}">
+                    <a data-ng-click="bookShow='group'">groups</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane " ng-class="{'active' : bookShow === 'user'}">
+                <div ng-repeat="(peerId,connection) in clientList">
+                    {{connection.label }}
+                    <span class="glyphicon glyphicon-trash" ng-click="removeClient(peerId)"></span>
+                    <span class="glyphicon glyphicon-earphone" ng-click="selectClient(peerId)"></span>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane " ng-class="{'active' : bookShow === 'group'}">
+                <input type="text" data-ng-model="label" placeholder="create new group">
+                <span class="glyphicon glyphicon-ok" ng-click="createGroup()"></span>
+                <div ng-repeat="(groupId,group) in groupList">
+                    <span ng-dropdown-multiselect=""
+                          extra-settings="{showCheckAll:false,showUncheckAll : false}"
+                          options="clientList"
+                          translation-texts="{buttonDefaultText: group.label,dynamicButtonTextSuffix: 'users in'+ group.label}"
+                          selected-model="group.users"></span>
+                    <span class="glyphicon glyphicon-trash" ng-click="removeRoom(groupId)"></span>
+                    <span class="glyphicon glyphicon-earphone" ng-click="selectRoom(groupId)"></span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

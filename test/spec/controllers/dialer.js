@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: dialer', function () {
+xdescribe('Controller: dialer', function () {
 
     beforeEach(module('unchatbar'));
 

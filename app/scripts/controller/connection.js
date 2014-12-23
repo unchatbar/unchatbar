@@ -22,6 +22,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
          */
         $scope.isOpen = $scope.connect.open ? true : false;
 
+        $scope.showSendButton = false;
         /**
          * @ngdoc property
          * @name message
@@ -65,15 +66,20 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
          */
         $scope.send = function () {
             Connection.send($scope.message);
-            $scope.messageList.push({own: true, text: $scope.message});
+            $scope.messageList.push({own: true, text: $scope.message,label:''});
             $scope.message = '';
         };
 
         // Receive messages
         $scope.$on('getMessage', function (event, data) {
-            $scope.messageList.push({own: false, text: data.message});
-
+            $scope.messageList.push({own: false, text: data.message,label: data.label});
         });
+
+
+        $scope.$on('roomSelected', function (event, data) {
+            $scope.showSendButton = true;
+        });
+
 
         function notifyOpenConnection() {
             if ($scope.isOpen) {

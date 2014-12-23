@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Serivce: Broker', function () {
+xdescribe('Serivce: Broker', function () {
     var brokerService, brokerProvider, brokerStorage,
         peerService, BrokerHeartbeatService;
     beforeEach(module('unchatbar', ['BrokerProvider', function (_brokerProvider) {

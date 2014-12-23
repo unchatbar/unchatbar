@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: connectionCenter', function () {
+xdescribe('Controller: connectionCenter', function () {
 
     beforeEach(module('unchatbar'));
 

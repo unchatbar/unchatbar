@@ -11,13 +11,18 @@
  * save client connections , for recall
  *
  */
+
+//TODO add groups config local Storage
 angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$sessionStorage','Broker','Connection',
     function ($scope,$rootScope,$localStorage, Broker, Connection) {
         var storagePhoneBook = $localStorage.$default({
             phoneBook: {
-                connections: {}
+                connections: {},
+                groups: {}
             }
         }).phoneBook;
+
+
         /**
          * @ngdoc property
          * @name username
@@ -25,8 +30,12 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$ses
          * @returns {Object} clientList map of all client connections
          */
         $scope.clientList = storagePhoneBook.connections;
-
-     $scope.selectClient = 'no selection';
+        $scope.groupList = storagePhoneBook.groups;
+        $scope.groupName = '';
+        $scope.selection = {
+            type:'',
+            data: ''
+        };
         /**
          * @ngdoc methode
          * @name removeClient
@@ -39,6 +48,22 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$ses
          */
         $scope.removeClient = function (peerId) {
             delete $scope.clientList[peerId];
+        };
+
+        $scope.createGroup = function () {
+            if(Broker.getPeerId()) {
+                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                var id = '';
+                for (var i = 0; i < 5; i++) {
+                    id += possible.charAt(Math.floor(Math.random() * possible.length));
+                }
+                $scope.groupList[id] = {
+                    label: $scope.label,
+                    users: [],
+                    owner: Broker.getPeerId()
+                };
+                $scope.groupName = '';
+            }
         };
 
         /**
@@ -56,28 +81,53 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$ses
         });
         $scope.init = function () {
             _.forEach($scope.clientList, function (item, peer) {
-                Broker.connect(peer);
+                if(item.id) {
+                    Broker.connect(item.id);
+                }
             });
             $scope.showList = false;
         };
 
         $scope.selectClient = function (peerId) {
-            $scope.selectClient = $scope.clientList[peerId].name || peerId;
-            Connection.setClient(peerId);
+            $scope.selection = {
+                type: 'user',
+                data: $scope.clientList[peerId]
+            };
+            Connection.setClient( $scope.selection);
             $scope.showList = false;
+        };
+
+        $scope.selectRoom = function (roomId) {
+            $scope.selection = {
+                type: 'group',
+                data: $scope.groupList[roomId]
+            };
+            Connection.setClient( $scope.selection);
+            $scope.showList = false;
+        };
+
+        $scope.removeRoom = function (roomId) {
+            delete $scope.groupList[roomId];
         };
 
 
         $scope.$on('client:connect', function (event, data) {
             Connection.add(data.connection);
             if(!$scope.clientList[data.connection.peer]) {
-                $scope.clientList[data.connection.peer] = {};
+                $scope.clientList[data.connection.peer] = {
+                    label:data.connection.peer,
+                    id: data.connection.peer
+                };
             }
         });
 
         $scope.$on('client:sendProfile', function (event, data) {
             if($scope.clientList[data.peer]) {
-                $scope.clientList[data.peer] = data.profile;
+                $scope.clientList[data.peer] = {
+                    label:data.profile.label || data.peer,
+                    id: data.peer
+                };
+
             }
         });
     }

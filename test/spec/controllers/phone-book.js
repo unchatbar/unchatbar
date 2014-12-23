@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: phoneBook', function () {
+xdescribe('Controller: phoneBook', function () {
 
     beforeEach(module('unchatbar'));
 
