@@ -77,36 +77,42 @@ angular.module('unchatbar')
                 send : function (message) {
                     if (selectedClient.type) {
                         if (selectedClient.type === 'user') {
-                            if (connections[selectedClient.id] &&
-                                connections[selectedClient.id].open === true) {
-                                connections[selectedClient.id].send({
-                                    action: 'textMessage',
-                                    type: 'user',
-                                    label: PhoneBook.getClient(selectedClient.id).label,
-                                    message: message
-                                });
-                            } else {
-                                console.log("ADD TO QUE");
-                                //TODO add to message Que
-                            }
+                          this.sendToUser(message);
                         } else if (selectedClient.type === 'group') {
-                            var room = PhoneBook.getRoom([selectedClient.id]);
-                            _.forEach(room.users, function (user, index) {
-                                if (connections[user.id] && connections[user.id].open === true) {
-                                    connections[user.id].send({
-                                        action: 'textMessage',
-                                        type: 'group',
-                                        label: selectedClient.data.label,
-                                        groupinfo: room,
-                                        message: message
-                                    });
-                                } else {
-                                    console.log("ADD TO QUE");
-                                    //TODO add to message Que
-                                }
-                            });
+                         this.sendToGroup(message);
                         }
                     }
+                },
+                sendToUser : function (message) {
+                    if (connections[selectedClient.id] &&
+                        connections[selectedClient.id].open === true) {
+                        connections[selectedClient.id].send({
+                            action: 'textMessage',
+                            type: 'user',
+                            label: PhoneBook.getClient(selectedClient.id).label,
+                            message: message
+                        });
+                    } else {
+                        console.log("ADD TO QUE");
+                        //TODO add to message Que
+                    }
+                },
+                sendToGroup : function (message) {
+                    var room = PhoneBook.getRoom([selectedClient.id]);
+                    _.forEach(room.users, function (user, index) {
+                        if (connections[user.id] && connections[user.id].open === true) {
+                            connections[user.id].send({
+                                action: 'textMessage',
+                                type: 'group',
+                                label: room.label,
+                                groupinfo: room,
+                                message: message
+                            });
+                        } else {
+                            console.log("ADD TO QUE");
+                            //TODO add to message Que
+                        }
+                    });
                 }
             };
         }

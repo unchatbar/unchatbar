@@ -46,6 +46,14 @@ angular.module('unchatbar')
                     }
                 }).phoneBook;
 
+                function getUniqueId () {
+                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    var id = '';
+                    for (var i = 0; i < 5; i++) {
+                        id += possible.charAt(Math.floor(Math.random() * possible.length));
+                    }
+                    return id;
+                }
 
                 return {
                     addClient : function (id,label){
@@ -76,11 +84,7 @@ angular.module('unchatbar')
                     },
                     addGroup : function(name,user){
                         if(Broker.getPeerId()) {
-                            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                            var id = '';
-                            for (var i = 0; i < 5; i++) {
-                                id += possible.charAt(Math.floor(Math.random() * possible.length));
-                            }
+                            var id = getUniqueId();
                             storagePhoneBook.groups[id] = {
                                 label: name,
                                 users: user,
