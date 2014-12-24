@@ -74,45 +74,50 @@ angular.module('unchatbar')
                  * @return {Object} created instance of peer
                  *
                  */
-                send : function (message) {
+                send : function (text) {
                     if (selectedClient.type) {
                         if (selectedClient.type === 'user') {
-                          this.sendToUser(message);
+                          this.sendToUser(text);
                         } else if (selectedClient.type === 'group') {
-                         this.sendToGroup(message);
+                         this.sendToGroup(text);
                         }
                     }
                 },
-                sendToUser : function (message) {
+                sendToUser : function (text) {
+                    var message = {
+                        action: 'textMessage',
+                        type: 'user',
+                        label: PhoneBook.getClient(selectedClient.id).label,
+                        message: text
+                        };
                     if (connections[selectedClient.id] &&
                         connections[selectedClient.id].open === true) {
-                        connections[selectedClient.id].send({
-                            action: 'textMessage',
-                            type: 'user',
-                            label: PhoneBook.getClient(selectedClient.id).label,
-                            message: message
-                        });
+                        connections[selectedClient.id].send(message);
                     } else {
-                        console.log("ADD TO QUE");
-                        //TODO add to message Que
+                        this.addToQue(selectedClient.id,message);
                     }
                 },
-                sendToGroup : function (message) {
-                    var room = PhoneBook.getRoom([selectedClient.id]);
-                    _.forEach(room.users, function (user, index) {
+                sendToGroup : function (text) {
+                    var message = {},room = PhoneBook.getRoom([selectedClient.id]);
+                    _.forEach(room.users, function (user) {
+                        message = {
+                            action: 'textMessage',
+                            type: 'group',
+                            label: room.label,
+                            groupinfo: room,
+                            message: text
+                        };
                         if (connections[user.id] && connections[user.id].open === true) {
-                            connections[user.id].send({
-                                action: 'textMessage',
-                                type: 'group',
-                                label: room.label,
-                                groupinfo: room,
-                                message: message
-                            });
+                            connections[user.id].send(message);
                         } else {
-                            console.log("ADD TO QUE");
-                            //TODO add to message Que
+                            this.addToQue(user.id,message);
+
                         }
-                    });
+                    }.bind(this));
+                },
+                addToQue : function(peerId,message) {
+                    //TODO Store
+                    console.log('ADD TO QUE',peerId,message);
                 }
             };
         }
