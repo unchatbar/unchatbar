@@ -10,8 +10,8 @@
  *
  */
 angular.module('unchatbar')
-    .service('Connection',['$rootScope','Profile',
-        function ($rootScope,Profile) {
+    .service('Connection',['$rootScope','Profile','PhoneBook',
+        function ($rootScope,Profile,PhoneBook) {
             var connections = {},selectedClient= {};
             $rootScope.$on('changeProfile',function(){
                 _.forEach(connections , function(connection,peerId){
@@ -23,8 +23,11 @@ angular.module('unchatbar')
                 register : function (_scope) {
                     scope = _scope;
                 },
-                setClient : function (peerId){
-                    selectedClient = peerId;
+                setShowRoom : function (type,id){
+                    selectedClient = {
+                        type : type,
+                        id:id
+                    };
                     scope.$broadcast('roomSelected',{});
                 },
                 /**
@@ -74,12 +77,12 @@ angular.module('unchatbar')
                 send : function (message) {
                     if (selectedClient.type) {
                         if (selectedClient.type === 'user') {
-                            if (connections[selectedClient.data.id]
-                                && connections[selectedClient.data.id].open === true) {
-                                connections[selectedClient.data.id].send({
+                            if (connections[selectedClient.id] &&
+                                connections[selectedClient.id].open === true) {
+                                connections[selectedClient.id].send({
                                     action: 'textMessage',
                                     type: 'user',
-                                    label: selectedClient.data.label,
+                                    label: PhoneBook.getClient(selectedClient.id).label,
                                     message: message
                                 });
                             } else {
@@ -87,13 +90,14 @@ angular.module('unchatbar')
                                 //TODO add to message Que
                             }
                         } else if (selectedClient.type === 'group') {
-                            _.forEach(selectedClient.data.users, function (user, index) {
+                            var room = PhoneBook.getRoom([selectedClient.id]);
+                            _.forEach(room.users, function (user, index) {
                                 if (connections[user.id] && connections[user.id].open === true) {
                                     connections[user.id].send({
                                         action: 'textMessage',
                                         type: 'group',
                                         label: selectedClient.data.label,
-                                        groupinfo: selectedClient.data,
+                                        groupinfo: room,
                                         message: message
                                     });
                                 } else {

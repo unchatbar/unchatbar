@@ -13,14 +13,9 @@
  */
 
 //TODO add groups config local Storage
-angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$sessionStorage','Broker','Connection',
-    function ($scope,$rootScope,$localStorage, Broker, Connection) {
-        var storagePhoneBook = $localStorage.$default({
-            phoneBook: {
-                connections: {},
-                groups: {}
-            }
-        }).phoneBook;
+angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$sessionStorage',
+    'Broker','Connection','PhoneBook',
+    function ($scope,$rootScope,$localStorage, Broker, Connection,PhoneBook) {
 
 
         /**
@@ -29,8 +24,22 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$ses
          * @propertyOf unchatbar.controller:phoneBook
          * @returns {Object} clientList map of all client connections
          */
-        $scope.clientList = storagePhoneBook.connections;
-        $scope.groupList = storagePhoneBook.groups;
+        $scope.clientList = PhoneBook.getClientList();
+
+        /**
+         * @ngdoc property
+         * @name groupList
+         * @propertyOf unchatbar.controller:phoneBook
+         * @returns {Object} list of groups
+         */
+        $scope.groupList = PhoneBook.getGroupList();
+
+        /**
+         * @ngdoc property
+         * @name label
+         * @propertyOf unchatbar.controller:phoneBook
+         * @returns {Object} name of new group
+         */
         $scope.label = '';
         $scope.selection = {
             type:'',
@@ -47,21 +56,11 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$ses
          *
          */
         $scope.removeClient = function (peerId) {
-            delete $scope.clientList[peerId];
+            $scope.clientList = PhoneBook.removeClient(peerId);
         };
 
         $scope.createGroup = function () {
-            if(Broker.getPeerId()) {
-                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                var id = '';
-                for (var i = 0; i < 5; i++) {
-                    id += possible.charAt(Math.floor(Math.random() * possible.length));
-                }
-                $scope.groupList[id] = {
-                    label: $scope.label,
-                    users: [],
-                    owner: Broker.getPeerId()
-                };
+            if(PhoneBook.addGroup($scope.label,[])) {
                 $scope.label = '';
             }
         };
@@ -89,46 +88,30 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$ses
         };
 
         $scope.selectClient = function (peerId) {
-            $scope.selection = {
-                type: 'user',
-                data: $scope.clientList[peerId]
-            };
-            Connection.setClient( $scope.selection);
+            Connection.setShowRoom('user',peerId);
             $scope.showList = false;
         };
 
         $scope.selectRoom = function (roomId) {
-            $scope.selection = {
-                type: 'group',
-                data: $scope.groupList[roomId]
-            };
-            Connection.setClient( $scope.selection);
-            $scope.showList = false;
+            Connection.setShowRoom('group',roomId);
+             $scope.showList = false;
         };
 
         $scope.removeRoom = function (roomId) {
-            delete $scope.groupList[roomId];
+            PhoneBook.deleteRoom(roomId);
         };
 
 
         $scope.$on('client:connect', function (event, data) {
-            Connection.add(data.connection);
+            Connection.add(data.connection,data.connection.peer);
             if(!$scope.clientList[data.connection.peer]) {
-                $scope.clientList[data.connection.peer] = {
-                    label:data.connection.peer,
-                    id: data.connection.peer
-                };
+                $scope.clientList = PhoneBook.addClient(data.connection.peer,data.connection.peer);
             }
         });
 
         $scope.$on('client:sendProfile', function (event, data) {
-            if($scope.clientList[data.peer]) {
-                $scope.clientList[data.peer] = {
-                    label:data.profile.label || data.peer,
-                    id: data.peer
-                };
+            $scope.clientList = PhoneBook.updateClient(data.peer,data.profile.label || data.peer);
 
-            }
         });
     }
 ]);

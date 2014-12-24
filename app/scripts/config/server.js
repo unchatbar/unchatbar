@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('unchatbar')
-    .config(['BrokerProvider', 'LOCALSTORAGE', function (BrokerProvider,ProfileProvider, LOCALSTORAGE) {
+    .config(['BrokerProvider','PhoneBookProvider','ProfileProvider', 'LOCALSTORAGE', function (BrokerProvider,PhoneBookProvider,ProfileProvider, LOCALSTORAGE) {
         if (LOCALSTORAGE === true) {
             BrokerProvider.setLocalStorage();
             ProfileProvider.setLocalStorage();
+            PhoneBookProvider.setLocalStorage();
+
 
         }
         BrokerProvider.setHost('unchatbar-server.herokuapp.com');
