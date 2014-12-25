@@ -11,12 +11,13 @@
  */
 angular.module('unchatbar').controller('connectionCenter', ['$scope',
     function ($scope) {
-        $scope.showPanel = 'dashboard';
+        $scope.showPanel = '';
         $scope.panelInfo = {};
         $scope.setView = function (viewName) {
             $scope.showPanel = $scope.showPanel === viewName ? '' : viewName;
             $scope.$broadcast('setView',{name:$scope.showPanel});
         };
+
 
         $scope.$on('panelInfo',function(event,data){
             console.log("GET IN CENTER");

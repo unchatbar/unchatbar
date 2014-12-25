@@ -1,4 +1,4 @@
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<div class="panel-group" role="tablist" aria-multiselectable="true" data-ng-init="setView('dashboard')">
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" >
             <h4 class="panel-title">
@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingOne">
+        <div class="panel-heading" role="tab" >
             <h4 class="panel-title">
                 <span data-ng-click="setView('phoneBook')">
                    Phone book {{panelInfo.phoneBook || ''}}
@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingOne">
+        <div class="panel-heading" role="tab" >
             <h4 class="panel-title">
                 <span data-ng-click="setView('chat')">
                     Text chat {{panelInfo.chat || ''}}
@@ -42,7 +42,7 @@
         </div>
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingOne">
+        <div class="panel-heading" role="tab" >
             <h4 class="panel-title">
                 <span data-ng-click="setView('stream')">
                     Media stream {{panelInfo.stream || ''}}
