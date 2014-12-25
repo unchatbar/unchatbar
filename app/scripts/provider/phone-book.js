@@ -36,7 +36,7 @@ angular.module('unchatbar')
          * # peer
          * peer service
          */
-        this.$get = ['$rootScope','$sessionStorage','$sessionStorage','$localStorage','Broker',
+        this.$get = ['$rootScope','$sessionStorage','$localStorage','Broker',
             function ($rootScope, $sessionStorage,$localStorage,Broker) {
                 var storage = useLocalStorage ? $localStorage : $sessionStorage;
                 var storagePhoneBook = storage.$default({
@@ -61,6 +61,7 @@ angular.module('unchatbar')
                             label:label,
                             id: id
                         };
+                        this.sendUpdateEvent();
                         return this.getClientList();
 
                     },
@@ -69,41 +70,54 @@ angular.module('unchatbar')
                             label:label,
                             id: id
                         };
+                        this.sendUpdateEvent();
                         return this.getClientList();
 
                     },
                     getClient : function(clientId){
-                        return storagePhoneBook.user[clientId];
+                        return storagePhoneBook.user[clientId] || '';
                     },
                     getClientList : function(){
                         return storagePhoneBook.user;
                     },
                     removeClient : function(id){
-                        delete storagePhoneBook.groups[id];
-                        return this.getClientList();
+                        delete storagePhoneBook.user[id];
+                        this.sendUpdateEvent();
+                    },
+                    copyGroupFromPartner : function (id,option) {
+                        option.editable = false;
+                        storagePhoneBook.groups[id] = option;
+                        this.sendUpdateEvent();
                     },
                     addGroup : function(name,user){
-                        if(Broker.getPeerId()) {
+			            var peerId = Broker.getPeerId();
+                        if(peerId) {
                             var id = getUniqueId();
                             storagePhoneBook.groups[id] = {
                                 label: name,
                                 users: user,
-                                owner: Broker.getPeerId()
+                                owner: peerId,
+                                editable : true,
+                                id : id
                             };
-                            return this.getGroupList();
                         }
-                        return this.getGroupList();
+                        this.sendUpdateEvent();
                     },
                     getRoom : function (roomId) {
                         return storagePhoneBook.groups[roomId];
                     },
-                    deleteRoom : function(roomId){
+                    removeGroup : function(roomId){
                         delete storagePhoneBook.groups[roomId];
-                        return this.getGroupList();
+                        this.sendUpdateEvent();
                     },
                     getGroupList : function(){
                         return storagePhoneBook.groups;
+                    },
+                    sendUpdateEvent : function(){
+                        $rootScope.$broadcast('phonebook:update',{});
                     }
+
+
 
                 };
             }

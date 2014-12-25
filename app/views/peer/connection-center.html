@@ -1,2 +1,60 @@
-<connection></connection>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" >
+            <h4 class="panel-title">
+                <span data-ng-click="setView('dashboard')">
+                    Dashboard {{panelInfo.dashboard || ''}}
+                </span>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'dashboard'}"  role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                TODO DASHBOARD
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <span data-ng-click="setView('phoneBook')">
+                   Phone book {{panelInfo.phoneBook || ''}}
+                </span>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'phoneBook'}" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <phone-book-admin></phone-book-admin>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <span data-ng-click="setView('chat')">
+                    Text chat {{panelInfo.chat || ''}}
+                </span>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'chat'}" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <connection></connection>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <span data-ng-click="setView('stream')">
+                    Media stream {{panelInfo.stream || ''}}
+                </span>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'stream'}" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                comming soon
+            </div>
+        </div>
+    </div>
+</div>
+
 

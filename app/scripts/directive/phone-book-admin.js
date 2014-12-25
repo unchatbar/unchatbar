@@ -10,13 +10,13 @@
  * save client connections , for recall
  *
  */
-angular.module('unchatbar').directive('phoneBook', [
+angular.module('unchatbar').directive('phoneBookAdmin', [
     function () {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             replace: true,
-            templateUrl:'views/peer/phone-book.html',
-            controller: 'phoneBook'
+            templateUrl:'views/peer/phone-book-admin.html',
+            controller: 'phoneBookAdmin'
         };
     }
 ]);

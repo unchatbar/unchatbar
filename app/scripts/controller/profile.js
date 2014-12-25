@@ -11,9 +11,9 @@
  * manage user profile
  *
  */
-angular.module('unchatbar').controller('profile', ['$scope', 'Profile',
-    function ($scope, Profile) {
-
+angular.module('unchatbar').controller('profile', ['$scope', 'Profile','Broker',
+    function ($scope, Profile,Broker) {
+        $scope.peerId = Broker.getPeerId();
         /**
          * @ngdoc property
          * @name profile

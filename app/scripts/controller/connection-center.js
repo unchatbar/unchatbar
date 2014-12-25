@@ -11,20 +11,16 @@
  */
 angular.module('unchatbar').controller('connectionCenter', ['$scope',
     function ($scope) {
-        /**
-         * @ngdoc property
-         * @name connections
-         * @propertyOf unchatbar.controller:connectionCenter
-         * @returns {Object} map of client connections
-         */
-        /*$scope.connections = {};
+        $scope.showPanel = 'dashboard';
+        $scope.panelInfo = {};
+        $scope.setView = function (viewName) {
+            $scope.showPanel = $scope.showPanel === viewName ? '' : viewName;
+            $scope.$broadcast('setView',{name:$scope.showPanel});
+        };
 
-        $scope.$on('client:connect', function (event, data) {
-            $scope.connections[data.connection.peer] = data.connection;
+        $scope.$on('panelInfo',function(event,data){
+            console.log("GET IN CENTER");
+            $scope.panelInfo[data.name] = data.info;
         });
-
-        $scope.$on('peer:clientDisconnect',function(event,data){
-            delete $scope.connections[data.connectionId];
-        });*/
     }]
 );

@@ -14,7 +14,6 @@ angular.module('unchatbar').directive('connection', [
     function() {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
-
             templateUrl: 'views/peer/connection.html',
             controller: 'connection'
 
