@@ -2,7 +2,7 @@
     <div class="btn-group" dropdown >
        <button type="button" class="btn btn-primary dropdown-toggle"
                dropdown-toggle >
-          user<span class="caret"></span>
+           User: {{selectedUser || 'no selection'}}<span class="caret"></span>
        </button>
       <ul class="dropdown-menu">
           <li ng-repeat="(peerId,connection) in clientList">
@@ -14,7 +14,7 @@
     <div class="btn-group" dropdown >
         <button type="button" class="btn btn-primary dropdown-toggle"
                 dropdown-toggle >
-            groups<span class="caret"></span>
+            Room: {{selectedRoom || 'no selection'}}<span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
             <li ng-repeat="(groupId,group) in groupList">

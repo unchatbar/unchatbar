@@ -25,7 +25,8 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$ses
          * @returns {Object} clientList map of all client connections
          */
         $scope.clientList = PhoneBook.getClientList();
-
+        $scope.selectedUser = '';
+        $scope.selectedRoom = '';
         /**
          * @ngdoc property
          * @name groupList
@@ -39,12 +40,17 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$ses
             Connection.setShowRoom('user',peerId);
             $scope.showList = false;
             $scope.$emit('selectUser',{name:$scope.clientList[peerId].label });
+            $scope.selectedRoom = '';
+            $scope.selectedUser = $scope.clientList[peerId].label;
+
         };
 
         $scope.selectRoom = function (roomId) {
             Connection.setShowRoom('group',roomId);
             $scope.showList = false;
             $scope.$emit('selectGroup',{name:$scope.groupList[roomId].label });
+            $scope.selectedRoom = $scope.groupList[roomId].label;
+            $scope.selectedUser = '';
         };
 
        $scope.$on('phonebook:update', function(){
