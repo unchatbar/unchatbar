@@ -36,8 +36,8 @@ angular.module('unchatbar')
          * manage user profile
          *
          */
-        this.$get = ['$rootScope', 'notify', '$localStorage', '$sessionStorage',
-            function ($rootScope, notify, $localStorage, $sessionStorage) {
+        this.$get = ['$rootScope', 'notify', '$localStorage', '$sessionStorage','Connection',
+            function ($rootScope, notify, $localStorage, $sessionStorage,Connection) {
 
                 var storage = useLocalStorage ? $localStorage : $sessionStorage;
                 storage = storage.$default({
@@ -47,6 +47,16 @@ angular.module('unchatbar')
                 });
 
                 return {
+                    init: function (){
+                        $rootScope.$on('connection:open',function(event,data){
+                            Connection.send(data.peerId,{action: 'profile', profile: this.get()});
+                        }.bind(this));
+                    },
+                    sendProfileUpdate: function () {
+                        _.forEach(Connection.getList(), function (connection, peerId) {
+                            Connection.send(peerId,{action: 'profile', profile: this.get()});
+                        }.bind(this));
+                    },
                     /**
                      * @ngdoc methode
                      * @name get
@@ -71,7 +81,7 @@ angular.module('unchatbar')
                      */
                     set: function (profile) {
                         storage.profile = profile;
-                        $rootScope.$broadcast('changeProfile',{});
+                        this.sendProfileUpdate();
                     }
 
 

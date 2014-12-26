@@ -10,11 +10,11 @@
  * single client connection
  *
  */
-angular.module('unchatbar').directive('connection', [
+angular.module('unchatbar').directive('textMessageList', [
     function() {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
-            templateUrl: 'views/peer/connection.html',
+            templateUrl: 'views/peer/text-message-list.html',
             controller: 'connection'
 
         };

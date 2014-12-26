@@ -29,15 +29,20 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" >
-            <h4 class="panel-title">
-                <span data-ng-click="setView('chat')">
-                    Text chat {{panelInfo.chat || ''}}
-                </span>
-            </h4>
+
+                <div class="row">
+                <div class="col-md-3" data-ng-click="setView('chat')">
+                    <h4 class="panel-title">Text chat</h4>
+                </div>
+                <div class="col-md-9">
+                    <phone-book></phone-book>
+                </div>
+                </div>
+
         </div>
         <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'chat'}" role="tabpanel" aria-labelledby="headingOne">
             <div class="panel-body">
-                <connection></connection>
+                <text-message-list></text-message-list>
             </div>
         </div>
     </div>

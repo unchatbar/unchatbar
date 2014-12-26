@@ -11,8 +11,9 @@
  * single client connection
  *
  */
-angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'notify','Connection',
-    function ($scope, $rootScope, notify,Connection) {
+angular.module('unchatbar').controller('connection', ['$scope', '$rootScope',
+    'notify','MessageText','PhoneBook','Profile',
+    function ($scope, $rootScope, notify,MessageText,PhoneBook,Profile) {
         $scope.isOpen = false;
 
 
@@ -42,53 +43,38 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope', 'n
          * @description
          *
          * send message to client
-         *
+         * TODO Send in own directive
          */
         $scope.send = function () {
-            Connection.send($scope.message);
-            $scope.messageList = Connection.getMessageList();
+            MessageText.send($scope.message);
+            $scope.messageList = MessageText.getMessageList();
             $scope.message = '';
         };
 
         // Receive messages
         $scope.$on('getMessage', function (event, data) {
             if ( $scope.isOpen) {
-                $scope.messageList = Connection.getMessageList();
+                $scope.messageList = MessageText.getMessageList();
             }
         });
+
+        $scope.getUserName = function (id) {
+            return PhoneBook.getClient(id).label || id;
+        };
+
+        $scope.getProfileName = function () {
+            return Profile.get().label || 'no profile name';
+        };
 
 
         $scope.$on('roomSelected', function (event, data) {
             $scope.showSendButton = true;
-            $scope.messageList = Connection.getMessageList();
+            $scope.messageList = MessageText.getMessageList();
         });
-
-
-        function notifyOpenConnection() {
-            if ($scope.isOpen) {
-                notify({
-                    message: 'connect to ' + $scope.connect.peer + ' succesfull',
-                    classes: 'alert alert-success',
-                    templateUrl: ''
-                });
-            }
-        }
 
         $scope.$on('setView',function(event,data){
             $scope.isOpen = data.name === 'chat' ? true : false;
         });
-        $scope.$on('selectGroup',function(event,data){
-            $scope.$emit('panelInfo',{
-                    name:'chat',
-                    info:data.name }
-            );
-        });
-        $scope.$on('selectUser',function(event,data){
-            $scope.$emit('panelInfo',{
-                    name:'chat',
-                    info:data.name }
-            );
-        });
-        notifyOpenConnection();
+
     }
 ]);

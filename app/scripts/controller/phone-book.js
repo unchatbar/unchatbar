@@ -13,9 +13,8 @@
  */
 
 //TODO add groups config local Storage
-angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$sessionStorage',
-    'Broker','Connection','PhoneBook',
-    function ($scope,$rootScope,$localStorage, Broker, Connection,PhoneBook) {
+angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','MessageText','PhoneBook',
+    function ($scope,$rootScope, MessageText,PhoneBook) {
 
 
         /**
@@ -37,25 +36,23 @@ angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','$ses
 
 
         $scope.selectClient = function (peerId) {
-            Connection.setShowRoom('user',peerId);
-            $scope.showList = false;
-            $scope.$emit('selectUser',{name:$scope.clientList[peerId].label });
+            MessageText.setRoom('user',peerId);
             $scope.selectedRoom = '';
             $scope.selectedUser = $scope.clientList[peerId].label;
 
         };
 
         $scope.selectRoom = function (roomId) {
-            Connection.setShowRoom('group',roomId);
-            $scope.showList = false;
-            $scope.$emit('selectGroup',{name:$scope.groupList[roomId].label });
+            MessageText.setRoom('group',roomId);
             $scope.selectedRoom = $scope.groupList[roomId].label;
             $scope.selectedUser = '';
         };
 
-       $scope.$on('phonebook:update', function(){
+        $scope.$on('phonebook:update', function(){
            $scope.clientList = PhoneBook.getClientList();
            $scope.groupList = PhoneBook.getGroupList();
        });
+
+
     }
 ]);

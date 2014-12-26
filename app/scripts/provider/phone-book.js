@@ -56,13 +56,33 @@ angular.module('unchatbar')
                 }
 
                 return {
+                    init: function () {
+                        $rootScope.$on('client:connect', function (event, data) {
+                            if (!storagePhoneBook.user[data.connection.peer] ) {
+                                this.addClient(data.connection.peer, data.connection.peer);
+                            }
+                        }.bind(this));
+                        $rootScope.$on('peer:open', function () {
+                            _.forEach(storagePhoneBook.user, function (item) {
+                                if(item.id) {
+                                    Broker.connect(item.id);
+                                }
+                            });
+                        });
+                        $rootScope.$on('connection:getMessage:profile',function(event,data){
+                            this.updateClient(data.peerId,data.message.profile.label || '');
+                        }.bind(this));
+
+                        $rootScope.$on('connection:getMessage:removeGroup', function (event,data) {
+                            this.removeGroup(data.peerId);
+                        }.bind(this));
+                    },
                     addClient : function (id,label){
                         storagePhoneBook.user[id] = {
                             label:label,
                             id: id
                         };
                         this.sendUpdateEvent();
-                        return this.getClientList();
 
                     },
                     updateClient : function (id,label){
@@ -85,6 +105,7 @@ angular.module('unchatbar')
                         this.sendUpdateEvent();
                     },
                     copyGroupFromPartner : function (id,option) {
+
                         option.editable = false;
                         storagePhoneBook.groups[id] = option;
                         this.sendUpdateEvent();

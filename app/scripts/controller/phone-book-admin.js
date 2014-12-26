@@ -14,8 +14,8 @@
 
 //TODO add groups config local Storage
 angular.module('unchatbar').controller('phoneBookAdmin', ['$scope','$rootScope','$sessionStorage',
-    'Broker','Connection','PhoneBook',
-    function ($scope,$rootScope,$localStorage, Broker, Connection,PhoneBook) {
+    'MessageText','PhoneBook',
+    function ($scope,$rootScope,$localStorage, MessageText,PhoneBook) {
 
 
         /**
@@ -66,7 +66,7 @@ angular.module('unchatbar').controller('phoneBookAdmin', ['$scope','$rootScope',
         };
 
         $scope.removeGroup = function (roomId) {
-            Connection.removeGroup(roomId);
+            MessageText.sendRemoveGroup(roomId);
             PhoneBook.removeGroup(roomId);
         };
 
@@ -84,33 +84,11 @@ angular.module('unchatbar').controller('phoneBookAdmin', ['$scope','$rootScope',
          * create connection to client
          *
          */
-        $scope.$on('peer:open', function () {
-            $scope.init();
-        });
+
         $scope.getUserName = function (id) {
             return PhoneBook.getClient(id).label || id;
         };
 
-        $scope.init = function () {
-            _.forEach($scope.clientList, function (item, peer) {
-                if(item.id) {
-                    Broker.connect(item.id);
-                }
-            });
-            $scope.showList = false;
-        };
-
-
-        $scope.$on('client:connect', function (event, data) {
-            Connection.add(data.connection,data.connection.peer);
-            if(!$scope.clientList[data.connection.peer]) {
-                $scope.clientList = PhoneBook.addClient(data.connection.peer,data.connection.peer);
-            }
-        });
-
-        $scope.toggleSelection = function () {
-
-        }
 
         $scope.$on('client:sendProfile', function (event, data) {
             $scope.clientList = PhoneBook.updateClient(data.peer,data.profile.label || data.peer);

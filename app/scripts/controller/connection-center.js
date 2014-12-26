@@ -18,10 +18,5 @@ angular.module('unchatbar').controller('connectionCenter', ['$scope',
             $scope.$broadcast('setView',{name:$scope.showPanel});
         };
 
-
-        $scope.$on('panelInfo',function(event,data){
-            console.log("GET IN CENTER");
-            $scope.panelInfo[data.name] = data.info;
-        });
     }]
 );
