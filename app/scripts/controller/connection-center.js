@@ -9,6 +9,7 @@
  * set active view
  *
  */
+
 angular.module('unchatbar').controller('connectionCenter', ['$scope',
     function ($scope) {
         /**
@@ -31,19 +32,19 @@ angular.module('unchatbar').controller('connectionCenter', ['$scope',
          */
         $scope.setView = function (viewName) {
             $scope.showPanel = $scope.showPanel === viewName ? '' : viewName;
-
+            /**
+             * @ngdoc event
+             * @name setView
+             * @eventOf unchatbar.controller:connectionCenter
+             * @eventType broadcast on scope
+             * @param {String} name of active panel
+             * @description
+             *
+             * Broadcasted after `$scope.showPanel`changed
+             *
+             */
             $scope.$broadcast('setView', {name: $scope.showPanel});
         };
-        /**
-         * @ngdoc event
-         * @name setView
-         * @eventOf unchatbar.controller:connectionCenter
-         * @eventType broadcast on scope
-         * @description
-         *
-         * Broadcasted after `$scope.showPanel`changed
-         *
-         * @param {name} name of active panel
-         */
+
     }
 ]);

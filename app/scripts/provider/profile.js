@@ -10,14 +10,12 @@
  */
 angular.module('unchatbar')
     .provider('Profile', function () {
-
         var useLocalStorage = false;
 
         /**
          * @ngdoc methode
          * @name setLocalStorage
          * @methodOf unchatbar.ProfileProvider
-         * @params {String} path set path from peerServer
          * @description
          *
          * use local storage for store peerId
@@ -31,32 +29,39 @@ angular.module('unchatbar')
         /**
          * @ngdoc service
          * @name unchatbar.Profile
+         * @require $rootScope
+         * @require $sessionStorage
+         * @require $localStorage
+         * @require Connection
          * @description
          *
          * manage user profile
          *
          */
-        this.$get = ['$rootScope', 'notify', '$localStorage', '$sessionStorage','Connection',
-            function ($rootScope, notify, $localStorage, $sessionStorage,Connection) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Connection',
+            function ($rootScope, $localStorage, $sessionStorage, Connection) {
 
                 var storage = useLocalStorage ? $localStorage : $sessionStorage;
                 storage = storage.$default({
-                    profile: {
-
-                    }
+                    profile: {}
                 });
 
                 return {
-                    init: function (){
-                        $rootScope.$on('connection:open',function(event,data){
-                            Connection.send(data.peerId,{action: 'profile', profile: this.get()});
+                    /**
+                     * @ngdoc methode
+                     * @name init
+                     * @methodOf unchatbar.Profile
+                     * @description
+                     *
+                     * init listener
+                     *
+                     */
+                    init: function () {
+                        $rootScope.$on('connection:open', function (event, data) {
+                            Connection.send(data.peerId, {action: 'profile', profile: this.get()});
                         }.bind(this));
                     },
-                    sendProfileUpdate: function () {
-                        _.forEach(Connection.getList(), function (connection, peerId) {
-                            Connection.send(peerId,{action: 'profile', profile: this.get()});
-                        }.bind(this));
-                    },
+
                     /**
                      * @ngdoc methode
                      * @name get
@@ -67,13 +72,14 @@ angular.module('unchatbar')
                      *
                      */
                     get: function () {
-                       return _.clone(storage.profile);
+                        return _.clone(storage.profile);
                     },
 
                     /**
                      * @ngdoc methode
                      * @name set
                      * @methodOf unchatbar.Profile
+                     * @parms {Object} profile information to profile
                      * @description
                      *
                      * set profile
@@ -81,7 +87,23 @@ angular.module('unchatbar')
                      */
                     set: function (profile) {
                         storage.profile = profile;
-                        this.sendProfileUpdate();
+                        this._sendProfileUpdate();
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name sendProfileUpdate
+                     * @methodOf unchatbar.Profile
+                     * @private
+                     * @description
+                     *
+                     * send profile update to all connected clients
+                     *
+                     */
+                    _sendProfileUpdate: function () {
+                        _.forEach(Connection.getMap(), function (connection, peerId) {
+                            Connection.send(peerId, {action: 'profile', profile: this.get()});
+                        }.bind(this));
                     }
 
 

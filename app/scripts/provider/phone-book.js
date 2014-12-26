@@ -3,22 +3,19 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc service
- * @name unchatbar.BrokerProvider
+ * @name unchatbar.PhoneBookProvider
  * @description
  * # peer
  * config peer connection
  */
 angular.module('unchatbar')
     .provider('PhoneBook', function () {
-
         var useLocalStorage = false;
-
 
         /**
          * @ngdoc methode
          * @name setLocalStorage
-         * @methodOf unchatbar.BrokerProvider
-         * @params {String} path set path from peerServer
+         * @methodOf unchatbar.PhoneBookProvider
          * @description
          *
          * use local storage for store peerId
@@ -31,13 +28,18 @@ angular.module('unchatbar')
 
         /**
          * @ngdoc service
-         * @name unchatbar.Broker
+         * @name unchatbar.PhoneBook
+         * @require $rootScope
+         * @require $sessionStorage
+         * @require $localStorage
+         * @require Broker
          * @description
-         * # peer
-         * peer service
+         *          *
+         * phonebook
+         *
          */
-        this.$get = ['$rootScope','$sessionStorage','$localStorage','Broker',
-            function ($rootScope, $sessionStorage,$localStorage,Broker) {
+        this.$get = ['$rootScope', '$sessionStorage', '$localStorage', 'Broker',
+            function ($rootScope, $sessionStorage, $localStorage, Broker) {
                 var storage = useLocalStorage ? $localStorage : $sessionStorage;
                 var storagePhoneBook = storage.$default({
                     phoneBook: {
@@ -46,100 +48,230 @@ angular.module('unchatbar')
                     }
                 }).phoneBook;
 
-                function getUniqueId () {
-                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                    var id = '';
-                    for (var i = 0; i < 5; i++) {
-                        id += possible.charAt(Math.floor(Math.random() * possible.length));
-                    }
-                    return id;
-                }
-
                 return {
+                    /**
+                     * @ngdoc methode
+                     * @name init
+                     * @methodOf unchatbar.PhoneBook
+                     * @description
+                     *
+                     * init listener
+                     *
+                     */
                     init: function () {
                         $rootScope.$on('client:connect', function (event, data) {
-                            if (!storagePhoneBook.user[data.connection.peer] ) {
+                            if (!storagePhoneBook.user[data.connection.peer]) {
                                 this.addClient(data.connection.peer, data.connection.peer);
                             }
                         }.bind(this));
                         $rootScope.$on('peer:open', function () {
                             _.forEach(storagePhoneBook.user, function (item) {
-                                if(item.id) {
+                                if (item.id) {
                                     Broker.connect(item.id);
                                 }
                             });
                         });
-                        $rootScope.$on('connection:getMessage:profile',function(event,data){
-                            this.updateClient(data.peerId,data.message.profile.label || '');
+                        $rootScope.$on('connection:getMessage:profile', function (event, data) {
+                            this.updateClient(data.peerId, data.message.profile.label || '');
                         }.bind(this));
 
-                        $rootScope.$on('connection:getMessage:removeGroup', function (event,data) {
+                        $rootScope.$on('connection:getMessage:removeGroup', function (event, data) {
                             this.removeGroup(data.peerId);
                         }.bind(this));
                     },
-                    addClient : function (id,label){
+
+                    /**
+                     * @ngdoc methode
+                     * @name addClient
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} id peerId from client
+                     * @paranm {String} label name of client
+                     * @description
+                     *
+                     * add new client
+                     *
+                     */
+                    addClient: function (id, label) {
                         storagePhoneBook.user[id] = {
-                            label:label,
+                            label: label,
                             id: id
                         };
-                        this.sendUpdateEvent();
+                        this._sendUpdateEvent();
 
                     },
-                    updateClient : function (id,label){
+
+                    /**
+                     * @ngdoc methode
+                     * @name updateClient
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} id peerId from client
+                     * @paranm {String} label name of client
+                     * @description
+                     *
+                     * update client
+                     *
+                     */
+                    updateClient: function (id, label) {
                         storagePhoneBook.user[id] = {
-                            label:label || id,
-                            id: id
+                            label: label || id
                         };
-                        this.sendUpdateEvent();
-                        return this.getClientList();
-
+                        this._sendUpdateEvent();
                     },
-                    getClient : function(clientId){
+
+                    /**
+                     * @ngdoc methode
+                     * @name getClient
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} clientId peerId from client
+                     * @return {Object} client object
+                     * @description
+                     *
+                     * get client by peerId
+                     *
+                     */
+                    getClient: function (clientId) {
                         return storagePhoneBook.user[clientId] || '';
                     },
-                    getClientMap : function(){
+
+                    /**
+                     * @ngdoc methode
+                     * @name getClientMap
+                     * @methodOf unchatbar.PhoneBook
+                     * @return {Object} map of all clients
+                     * @description
+                     *
+                     * get map of all clients
+                     *
+                     */
+                    getClientMap: function () {
                         return storagePhoneBook.user;
                     },
-                    removeClient : function(id){
+
+                    /**
+                     * @ngdoc methode
+                     * @name getClientMap
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} id peerId from client
+                     * @return {Object} map of all clients
+                     * @description
+                     *
+                     * remove client from phone book
+                     *
+                     */
+                    removeClient: function (id) {
                         delete storagePhoneBook.user[id];
-                        this.sendUpdateEvent();
+                        this._sendUpdateEvent();
                     },
-                    copyGroupFromPartner : function (id,option) {
+
+                    /**
+                     * @ngdoc methode
+                     * @name copyGroupFromPartner
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} id id of room
+                     * @return {Object} option room info
+                     * @description
+                     *
+                     * write a copy group in phonebook from owner of the group
+                     *
+                     */
+                    copyGroupFromPartner: function (id, option) {
 
                         option.editable = false;
                         storagePhoneBook.groups[id] = option;
-                        this.sendUpdateEvent();
+                        this._sendUpdateEvent();
                     },
-                    addGroup : function(name,user){
-			            var peerId = Broker.getPeerId();
-                        if(peerId) {
-                            var id = getUniqueId();
+
+                    /**
+                     * @ngdoc methode
+                     * @name addGroup
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} name name of group
+                     * @paranm {String} user user on group
+                     * @description
+                     *
+                     * add new client
+                     *
+                     */
+                    addGroup: function (name, user) {
+                        var peerId = Broker.getPeerId();
+                        if (peerId) {
+                            var id = peerId + new Date().getTime();
                             storagePhoneBook.groups[id] = {
                                 label: name,
                                 users: user,
                                 owner: peerId,
-                                editable : true,
-                                id : id
+                                editable: true,
+                                id: id
                             };
                         }
-                        this.sendUpdateEvent();
+                        this._sendUpdateEvent();
                     },
-                    getRoom : function (roomId) {
-                        return storagePhoneBook.groups[roomId];
+
+                    /**
+                     * @ngdoc methode
+                     * @name getGroup
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} groupId id of group
+                     * @description
+                     *
+                     * get infor from a group
+                     *
+                     */
+                    getGroup: function (groupId) {
+                        return storagePhoneBook.groups[groupId];
                     },
-                    removeGroup : function(roomId){
+
+                    /**
+                     * @ngdoc methode
+                     * @name removeGroup
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} roomId id of room
+                     * @description
+                     *
+                     * remove group from phone book
+                     *
+                     */
+                    removeGroup: function (roomId) {
                         delete storagePhoneBook.groups[roomId];
-                        this.sendUpdateEvent();
+                        this._sendUpdateEvent();
                     },
-                    getGroupMap : function(){
+
+                    /**
+                     * @ngdoc methode
+                     * @name getGroupMap
+                     * @methodOf unchatbar.PhoneBook
+                     * @return {Object} get a map of all groups from phonebook
+                     * @description
+                     *
+                     * remove group from phone book
+                     *
+                     */
+                    getGroupMap: function () {
                         return storagePhoneBook.groups;
                     },
-                    sendUpdateEvent : function(){
-                        $rootScope.$broadcast('phonebook:update',{});
+
+                    /**
+                     * @ngdoc methode
+                     * @name _sendUpdateEvent
+                     * @methodOf unchatbar.PhoneBook
+                     * @description
+                     *
+                     * broadcast an update event
+                     *
+                     */
+                    _sendUpdateEvent: function () {
+                        /**
+                         * @ngdoc event
+                         * @name phonebook:update
+                         * @eventOf unchatbar.PhoneBook
+                         * @eventType broadcast on root scope
+                         * @description
+                         *
+                         * Broadcasted data in phonebook changed
+                         *
+                         */
+                        $rootScope.$broadcast('phonebook:update', {});
                     }
-
-
-
                 };
             }
         ];

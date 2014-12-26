@@ -89,13 +89,13 @@ angular.module('unchatbar').controller('connection', ['$scope', 'MessageText', '
             return Profile.get().label || 'no profile name';
         };
 
-        $scope.$on('getMessage', function () {
+        $scope.$on('chat:getMessage', function () {
             if ($scope.isOpen) {
                 $scope.messageList = MessageText.getMessageList();
             }
         });
 
-        $scope.$on('roomSelected', function () {
+        $scope.$on('chat:setRoom', function () {
             $scope.isRoomSelected = true;
             $scope.messageList = MessageText.getMessageList();
         });

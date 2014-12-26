@@ -16,7 +16,7 @@ angular.module('unchatbar')
             return {
                 /**
                  * @ngdoc methode
-                 * @name getPeerId
+                 * @name init
                  * @methodOf unchatbar.Peer
                  * @param {String} peerId Id of peer client
                  * @param {Object} options for peer server
@@ -30,7 +30,7 @@ angular.module('unchatbar')
                },
                 /**
                  * @ngdoc methode
-                 * @name getPeerId
+                 * @name get
                  * @methodOf unchatbar.Peer
                  * @return {Object} created instance of peer
                  *
