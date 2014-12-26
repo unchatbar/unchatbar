@@ -47,7 +47,7 @@ angular.module('unchatbar')
                             this._sendFromQueue(data.peerId);
                         }.bind(this));
                         $rootScope.$on('connection:getMessage:textMessage', function (event, data) {
-                            this._addNewMessage(data.message.group.id || data.peerId,data.peerId, data.message);
+                            this._addStoStorage(data.message.group.id || data.peerId,data.peerId, data.message);
                         }.bind(this));
                     },
 
@@ -80,7 +80,7 @@ angular.module('unchatbar')
                                 message = this._sendToGroup(text);
                             }
                             message.own = true;
-                            this._addNewMessage(selectedRoom.id,selectedRoom.id,message);
+                            this._addStoStorage(selectedRoom.id,selectedRoom.id,message);
                         }
                     },
 
@@ -99,7 +99,7 @@ angular.module('unchatbar')
                         }
                     },
 
-                    _addNewMessage: function (room,from, message) {
+                    _addStoStorage: function (room,from, message) {
 
                         if (!storageMessages.messages[room]) {
                             storageMessages.messages[room] = [];
@@ -162,10 +162,13 @@ angular.module('unchatbar')
                     _sendFromQueue: function (peerId) {
                         if (storageMessages.queue[peerId]) {
                             _.forEach(storageMessages.queue[peerId], function (message, index) {
-                                Connection.send(peerId, message);
-                                delete storageMessages.queue[peerId][index];
+                                if(Connection.send(peerId, message)) {
+                                    delete storageMessages.queue[peerId][index];
+                                }
                             });
-                            delete storageMessages.queue[peerId];
+                            if(storageMessages.queue[peerId].length === 0) {
+                                delete storageMessages.queue[peerId];
+                            }
                         }
                     }
 

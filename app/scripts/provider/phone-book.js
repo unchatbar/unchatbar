@@ -87,7 +87,7 @@ angular.module('unchatbar')
                     },
                     updateClient : function (id,label){
                         storagePhoneBook.user[id] = {
-                            label:label,
+                            label:label || id,
                             id: id
                         };
                         this.sendUpdateEvent();

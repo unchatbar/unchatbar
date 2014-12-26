@@ -19,7 +19,7 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane " ng-class="{'active' : bookShow === 'user'}">
                 <div ng-repeat="(peerId,connection) in clientList">
-                    {{connection.label }}
+                    {{getUserName(peerId)}}
                     <i class="glyphicon glyphicon-trash" data-ng-click="removeClient(peerId)"></i>
                 </div>
             </div>
