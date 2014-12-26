@@ -3,7 +3,7 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name unchatbar.directive:messageData
+ * @name unchatbar.directive:textMessageList
  * @restrict E
  * @description
  *

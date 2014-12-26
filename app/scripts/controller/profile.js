@@ -4,7 +4,7 @@
  * @ngdoc controller
  * @name  unchatbar.controller:profile
  * @require $scope
- * @require $localStorage
+ * @require Profile
  * @require Broker
  * @description
  *

@@ -3,11 +3,11 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name unchatbar.directive:phoneBook
+ * @name unchatbar.directive:phoneBookAdmin
  * @restrict E
  * @description
  *
- * save client connections , for recall
+ * phonebook administration
  *
  */
 angular.module('unchatbar').directive('phoneBookAdmin', [

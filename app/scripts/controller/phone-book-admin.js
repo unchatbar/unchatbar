@@ -2,54 +2,47 @@
 
 /**
  * @ngdoc controller
- * @name  unchatbar.controller:phoneBook
+ * @name  unchatbar.controller:phoneBookAdmin
  * @require $scope
  * @require $localStorage
  * @require Broker
  * @description
  *
- * save client connections , for recall
+ * phonebook administration
  *
  */
 
 //TODO add groups config local Storage
-angular.module('unchatbar').controller('phoneBookAdmin', ['$scope','$rootScope','$sessionStorage',
-    'MessageText','PhoneBook',
-    function ($scope,$rootScope,$localStorage, MessageText,PhoneBook) {
-
-
+angular.module('unchatbar').controller('phoneBookAdmin', ['$scope', 'MessageText', 'PhoneBook',
+    function ($scope, MessageText, PhoneBook) {
         /**
          * @ngdoc property
-         * @name username
-         * @propertyOf unchatbar.controller:phoneBook
-         * @returns {Object} clientList map of all client connections
+         * @name clientList
+         * @propertyOf unchatbar.controller:phoneBookAdmin
+         * @returns {Object} map of all client
          */
-        $scope.clientList = PhoneBook.getClientList();
+        $scope.clientList = PhoneBook.getClientMap();
 
         /**
          * @ngdoc property
          * @name groupList
-         * @propertyOf unchatbar.controller:phoneBook
-         * @returns {Object} list of groups
+         * @propertyOf unchatbar.controller:phoneBookAdmin
+         * @returns {Object} map of groups
          */
-        $scope.groupList = PhoneBook.getGroupList();
+        $scope.groupList = PhoneBook.getGroupMap();
 
         /**
          * @ngdoc property
-         * @name label
-         * @propertyOf unchatbar.controller:phoneBook
+         * @name newGroupName
+         * @propertyOf unchatbar.controller:phoneBookAdmin
          * @returns {Object} name of new group
          */
-        $scope.label = '';
+        $scope.newGroupName = '';
 
-        $scope.selection = {
-            type:'',
-            data: ''
-        };
         /**
          * @ngdoc methode
          * @name removeClient
-         * @methodOf unchatbar.controller:phoneBook
+         * @methodOf unchatbar.controller:phoneBookAdmin
          * @params  {String} peerId id of client
          * @description
          *
@@ -60,39 +53,52 @@ angular.module('unchatbar').controller('phoneBookAdmin', ['$scope','$rootScope',
             PhoneBook.removeClient(peerId);
         };
 
+        /**
+         * @ngdoc methode
+         * @name createGroup
+         * @methodOf unchatbar.controller:phoneBookAdmin
+         * @description
+         *
+         * create new group
+         *
+         */
         $scope.createGroup = function () {
-            PhoneBook.addGroup($scope.label,[]);
-            $scope.label = '';
+            PhoneBook.addGroup($scope.newGroupName, []);
+            $scope.newGroupName = '';
         };
 
+        /**
+         * @ngdoc methode
+         * @name removeGroup
+         * @methodOf unchatbar.controller:phoneBookAdmin
+         * @params  {String} roomId id of room
+         * @description
+         *
+         * remove group from phone book list
+         *
+         */
         $scope.removeGroup = function (roomId) {
             MessageText.sendRemoveGroup(roomId);
             PhoneBook.removeGroup(roomId);
         };
 
-        $scope.$on('phonebook:update', function(){
-            $scope.clientList = PhoneBook.getClientList();
-            $scope.groupList = PhoneBook.getGroupList();
-        });
         /**
          * @ngdoc methode
-         * @name removeClient
-         * @methodOf unchatbar.controller:phoneBook
-         * @params  {String} peerId id of client
+         * @name getUserName
+         * @methodOf unchatbar.controller:phoneBookAdmin
+         * @params  {String} id peerId from Client
          * @description
          *
-         * create connection to client
+         * get name of client
          *
          */
-
         $scope.getUserName = function (id) {
             return PhoneBook.getClient(id).label || id;
         };
 
-
-        $scope.$on('client:sendProfile', function (event, data) {
-            $scope.clientList = PhoneBook.updateClient(data.peer,data.profile.label || data.peer);
-
+        $scope.$on('phonebook:update', function () {
+            $scope.clientList = PhoneBook.getClientMap();
+            $scope.groupList = PhoneBook.getGroupMap();
         });
     }
 ]);

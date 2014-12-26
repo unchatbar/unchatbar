@@ -4,55 +4,83 @@
  * @ngdoc controller
  * @name  unchatbar.controller:phoneBook
  * @require $scope
- * @require $localStorage
- * @require Broker
+ * @require MessageText
+ * @require PhoneBook
  * @description
  *
- * save client connections , for recall
+ * select client/room for connection
  *
  */
-
-//TODO add groups config local Storage
-angular.module('unchatbar').controller('phoneBook', ['$scope','$rootScope','MessageText','PhoneBook',
-    function ($scope,$rootScope, MessageText,PhoneBook) {
-
+angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'PhoneBook',
+    function ($scope, MessageText, PhoneBook) {
+        /**
+         * @ngdoc property
+         * @name clientMap
+         * @propertyOf unchatbar.controller:phoneBook
+         * @returns {Object} map of all client
+         */
+        $scope.clientMap = PhoneBook.getClientMap();
 
         /**
          * @ngdoc property
-         * @name username
+         * @name selectedUser
          * @propertyOf unchatbar.controller:phoneBook
-         * @returns {Object} clientList map of all client connections
+         * @returns {String} name of selcted user
          */
-        $scope.clientList = PhoneBook.getClientList();
         $scope.selectedUser = '';
-        $scope.selectedRoom = '';
+
         /**
          * @ngdoc property
-         * @name groupList
+         * @name selectedGroup
          * @propertyOf unchatbar.controller:phoneBook
-         * @returns {Object} list of groups
+         * @returns {String} name of group
          */
-        $scope.groupList = PhoneBook.getGroupList();
+        $scope.selectedGroup = '';
 
+        /**
+         * @ngdoc property
+         * @name groupMap
+         * @propertyOf unchatbar.controller:phoneBook
+         * @returns {Object} map of groups
+         */
+        $scope.groupMap = PhoneBook.getGroupMap();
 
+        /**
+         * @ngdoc methode
+         * @name selectClient
+         * @methodOf unchatbar.controller:phoneBook
+         * @params {String} peerId id of client
+         * @description
+         *
+         * select room for single client chat
+         *
+         */
         $scope.selectClient = function (peerId) {
-            MessageText.setRoom('user',peerId);
-            $scope.selectedRoom = '';
-            $scope.selectedUser = $scope.clientList[peerId].label;
+            MessageText.setRoom('user', peerId);
+            $scope.selectedGroup = '';
+            $scope.selectedUser = $scope.clientMap[peerId].label;
 
         };
 
-        $scope.selectRoom = function (roomId) {
-            MessageText.setRoom('group',roomId);
-            $scope.selectedRoom = $scope.groupList[roomId].label;
+        /**
+         * @ngdoc methode
+         * @name selectGroup
+         * @methodOf unchatbar.controller:phoneBook
+         * @params {String} peerId id of client
+         * @description
+         *
+         * select room for group chat
+         *
+         */
+        $scope.selectGroup = function (roomId) {
+            MessageText.setRoom('group', roomId);
+            $scope.selectedGroup = $scope.groupMap[roomId].label;
             $scope.selectedUser = '';
         };
 
-        $scope.$on('phonebook:update', function(){
-           $scope.clientList = PhoneBook.getClientList();
-           $scope.groupList = PhoneBook.getGroupList();
-       });
-
-
+        $scope.$on('phonebook:update', function () {
+            $scope.clientMap = PhoneBook.getClientMap();
+            $scope.groupMap = PhoneBook.getGroupMap();
+        });
     }
 ]);

@@ -170,8 +170,8 @@ angular.module('unchatbar')
                                 delete storageMessages.queue[peerId];
                             }
                         }
+                        this.closeConnection(peerId);
                     }
-
 
                 };
             }

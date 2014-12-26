@@ -5,7 +5,7 @@
            User: {{selectedUser || 'no selection'}}<span class="caret"></span>
        </button>
       <ul class="dropdown-menu">
-          <li ng-repeat="(peerId,connection) in clientList">
+          <li ng-repeat="(peerId,connection) in clientMap">
               <a data-ng-click="selectClient(peerId)" >{{connection.label}}</a>
           </li>
       </ul>
@@ -14,11 +14,11 @@
     <div class="btn-group" dropdown >
         <button type="button" class="btn btn-default dropdown-toggle"
                 dropdown-toggle >
-            Room: {{selectedRoom || 'no selection'}}<span class="caret"></span>
+            Room: {{selectedGroup || 'no selection'}}<span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li ng-repeat="(groupId,group) in groupList">
-                <a data-ng-click="selectRoom(groupId)">{{group.label}}</a>
+            <li ng-repeat="(groupId,group) in groupMap">
+                <a data-ng-click="selectGroup(groupId)">{{group.label}}</a>
             </li>
         </ul>
     </div>

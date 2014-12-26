@@ -2,8 +2,8 @@
 
 /**
  * @author Lars Wiedemann
- * @ngdoc service
- * @name unchatbar.directive:clientConnector
+ * @ngdoc directive
+ * @name unchatbar.directive:dialer
  * @restrict E
  * @description
  *

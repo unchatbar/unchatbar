@@ -11,10 +11,8 @@
  * build client connection
  *
  */
-angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'Broker',
-    function ($scope, $rootScope, Broker) {
-
-
+angular.module('unchatbar').controller('dialer', ['$scope', 'Broker',
+    function ($scope, Broker) {
         /**
          * @ngdoc property
          * @name peerId
@@ -30,7 +28,6 @@ angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'Broke
          * @returns {String} client id for connect
          */
         $scope.connectId = '';
-
 
         /**
          * @ngdoc methode
@@ -50,6 +47,5 @@ angular.module('unchatbar').controller('dialer', ['$scope', '$rootScope', 'Broke
             $scope.peerId = Broker.getPeerId();
 
         });
-
     }
 ]);

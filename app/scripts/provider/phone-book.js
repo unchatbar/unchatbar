@@ -97,7 +97,7 @@ angular.module('unchatbar')
                     getClient : function(clientId){
                         return storagePhoneBook.user[clientId] || '';
                     },
-                    getClientList : function(){
+                    getClientMap : function(){
                         return storagePhoneBook.user;
                     },
                     removeClient : function(id){
@@ -131,7 +131,7 @@ angular.module('unchatbar')
                         delete storagePhoneBook.groups[roomId];
                         this.sendUpdateEvent();
                     },
-                    getGroupList : function(){
+                    getGroupMap : function(){
                         return storagePhoneBook.groups;
                     },
                     sendUpdateEvent : function(){

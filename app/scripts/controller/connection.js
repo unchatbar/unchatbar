@@ -4,20 +4,32 @@
  * @ngdoc controller
  * @name  unchatbar.controller:connection
  * @require $scope
- * @require $rootScope
- * @require notify
+ * @require MessageText
+ * @require PhoneBook
+ * @require Profile
  * @description
  *
  * single client connection
  *
  */
-angular.module('unchatbar').controller('connection', ['$scope', '$rootScope',
-    'notify','MessageText','PhoneBook','Profile',
-    function ($scope, $rootScope, notify,MessageText,PhoneBook,Profile) {
+angular.module('unchatbar').controller('connection', ['$scope', 'MessageText', 'PhoneBook', 'Profile',
+    function ($scope, MessageText, PhoneBook, Profile) {
+        /**
+         * @ngdoc property
+         * @name isOpen
+         * @propertyOf unchatbar.controller:connection
+         * @returns {Boolean} is chat open
+         */
         $scope.isOpen = false;
 
+        /**
+         * @ngdoc property
+         * @name isRoomSelected
+         * @propertyOf unchatbar.controller:connection
+         * @returns {Boolean} is room selected
+         */
+        $scope.isRoomSelected = false;
 
-        $scope.showSendButton = false;
         /**
          * @ngdoc property
          * @name message
@@ -34,8 +46,6 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope',
          */
         $scope.messageList = [];
 
-
-
         /**
          * @ngdoc methode
          * @name send
@@ -43,7 +53,7 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope',
          * @description
          *
          * send message to client
-         * TODO Send in own directive
+         *
          */
         $scope.send = function () {
             MessageText.send($scope.message);
@@ -51,29 +61,47 @@ angular.module('unchatbar').controller('connection', ['$scope', '$rootScope',
             $scope.message = '';
         };
 
-        // Receive messages
-        $scope.$on('getMessage', function (event, data) {
-            if ( $scope.isOpen) {
-                $scope.messageList = MessageText.getMessageList();
-            }
-        });
-
+        /**
+         * @ngdoc methode
+         * @name getUserName
+         * @methodOf unchatbar.controller:connection
+         * @params {String} id client id
+         * @description
+         *
+         * get the name of user
+         *
+         */
         $scope.getUserName = function (id) {
             return PhoneBook.getClient(id).label || id;
         };
 
+        /**
+         * @ngdoc methode
+         * @name getProfileName
+         * @methodOf unchatbar.controller:connection
+         * @params {String} id of user
+         * @description
+         *
+         * get own username
+         *
+         */
         $scope.getProfileName = function () {
             return Profile.get().label || 'no profile name';
         };
 
+        $scope.$on('getMessage', function () {
+            if ($scope.isOpen) {
+                $scope.messageList = MessageText.getMessageList();
+            }
+        });
 
-        $scope.$on('roomSelected', function (event, data) {
-            $scope.showSendButton = true;
+        $scope.$on('roomSelected', function () {
+            $scope.isRoomSelected = true;
             $scope.messageList = MessageText.getMessageList();
         });
 
-        $scope.$on('setView',function(event,data){
-            $scope.isOpen = data.name === 'chat' ? true : false;
+        $scope.$on('setView', function (event, data) {
+            $scope.isOpen = data.name === 'chat';
         });
 
     }
