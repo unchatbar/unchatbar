@@ -12,7 +12,7 @@
  * single client connection
  *
  */
-angular.module('unchatbar').controller('connection', ['$scope', 'MessageText', 'PhoneBook', 'Profile',
+angular.module('unchatbar').controller('textMessageList', ['$scope', 'MessageText', 'PhoneBook', 'Profile',
     function ($scope, MessageText, PhoneBook, Profile) {
         /**
          * @ngdoc property

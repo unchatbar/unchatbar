@@ -15,7 +15,7 @@ angular.module('unchatbar').directive('textMessageList', [
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/text-message-list.html',
-            controller: 'connection'
+            controller: 'textMessageList'
 
         };
     }
