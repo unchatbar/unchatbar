@@ -149,7 +149,7 @@ angular.module('unchatbar')
                      * @methodOf unchatbar.Broker
                      * @description
                      *
-                     * init stroage
+                     * init storage
                      *
                      */
                     _initStorage : function() {
