@@ -1,6 +1,6 @@
 'use strict';
 
-xdescribe('Serivce: Broker', function () {
+describe('Serivce: Broker', function () {
     var brokerService, brokerProvider, brokerStorage,
         peerService, BrokerHeartbeatService;
     beforeEach(module('unchatbar', ['BrokerProvider', function (_brokerProvider) {
@@ -88,6 +88,12 @@ xdescribe('Serivce: Broker', function () {
                 it('should call peer.on with param `error`', function () {
                     expect(peer.on).toHaveBeenCalledWith('error', jasmine.any(Function));
                 });
+                it('should broadcast on $rootscope error', function () {
+                    spyOn(rootScope, '$broadcast').and.returnValue(true);
+                    peerCallBack.error('error');
+                    expect(rootScope.$broadcast).toHaveBeenCalledWith('peer:error', {error: 'error'});
+                });
+
             });
 
         });
@@ -119,7 +125,7 @@ xdescribe('Serivce: Broker', function () {
             }));
         });
 
-        describe('connect', function () {
+        describe('getPeerId', function () {
             it('should return server id from peer ' , function(){
                 spyOn(peerService, 'get').and.returnValue({id: 'OurId'});
 
@@ -128,6 +134,7 @@ xdescribe('Serivce: Broker', function () {
 
 
         });
+
     });
 })
 ;
