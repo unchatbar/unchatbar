@@ -56,7 +56,7 @@ angular.module('unchatbar').controller('phoneBookAdmin', ['$scope', 'MessageText
         /**
          * @ngdoc methode
          * @name getClientAndGroups
-         * @methodOf unchatbar.controller:phoneBook
+         * @methodOf unchatbar.controller:phoneBookAdmin
          * @params {String} peerId id of client
          * @description
          *
