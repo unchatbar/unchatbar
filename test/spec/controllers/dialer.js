@@ -1,20 +1,18 @@
 'use strict';
 
-xdescribe('Controller: dialer', function () {
+describe('Controller: dialer', function () {
 
     beforeEach(module('unchatbar'));
 
-    var dialerCTRL, scope, rootScope, brokerService;
+    var dialerCTRL, scope, brokerService;
 
     beforeEach(inject(function ($controller, $rootScope, Broker) {
         scope = $rootScope.$new();
-        rootScope = $rootScope;
         brokerService = Broker;
 
         dialerCTRL = function () {
             $controller('dialer', {
                 $scope: scope,
-                $rootScope: rootScope,
                 Broker: brokerService
 
             });
@@ -22,21 +20,15 @@ xdescribe('Controller: dialer', function () {
     }));
 
     describe('check init', function () {
-        it('should have an empty peerId by init', function () {
-            spyOn(brokerService, 'getPeerId').and.returnValue('');
+        it('should set `$scope.peerId`to rturn value from `Broker.getPeerId`', function () {
+            spyOn(brokerService, 'getPeerId').and.returnValue('peerId');
 
             dialerCTRL();
 
-            expect(scope.peerId).toEqual('');
+            expect(scope.peerId).toEqual('peerId');
         });
 
-        it('should call `broker.getPeerId`', function () {
-            spyOn(brokerService, 'getPeerId').and.returnValue('');
 
-            dialerCTRL();
-
-            expect(brokerService.getPeerId).toHaveBeenCalled();
-        });
 
         it('should set scope.connectId to empty string', function () {
             spyOn(brokerService, 'getPeerId').and.returnValue('');
@@ -84,7 +76,7 @@ xdescribe('Controller: dialer', function () {
                 scope.$broadcast('peer:open', {});
 
                 expect(scope.peerId).toBe('test');
-            })
+            });
         });
     });
 
