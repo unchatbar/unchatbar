@@ -84,15 +84,18 @@ angular.module('unchatbar')
          */
         this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'BrokerHeartbeat', 'Peer',
             function ($rootScope, $localStorage, $sessionStorage, BrokerHeartbeat, peerService) {
-
-                var storage = useLocalStorage ? $localStorage : $sessionStorage;
-                storage = storage.$default({
-                    broker: {
-                        peerId: ''
-                    }
-                }).broker;
-
                 return {
+                    /**
+                     * @ngdoc methode
+                     * @name connectServer
+                     * @propertyOf unchatbar.Broker
+                     * @private
+                     * @returns {Object} broker storage
+                     *
+                     */
+                    _storage : {
+                      peerId : ''
+                    },
                     /**
                      * @ngdoc methode
                      * @name connectServer
@@ -103,7 +106,8 @@ angular.module('unchatbar')
                      *
                      */
                     connectServer: function () {
-                        peerService.init(storage.peerId, {host: host, port: port, path: path});
+                        this._initStorage();
+                        peerService.init(this._storage.peerId, {host: host, port: port, path: path});
                         this._peerListener();
                         BrokerHeartbeat.start();
                     },
@@ -141,6 +145,24 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
+                     * @name _initStorage
+                     * @methodOf unchatbar.Broker
+                     * @description
+                     *
+                     * init stroage
+                     *
+                     */
+                    _initStorage : function() {
+                        var storage = useLocalStorage ? $localStorage : $sessionStorage;
+                        this._storage = storage.$default({
+                            broker: {
+                                peerId: ''
+                            }
+                        }).broker;
+                    },
+
+                    /**
+                     * @ngdoc methode
                      * @name _peerListener
                      * @methodOf unchatbar.Broker
                      * @private
@@ -151,9 +173,10 @@ angular.module('unchatbar')
                      */
                     _peerListener: function () {
                         var peer = peerService.get();
+                        var self = this;
                         peer.on('open', function (id) {
                             $rootScope.$apply(function () {
-                                storage.peerId = id;
+                                self._storage.peerId = id;
                                 /**
                                  * @ngdoc event
                                  * @name peer:open

@@ -1,8 +1,7 @@
 'use strict';
 
 describe('Serivce: Broker', function () {
-    var brokerService, brokerProvider, brokerStorage,
-        peerService, BrokerHeartbeatService;
+    var brokerService, brokerProvider,peerService, BrokerHeartbeatService;
     beforeEach(module('unchatbar', ['BrokerProvider', function (_brokerProvider) {
         brokerProvider = _brokerProvider;
         brokerProvider.setHost('host.de');
@@ -19,19 +18,43 @@ describe('Serivce: Broker', function () {
     }));
 
     describe('check methode', function () {
+        describe('_initStorage', function () {
+            var sessionStorage ={};
+            beforeEach(inject(function($sessionStorage){
+                sessionStorage = $sessionStorage;
+                spyOn(sessionStorage,'$default').and.returnValue({broker : {test: 'data'}});
+                brokerService._initStorage();
+            }));
+            it('should call `$sessionStorage.$default` with object' , function(){
+                expect(sessionStorage.$default).toHaveBeenCalledWith({
+                    broker: {
+                        peerId: ''
+                    }
+                });
+            });
+            it('should set  `brokerService._storage` return value from `$sessionStorage.$default`' , function(){
+                expect(brokerService._storage).toEqual({test: 'data'});
+            });
+        });
 
         describe('connectServer', function () {
             beforeEach(function () {
+               spyOn(brokerService,'_initStorage').and.returnValue(true);
                 spyOn(peerService, 'init').and.returnValue('peer');
                 spyOn(brokerService, '_peerListener').and.returnValue(true);
                 spyOn(BrokerHeartbeatService, 'start').and.returnValue(true);
             });
-            it('should call Peer.init without peerId and provider options', inject(function ($sessionStorage) {
-                $sessionStorage.broker.peerId = 'peerTest';
+            it('should call `brokerService._initStorage`', function () {
+                brokerService.connectServer();
+
+                expect(brokerService._initStorage).toHaveBeenCalled();
+            });
+            it('should call Peer.init with peerId and provider options', function () {
+                brokerService._storage.peerId = 'peerTest';
                 brokerService.connectServer();
 
                 expect(peerService.init).toHaveBeenCalledWith('peerTest', {host: 'host.de', port: 12345, path: 'test/'});
-            }));
+            });
             it('should call _peerListener', function () {
                 brokerService.connectServer();
 
@@ -63,10 +86,10 @@ describe('Serivce: Broker', function () {
                 it('should call peer.on with param `open`', function () {
                     expect(peer.on).toHaveBeenCalledWith('open', jasmine.any(Function));
                 });
-                it('should set peerid from callback storage peerId', inject(function ($sessionStorage) {
+                it('should set peerid from callback storage peerId', function () {
                     peerCallBack.open('newPeerId');
-                    expect($sessionStorage.broker.peerId).toBe('newPeerId');
-                }));
+                    expect(brokerService._storage.peerId).toBe('newPeerId');
+                });
                 it('should broadcast on $rootscope new peerid', function () {
                     spyOn(rootScope, '$broadcast').and.returnValue(true);
                     peerCallBack.open('newPeerId');

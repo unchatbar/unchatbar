@@ -42,14 +42,11 @@ angular.module('unchatbar')
          */
         this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker',  'PhoneBook', 'Connection',
             function ($rootScope, $localStorage, $sessionStorage, Broker,  PhoneBook, Connection) {
-                var storage = useLocalStorage ? $localStorage : $sessionStorage;
-                var storageMessages = storage.$default({
-                    message: {
+                var selectedRoom = {},
+                    storageMessages={
                         messages: {},
                         queue: {}
-                    }
-                }).message;
-                var selectedRoom = {};
+                    };
 
 
                 return {
@@ -63,6 +60,7 @@ angular.module('unchatbar')
                      *
                      */
                     init: function () {
+                        this._initStorage();
                         $rootScope.$on('connection:open', function (event, data) {
                             this._sendFromQueue(data.peerId);
                         }.bind(this));
@@ -71,6 +69,23 @@ angular.module('unchatbar')
                         }.bind(this));
                     },
 
+                    /**
+                     * @ngdoc methode
+                     * @name _initStorage
+                     * @methodOf unchatbar.MessageText
+                     * @description
+                     *
+                     * init storage
+                     */
+                    _initStorage : function(){
+                        var storage = useLocalStorage ? $localStorage : $sessionStorage;
+                        storageMessages = storage.$default({
+                            message: {
+                                messages: {},
+                                queue: {}
+                            }
+                        }).message;
+                    },
                     /**
                      * @ngdoc methode
                      * @name setRoom
