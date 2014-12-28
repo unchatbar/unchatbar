@@ -1,93 +1,137 @@
 'use strict';
 
-xdescribe('Controller: phoneBook', function () {
+describe('Controller: phoneBook', function () {
 
     beforeEach(module('unchatbar'));
 
-    var phoneBookCTRL, scope, brokerService,localStorage;
+    var phoneBookCTRL, scope, PhoneBookService,MessageTextService;
 
-    beforeEach(inject(function ($controller, $rootScope, $localStorage, Broker) {
-        brokerService = Broker;
+    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook) {
+        PhoneBookService = PhoneBook;
         scope = $rootScope.$new();
-        localStorage = $localStorage;
+        MessageTextService = MessageText;
         phoneBookCTRL = function () {
             $controller('phoneBook', {
                 $scope: scope,
-                $localStorage : localStorage,
-                broker : brokerService
+                MessageText : MessageTextService,
+                PhoneBook : PhoneBookService
             });
         };
     }));
 
     describe('check init', function () {
-        beforeEach(function () {
-            spyOn(localStorage,'$default').and.returnValue({
-                phoneBook: {
-                    connections: {}
-                }
-            });
+        beforeEach(function(){
             phoneBookCTRL();
         });
-        it('should call `$localStorage.$default` with phone Book object', function () {
-            expect(localStorage.$default).toHaveBeenCalledWith({
-                phoneBook: {
-                    connections: {}
-                }
-            });
+
+        it('should set `$scope.clientMap` to empty object', function () {
+            expect(scope.clientMap).toEqual({});
         });
-        it('should have an empty username by init', function () {
-            expect(scope.clientList).toEqual({});
+
+        it('should set `$scope.groupMap` to empty object', function () {
+            expect(scope.groupMap).toEqual({});
+        });
+
+        it('should set `$scope.selectedUser` to empty string', function () {
+            expect(scope.selectedUser).toBe('');
+        });
+
+        it('should set `$scope.selectedGroup` to empty string', function () {
+            expect(scope.selectedGroup).toBe('');
         });
     });
     describe('check methode', function () {
-        describe('removeClient' , function (){
+        describe('getClientAndGroups' , function() {
+            beforeEach(function () {
+                phoneBookCTRL();
+                spyOn(PhoneBookService,'getClientMap').and.returnValue(
+                    {'peerIdUser':'test'}
+                );
+                spyOn(PhoneBookService,'getGroupMap').and.returnValue(
+                    {'userGroupId':'test'}
+                );
+                scope.getClientAndGroups();
+            });
+            it('should set `$scope.clientMap` to return value from `PhoneBook.getClientMap`', function () {
+                expect(scope.clientMap).toEqual({'peerIdUser':'test'});
+            });
+
+            it('should set `$scope.groupMap` to return value from `PhoneBook.getGroupMap`', function () {
+                expect(scope.groupMap).toEqual({'userGroupId':'test'});
+            });
+
+        });
+
+        describe('selectClient' , function (){
             beforeEach(function(){
                 phoneBookCTRL();
-                scope.clientList = {'removePeer' : 'test','noRemove' : 'test'};
+                spyOn(MessageTextService,'setRoom').and.returnValue(true);
+                scope.clientMap = {'peerId': {label: 'test'}};
             });
-            it('should remove key `removePeer`  from `scope.clientList `' , function() {
-                scope.removeClient('removePeer');
+            it('should call `MessageText.setRoom` with `user` and peerId' , function() {
+                scope.selectClient('peerId');
 
-                expect(scope.clientList ).toEqual({'noRemove' : 'test'});
+                expect(MessageTextService.setRoom).toHaveBeenCalledWith('user','peerId');
+            });
+            it('should set `$scope.selectedGroup` to empty string' , function() {
+                scope.selectedGroup = 'test';
+                scope.selectClient('peerId');
+
+                expect(scope.selectedGroup).toBe('');
             });
 
+            it('should set `$scope.selectedUser` object from `$scope.clientMap` ' , function() {
+                scope.selectedGroup = 'test';
+                scope.selectedUser = '';
+
+                scope.selectClient('peerId');
+
+                expect(scope.selectedUser).toBe('test');
+            });
 
         });
-        describe('connectClient' , function (){
-            it('should call `connectToClient` with peerId' ,function (){
+
+        describe('selectGroup' , function (){
+            beforeEach(function(){
                 phoneBookCTRL();
-                spyOn(brokerService,'connect').and.returnValue(true);
+                scope.groupMap = {'roomId': {label: 'testRoom'}};
 
-                scope.connectClient('peerId');
+                spyOn(MessageTextService,'setRoom').and.returnValue(true);
 
-                expect(brokerService.connect).toHaveBeenCalledWith('peerId');
             });
+            it('should call `MessageText.setRoom` with `user` and roomId' , function() {
+                scope.selectGroup('roomId');
+
+                expect(MessageTextService.setRoom).toHaveBeenCalledWith('group','roomId');
+            });
+            it('should set `$scope.selectedUser` to empty string' , function() {
+                scope.selectedUser = 'test';
+                scope.selectGroup('roomId');
+
+                expect(scope.selectedUser).toBe('');
+            });
+
+            it('should set `$scope.selectedUser` object from `$scope.clientMap` ' , function() {
+                scope.selectGroup('roomId');
+
+                expect(scope.selectedGroup).toBe('testRoom');
+            });
+
         });
+
 
     });
     describe('check event', function () {
-        describe('peer:clientConnect', function () {
+        describe('phonebook:update', function () {
             beforeEach(function () {
                 phoneBookCTRL();
-                scope.clientList = {};
             });
             it('should add connection to  `$scope.clientList`', function () {
-                scope.$broadcast('client:connect', {connection : {peer: 'conId','send': 'function'}});
-                expect(scope.clientList).toEqual({conId: {}});
-            });
-        });
+                spyOn(scope,'getClientAndGroups').and.returnValue(true);
+                scope.$broadcast('phonebook:update', {connection : {peer: 'conId','send': 'function'}});
 
-        describe('client:sendProfile', function () {
-            beforeEach(function () {
-                phoneBookCTRL();
-                scope.clientList = {};
+                expect(scope.getClientAndGroups).toHaveBeenCalled();
             });
-            it('should update clientList with profile', function () {
-                scope.clientList = {'test' : {}};
-                scope.$broadcast('client:sendProfile',  {peer: 'test','profile': {name:'test'}});
-                expect(scope.clientList).toEqual({test : {name:'test'}});
-            });
-
         });
     });
 

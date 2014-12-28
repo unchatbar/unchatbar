@@ -19,7 +19,15 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'P
          * @propertyOf unchatbar.controller:phoneBook
          * @returns {Object} map of all client
          */
-        $scope.clientMap = PhoneBook.getClientMap();
+        $scope.clientMap = {};
+
+        /**
+         * @ngdoc property
+         * @name groupMap
+         * @propertyOf unchatbar.controller:phoneBook
+         * @returns {Object} map of groups
+         */
+        $scope.groupMap = {};
 
         /**
          * @ngdoc property
@@ -38,12 +46,19 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'P
         $scope.selectedGroup = '';
 
         /**
-         * @ngdoc property
-         * @name groupMap
-         * @propertyOf unchatbar.controller:phoneBook
-         * @returns {Object} map of groups
+         * @ngdoc methode
+         * @name getClientAndGroups
+         * @methodOf unchatbar.controller:phoneBook
+         * @params {String} peerId id of client
+         * @description
+         *
+         * get user and groups
+         *
          */
-        $scope.groupMap = PhoneBook.getGroupMap();
+        $scope.getClientAndGroups = function () {
+            $scope.clientMap = PhoneBook.getClientMap();
+            $scope.groupMap = PhoneBook.getGroupMap();
+        };
 
         /**
          * @ngdoc methode
@@ -79,8 +94,8 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'P
         };
 
         $scope.$on('phonebook:update', function () {
-            $scope.clientMap = PhoneBook.getClientMap();
-            $scope.groupMap = PhoneBook.getGroupMap();
+            $scope.getClientAndGroups();
         });
+
     }
 ]);
