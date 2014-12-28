@@ -23,15 +23,18 @@ module.exports = function (config) {
             'bower_components/angular-notify/dist/angular-notify.js',
             'bower_components/ngstorage/ngStorage.js',
             'bower_components/lodash/dist/lodash.compat.js',
+            'bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js',
+            'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
             'bower_components/angular-mocks/angular-mocks.js',
             'app/scripts/constants.js',
             'app/scripts/**/*.js',
             'test/mock/**/*.js',
-            'test/spec/**/*.js'
+            'test/spec/**/*.js',
+
         ],
 
         // list of files / patterns to exclude
-        exclude: [],
+        exclude: ['app/scripts/run.js'],
 
         // web server port
         port: 8080,

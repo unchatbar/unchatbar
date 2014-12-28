@@ -86,7 +86,7 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', 'MessageTex
          *
          */
         $scope.getProfileName = function () {
-            return Profile.get().label || 'no profile name';
+            return Profile.get().label;
         };
 
         $scope.$on('chat:getMessage', function () {
@@ -103,6 +103,5 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', 'MessageTex
         $scope.$on('setView', function (event, data) {
             $scope.isOpen = data.name === 'chat';
         });
-
     }
 ]);
