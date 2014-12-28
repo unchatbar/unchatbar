@@ -1,6 +1,6 @@
 'use strict';
 
-xdescribe('Controller: connectionCenter', function () {
+describe('Controller: connectionCenter', function () {
 
     beforeEach(module('unchatbar'));
 
@@ -22,34 +22,26 @@ xdescribe('Controller: connectionCenter', function () {
             connectionCenterCTRL();
         });
 
-        it('should set `scope.connections` to empty object', function () {
-            expect(scope.connections).toEqual({});
+        it('should set `scope.showPanel` to be empty string', function () {
+            expect(scope.showPanel).toEqual('');
         });
     });
 
-    describe('check event', function () {
+    describe('check methode', function () {
         beforeEach(function(){
             connectionCenterCTRL();
         });
-        describe('client:connect', function () {
-            it('should add `$scope.connections` with connection.peer and connection ', function () {
-                scope.connections = {};
-                scope.$broadcast('client:connect',{connection:{peer:'testPeerId',send : 'function'}});
-                scope.$apply();
-
-                expect(scope.connections).toEqual({testPeerId: {peer:'testPeerId',send : 'function'}});
+        describe('setView', function () {
+            it('should set `$scope.showPanel` to viewName' , function(){
+                scope.setView('test');
+                expect(scope.showPanel).toBe('test');
+            });
+            it('should broadcast `setView` with viewname' , function(){
+                spyOn(scope,'$broadcast').and.returnValue(true);
+                scope.setView('test');
+                expect(scope.$broadcast).toHaveBeenCalledWith('setView',{name:'test'});
             });
         });
-        describe('peer:clientDisconnect', function () {
-            it('should remove key `deleteItem` from  `$scope.connections`', function () {
-                scope.connections = {'deleteItem': 'test', 'noDelete': 'test'};
-                scope.$broadcast('peer:clientDisconnect', {connectionId: 'deleteItem'});
-                scope.$apply();
-
-                expect(scope.connections).toEqual({'noDelete': 'test'});
-            });
-        });
-
     });
 
 

@@ -64,8 +64,8 @@ angular.module('unchatbar').controller('phoneBookAdmin', ['$scope', 'MessageText
          *
          */
         $scope.getClientAndGroups = function () {
-            $scope.clientMap = PhoneBook.getClientMap();
-            $scope.groupMap = PhoneBook.getGroupMap();
+            $scope.clientList = PhoneBook.getClientMap();
+            $scope.groupList = PhoneBook.getGroupMap();
         };
 
 

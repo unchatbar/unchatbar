@@ -93,6 +93,21 @@ describe('Controller: connection', function () {
             });
 
         });
+
+        describe('getUserName' , function () {
+            beforeEach(function () {
+                connectionCTRL();
+                spyOn(PhoneBookService, 'getClient').and.returnValue({label:'test'});
+            });
+            it('should call `PhoneBook.getClient` with peerId' , function(){
+                scope.getUserName('peerId');
+                expect(PhoneBookService.getClient).toHaveBeenCalledWith('peerId');
+            });
+            it('should set return value `label` from PhoneBook.getClient' , function(){
+                scope.getUserName('peerId');
+                expect(scope.getUserName('peerId')).toBe('test');
+            });
+        });
     });
     describe('check event', function () {
         beforeEach(function () {

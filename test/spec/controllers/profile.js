@@ -1,6 +1,6 @@
 'use strict';
 
-xdescribe('Controller: profile', function () {
+describe('Controller: profile', function () {
 
     beforeEach(module('unchatbar'));
 
