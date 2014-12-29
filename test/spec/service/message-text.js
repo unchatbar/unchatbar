@@ -385,34 +385,34 @@ describe('Serivce: MessageText', function () {
                 );
             });
 
-            describe('sender is not owner' , function(){
-                beforeEach(function(){
+            describe('sender is not owner', function () {
+                beforeEach(function () {
                     spyOn(PhoneBookService, 'getGroup').and.returnValue({owner: 'otherPeerId', users: []});
 
                 });
-                it('should call `Connection.send` with owner id' , function(){
-                    spyOn(ConnectionService,'send').and.returnValue(true);
+                it('should call `Connection.send` with owner id', function () {
+                    spyOn(ConnectionService, 'send').and.returnValue(true);
                     MessageTextService._sendToGroup('test text');
-                    expect(ConnectionService.send).toHaveBeenCalledWith('otherPeerId',{
+                    expect(ConnectionService.send).toHaveBeenCalledWith('otherPeerId', {
                         action: 'textMessage',
                         from: 'clientPeerId',
                         group: {owner: 'otherPeerId', users: []},
                         text: 'test text'
                     });
                 });
-                describe('send was successful' , function(){
-                    it('should not call `MessageText._addToQueue`' , function(){
-                        spyOn(ConnectionService,'send').and.returnValue(true);
+                describe('send was successful', function () {
+                    it('should not call `MessageText._addToQueue`', function () {
+                        spyOn(ConnectionService, 'send').and.returnValue(true);
                         MessageTextService._sendToGroup('test text');
                         expect(MessageTextService._addToQueue).not.toHaveBeenCalled();
                     });
                 });
 
-                describe('send was not successful' , function(){
-                    it('should not call `MessageText._addToQueue` with owner id' , function(){
-                        spyOn(ConnectionService,'send').and.returnValue(false);
+                describe('send was not successful', function () {
+                    it('should not call `MessageText._addToQueue` with owner id', function () {
+                        spyOn(ConnectionService, 'send').and.returnValue(false);
                         MessageTextService._sendToGroup('test text');
-                        expect(MessageTextService._addToQueue).toHaveBeenCalledWith('otherPeerId',{
+                        expect(MessageTextService._addToQueue).toHaveBeenCalledWith('otherPeerId', {
                             action: 'textMessage',
                             from: 'clientPeerId',
                             group: {owner: 'otherPeerId', users: []},
@@ -422,37 +422,40 @@ describe('Serivce: MessageText', function () {
                 });
             });
 
-            describe('sender is owner' , function(){
-                beforeEach(function(){
-                    spyOn(PhoneBookService, 'getGroup').and.returnValue({owner: 'clientPeerId', users: [{id:'userId'}]});
+            describe('sender is owner', function () {
+                beforeEach(function () {
+                    spyOn(PhoneBookService, 'getGroup').and.returnValue({
+                        owner: 'clientPeerId',
+                        users: [{id: 'userId'}]
+                    });
 
                 });
-                it('should call `Connection.send` with userId id' , function(){
-                    spyOn(ConnectionService,'send').and.returnValue(true);
+                it('should call `Connection.send` with userId id', function () {
+                    spyOn(ConnectionService, 'send').and.returnValue(true);
                     MessageTextService._sendToGroup('test text');
-                    expect(ConnectionService.send).toHaveBeenCalledWith('userId',{
+                    expect(ConnectionService.send).toHaveBeenCalledWith('userId', {
                         action: 'textMessage',
                         from: 'clientPeerId',
-                        group: {owner: 'clientPeerId', users: [{ id: 'userId' }]},
+                        group: {owner: 'clientPeerId', users: [{id: 'userId'}]},
                         text: 'test text'
                     });
                 });
-                describe('send was successful' , function(){
-                    it('should not call `MessageText._addToQueue` ' , function(){
-                        spyOn(ConnectionService,'send').and.returnValue(true);
+                describe('send was successful', function () {
+                    it('should not call `MessageText._addToQueue` ', function () {
+                        spyOn(ConnectionService, 'send').and.returnValue(true);
                         MessageTextService._sendToGroup('test text');
                         expect(MessageTextService._addToQueue).not.toHaveBeenCalled();
                     });
                 });
 
-                describe('send was not successful' , function(){
-                    it('should not call `MessageText._addToQueue` with userId id' , function(){
-                        spyOn(ConnectionService,'send').and.returnValue(false);
+                describe('send was not successful', function () {
+                    it('should not call `MessageText._addToQueue` with userId id', function () {
+                        spyOn(ConnectionService, 'send').and.returnValue(false);
                         MessageTextService._sendToGroup('test text');
-                        expect(MessageTextService._addToQueue).toHaveBeenCalledWith('userId',{
+                        expect(MessageTextService._addToQueue).toHaveBeenCalledWith('userId', {
                             action: 'textMessage',
                             from: 'clientPeerId',
-                            group: {owner: 'clientPeerId', users: [ { id: 'userId' }]},
+                            group: {owner: 'clientPeerId', users: [{id: 'userId'}]},
                             text: 'test text'
                         });
                     });
@@ -461,56 +464,56 @@ describe('Serivce: MessageText', function () {
 
         });
 
-        describe('_addToQueue' , function(){
-            it('should push `_storageMessages.queue` to peerId key' , function(){
+        describe('_addToQueue', function () {
+            it('should push `_storageMessages.queue` to peerId key', function () {
                 MessageTextService._storageMessages.queue = {};
-                MessageTextService._addToQueue('peerId','message');
+                MessageTextService._addToQueue('peerId', 'message');
                 expect(MessageTextService._storageMessages.queue).toEqual({
-                    'peerId' : ['message']
+                    'peerId': ['message']
                 });
             });
 
         });
 
-        describe('_sendFromQueue' , function(){
-            describe('peerId has no items in queue ' , function(){
-                beforeEach(function(){
+        describe('_sendFromQueue', function () {
+            describe('peerId has no items in queue ', function () {
+                beforeEach(function () {
                     MessageTextService._storageMessages.queue = {};
-                    spyOn(ConnectionService,'send').and.returnValue(true);
+                    spyOn(ConnectionService, 'send').and.returnValue(true);
 
                 });
-                it('should not call `Connection.send` for message in storage queue' , function(){
+                it('should not call `Connection.send` for message in storage queue', function () {
 
                     MessageTextService._sendFromQueue('peerId');
 
                     expect(ConnectionService.send).not.toHaveBeenCalled();
                 });
             });
-            describe('peerId has items in queue ' , function(){
-                beforeEach(function(){
-                    MessageTextService._storageMessages.queue = {'peerId' : ['message']};
+            describe('peerId has items in queue ', function () {
+                beforeEach(function () {
+                    MessageTextService._storageMessages.queue = {'peerId': ['message']};
                 });
-                it('should not call `Connection.send` for message in storage queue' , function(){
-                    spyOn(ConnectionService,'send').and.returnValue(true);
+                it('should not call `Connection.send` for message in storage queue', function () {
+                    spyOn(ConnectionService, 'send').and.returnValue(true);
                     MessageTextService._sendFromQueue('peerId');
-                    expect(ConnectionService.send).toHaveBeenCalledWith('peerId','message');
+                    expect(ConnectionService.send).toHaveBeenCalledWith('peerId', 'message');
                 });
-                describe('`Connection.send` was successful' , function(){
-                    beforeEach(function(){
-                        spyOn(ConnectionService,'send').and.returnValue(true);
+                describe('`Connection.send` was successful', function () {
+                    beforeEach(function () {
+                        spyOn(ConnectionService, 'send').and.returnValue(true);
                     });
-                    it('should delete peer from queue' , function(){
+                    it('should delete peer from queue', function () {
                         MessageTextService._sendFromQueue('peerId');
                         expect(MessageTextService._storageMessages.queue).toEqual({});
                     });
                 });
-                describe('`Connection.send` was not successful' , function(){
-                    beforeEach(function(){
-                        spyOn(ConnectionService,'send').and.returnValue(false);
+                describe('`Connection.send` was not successful', function () {
+                    beforeEach(function () {
+                        spyOn(ConnectionService, 'send').and.returnValue(false);
                     });
-                    it('should delete peer from queue' , function(){
+                    it('should delete peer from queue', function () {
                         MessageTextService._sendFromQueue('peerId');
-                        expect(MessageTextService._storageMessages.queue).toEqual({'peerId' : ['message']});
+                        expect(MessageTextService._storageMessages.queue).toEqual({'peerId': ['message']});
                     });
                 });
 

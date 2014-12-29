@@ -183,7 +183,7 @@ angular.module('unchatbar')
                     sendRemoveGroup: function (roomId) {
                         var groupUsers = {},message = {};
                         if (PhoneBook.getGroup(roomId).owner === Broker.getPeerId()) {
-                            groupUsers = PhoneBook.getGroup(roomId).users,
+                            groupUsers = PhoneBook.getGroup(roomId).users;
                                 message = {
                                     action: 'removeGroup',
                                     id: roomId
