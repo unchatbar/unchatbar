@@ -41,12 +41,20 @@ angular.module('unchatbar')
         this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Connection',
             function ($rootScope, $localStorage, $sessionStorage, Connection) {
 
-                var storage = useLocalStorage ? $localStorage : $sessionStorage;
-                storage = storage.$default({
-                    profile: {}
-                });
+
 
                 return {
+                    /**
+                     * @ngdoc methode
+                     * @name _storageProfile
+                     * @propertyOf unchatbar.Profile
+                     * @private
+                     * @returns {Object} user/group storage
+                     *
+                     */
+                    _storageProfile:{
+                        profile: {}
+                    },
                     /**
                      * @ngdoc methode
                      * @name init
@@ -57,9 +65,25 @@ angular.module('unchatbar')
                      *
                      */
                     init: function () {
+                        this._initStorage();
                         $rootScope.$on('connection:open', function (event, data) {
                             Connection.send(data.peerId, {action: 'profile', profile: this.get()});
                         }.bind(this));
+                    },
+                    /**
+                     * @ngdoc methode
+                     * @name _initStorage
+                     * @methodOf unchatbar.Profile
+                     * @description
+                     *
+                     * init storage
+                     */
+                    _initStorage : function(){
+                        var storage = useLocalStorage ? $localStorage : $sessionStorage;
+                        this._storageProfile = storage.$default({
+                            profile: {}
+                        });
+
                     },
 
                     /**
@@ -72,7 +96,7 @@ angular.module('unchatbar')
                      *
                      */
                     get: function () {
-                        return _.clone(storage.profile);
+                        return _.clone(this._storageProfile.profile);
                     },
 
                     /**
@@ -86,7 +110,7 @@ angular.module('unchatbar')
                      *
                      */
                     set: function (profile) {
-                        storage.profile = profile;
+                        this._storageProfile.profile = profile;
                         this._sendProfileUpdate();
                     },
 

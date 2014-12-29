@@ -44,7 +44,7 @@ angular.module('unchatbar')
                 return {
                     /**
                      * @ngdoc methode
-                     * @name _storageMessages
+                     * @name _storagePhoneBook
                      * @propertyOf unchatbar.PhoneBook
                      * @private
                      * @returns {Object} user/group storage
@@ -86,6 +86,7 @@ angular.module('unchatbar')
                             this.removeGroup(data.peerId);
                         }.bind(this));
                     },
+
                     /**
                      * @ngdoc methode
                      * @name _initStorage
