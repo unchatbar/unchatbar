@@ -4,6 +4,7 @@
  * @author Lars Wiedemann
  * @ngdoc service
  * @name unchatbar.Connection
+ * @require $rootScope
  * @description
  *
  * Wrapper for window.peer lib
@@ -12,9 +13,18 @@
 angular.module('unchatbar')
     .service('Connection', ['$rootScope',
         function ($rootScope) {
-            var connectionMap = {};
+
 
             return {
+                /**
+                 * @ngdoc methode
+                 * @name _connectionMap
+                 * @propertyOf unchatbar.Connection
+                 * @private
+                 * @returns {Object} connection storage
+                 *
+                 */
+                _connectionMap : {},
                 /**
                  * @ngdoc methode
                  * @name init
@@ -43,8 +53,8 @@ angular.module('unchatbar')
                  *
                  */
                 send: function (id, message) {
-                    if (connectionMap[id] && connectionMap[id].open) {
-                        connectionMap[id].send(message);
+                    if (this._connectionMap[id]) {
+                        this._connectionMap[id].send(message);
                         return true;
                     }
                     return false;
@@ -61,7 +71,7 @@ angular.module('unchatbar')
                  *
                  */
                 getMap : function () {
-                    return connectionMap;
+                    return this._connectionMap;
                 },
                 /**
                  * @ngdoc methode
@@ -75,7 +85,7 @@ angular.module('unchatbar')
                  *
                  */
                 _add: function (connection) {
-                    connectionMap[connection.peer] = connection;
+                    this._connectionMap[connection.peer] = connection;
 
                     connection.on('open', function () {
                         /**
@@ -92,8 +102,8 @@ angular.module('unchatbar')
                         $rootScope.$broadcast('connection:open', {peerId: connection.peer});
                     });
                     connection.on('close', function () {
-                        delete connectionMap[connection.peer];
-                    });
+                        delete this._connectionMap[connection.peer];
+                    }.bind(this));
                     connection.on('data', function (data) {
                         $rootScope.$apply(function () {
                             /**
