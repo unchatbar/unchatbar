@@ -20,6 +20,7 @@ module.exports = function (config) {
         files: [
             'bower_components/angular/angular.js',
             'bower_components/peerjs/peer.js',
+            'bower_components/es5-shim/es5-shim.js',
             'bower_components/angular-notify/dist/angular-notify.js',
             'bower_components/ngstorage/ngStorage.js',
             'bower_components/lodash/dist/lodash.compat.js',

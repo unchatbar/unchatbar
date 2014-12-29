@@ -42,14 +42,32 @@ angular.module('unchatbar')
          */
         this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker',  'PhoneBook', 'Connection',
             function ($rootScope, $localStorage, $sessionStorage, Broker,  PhoneBook, Connection) {
-                var selectedRoom = {},
-                    storageMessages={
-                        messages: {},
-                        queue: {}
-                    };
 
 
                 return {
+                    /**
+                     * @ngdoc methode
+                     * @name _selectedRoom
+                     * @propertyOf unchatbar.Broker
+                     * @private
+                     * @returns {Object} selected room
+                     *
+                     */
+                    _selectedRoom: {},
+
+                    /**
+                     * @ngdoc methode
+                     * @name _storageMessages
+                     * @propertyOf unchatbar.Broker
+                     * @private
+                     * @returns {Object} message storage
+                     *
+                     */
+                    _storageMessages:{
+                        messages: {},
+                        queue: {}
+                    },
+
                     /**
                      * @ngdoc methode
                      * @name init
@@ -79,7 +97,7 @@ angular.module('unchatbar')
                      */
                     _initStorage : function(){
                         var storage = useLocalStorage ? $localStorage : $sessionStorage;
-                        storageMessages = storage.$default({
+                        this._storageMessages = storage.$default({
                             message: {
                                 messages: {},
                                 queue: {}
@@ -98,7 +116,7 @@ angular.module('unchatbar')
                      *
                      */
                     setRoom: function (type, id) {
-                        selectedRoom = {
+                        this._selectedRoom = {
                             type: type,
                             id: id
                         };
@@ -126,7 +144,7 @@ angular.module('unchatbar')
                      *
                      */
                     getMessageList: function () {
-                        return storageMessages.messages[selectedRoom.id] || [];
+                        return this._storageMessages.messages[this._selectedRoom.id] || [];
                     },
 
                     /**
@@ -141,14 +159,14 @@ angular.module('unchatbar')
                      */
                     send: function (text) {
                         var message = {};
-                        if (selectedRoom.type) {
-                            if (selectedRoom.type === 'user') {
+                        if (this._selectedRoom.type) {
+                            if (this._selectedRoom.type === 'user') {
                                 message = this._sendToUser(text);
-                            } else if (selectedRoom.type === 'group') {
+                            } else if (this._selectedRoom.type === 'group') {
                                 message = this._sendToGroup(text);
                             }
                             message.own = true;
-                            this._addStoStorage(selectedRoom.id, selectedRoom.id, message);
+                            this._addStoStorage(this._selectedRoom.id, this._selectedRoom.id, message);
                         }
                     },
 
@@ -163,12 +181,13 @@ angular.module('unchatbar')
                      *
                      */
                     sendRemoveGroup: function (roomId) {
-                        var groupUsers = PhoneBook.getGroup(roomId).users,
-                            message = {
-                                action: 'removeGroup',
-                                id: roomId
-                            };
-                        if (PhoneBook.getGroup([roomId]).owner === Broker.getPeerId()) {
+                        var groupUsers = {},message = {};
+                        if (PhoneBook.getGroup(roomId).owner === Broker.getPeerId()) {
+                            groupUsers = PhoneBook.getGroup(roomId).users,
+                                message = {
+                                    action: 'removeGroup',
+                                    id: roomId
+                                };
                             _.forEach(groupUsers, function (user) {
                                 if (Connection.send(user.id, message) === false) {
                                     this._addToQueue(user.id, message);
@@ -192,17 +211,18 @@ angular.module('unchatbar')
                      */
                     _addStoStorage: function (roomId, from, message) {
 
-                        if (!storageMessages.messages[roomId]) {
-                            storageMessages.messages[roomId] = [];
+                        if (!this._storageMessages.messages[roomId]) {
+                            this._storageMessages.messages[roomId] = [];
                         }
-                        storageMessages.messages[roomId].push({
+                        message.group = message.group || {};
+                        this._storageMessages.messages[roomId].push({
                             text: message.text,
                             user: from,
-                            group: message.group || {},
-                            own: message.own || false
+                            group: message.group,
+                            own: message.own
                         });
 
-                        if (message.group && message.group.id && from === message.group.owner) {
+                        if (message.group.owner && message.group.owner === from ) {
                             PhoneBook.copyGroupFromPartner(message.group.id, message.group);
                         }
                         /**
@@ -237,8 +257,8 @@ angular.module('unchatbar')
                             group: '',
                             text: text
                         };
-                        if (Connection.send(selectedRoom.id, message) === false) {
-                            this._addToQueue(selectedRoom.id, message);
+                        if (Connection.send(this._selectedRoom.id, message) === false) {
+                            this._addToQueue(this._selectedRoom.id, message);
                         }
                         return message;
                     },
@@ -256,7 +276,7 @@ angular.module('unchatbar')
                      *
                      */
                     _sendToGroup: function (text) {
-                        var group = PhoneBook.getGroup([selectedRoom.id]),
+                        var group = PhoneBook.getGroup([this._selectedRoom.id]),
                             message = {
                                 action: 'textMessage',
                                 from: Broker.getPeerId(),
@@ -267,6 +287,7 @@ angular.module('unchatbar')
                             if (Connection.send(group.owner, message) === false) {
                                 this._addToQueue(group.owner, message);
                             }
+
                         }
                         _.forEach(group.users, function (user) {
                             if (Connection.send(user.id, message) === false) {
@@ -289,10 +310,10 @@ angular.module('unchatbar')
                      *
                      */
                     _addToQueue: function (peerId, message) {
-                        if (!storageMessages.queue[peerId]) {
-                            storageMessages.queue[peerId] = [];
+                        if (!this._storageMessages.queue[peerId]) {
+                            this._storageMessages.queue[peerId] = [];
                         }
-                        storageMessages.queue[peerId].push(message);
+                        this._storageMessages.queue[peerId].push(message);
 
                     },
 
@@ -308,17 +329,17 @@ angular.module('unchatbar')
                      *
                      */
                     _sendFromQueue: function (peerId) {
-                        if (storageMessages.queue[peerId]) {
-                            _.forEach(storageMessages.queue[peerId], function (message, index) {
+                        if (this._storageMessages.queue[peerId]) {
+                            _.forEach(this._storageMessages.queue[peerId], function (message, index) {
                                 if (Connection.send(peerId, message)) {
-                                    delete storageMessages.queue[peerId][index];
+                                    this._storageMessages.queue[peerId].splice(index);
                                 }
-                            });
-                            if (storageMessages.queue[peerId].length === 0) {
-                                delete storageMessages.queue[peerId];
+                            }.bind(this));
+                            if (this._storageMessages.queue[peerId].length === 0) {
+                                delete this._storageMessages.queue[peerId];
                             }
                         }
-                        this.closeConnection(peerId);
+
                     }
                 };
             }

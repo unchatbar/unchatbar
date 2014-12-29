@@ -87,7 +87,7 @@ angular.module('unchatbar')
                 return {
                     /**
                      * @ngdoc methode
-                     * @name connectServer
+                     * @name _storage
                      * @propertyOf unchatbar.Broker
                      * @private
                      * @returns {Object} broker storage
@@ -173,10 +173,10 @@ angular.module('unchatbar')
                      */
                     _peerListener: function () {
                         var peer = peerService.get();
-                        var self = this;
+
                         peer.on('open', function (id) {
                             $rootScope.$apply(function () {
-                                self._storage.peerId = id;
+                                this._storage.peerId = id;
                                 /**
                                  * @ngdoc event
                                  * @name peer:open
@@ -189,8 +189,8 @@ angular.module('unchatbar')
                                  * @param {String} id own peer id
                                  */
                                 $rootScope.$broadcast('peer:open', {id: id});
-                            });
-                        });
+                            }.bind(this));
+                        }.bind(this));
 
                         peer.on('connection', function (connect) {
                             $rootScope.$apply(function () {
