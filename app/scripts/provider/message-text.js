@@ -116,10 +116,13 @@ angular.module('unchatbar')
                      *
                      */
                     setRoom: function (type, id) {
-                        this._selectedRoom = {
-                            type: type,
-                            id: id
-                        };
+                        this._selectedRoom = {};
+                        if (id) {
+                            this._selectedRoom = {
+                                type: type,
+                                id: id
+                            };
+                        }
                         /**
                          * @ngdoc event
                          * @name chat:setRoom
@@ -132,7 +135,20 @@ angular.module('unchatbar')
                          */
                         $rootScope.$broadcast('chat:setRoom', {});
                     },
-
+                    /**
+                     * @ngdoc methode
+                     * @name isRoomOpen
+                     * @methodOf unchatbar.MessageText
+                     * @params {String} type type of room `user` or group
+                     * @params {String} id id of user or id of group
+                     * @description
+                     *
+                     * define active room
+                     *
+                     */
+                    isRoomOpen: function () {
+                        return this._selectedRoom.id  ? true : false;
+                    },
                     /**
                      * @ngdoc methode
                      * @name getMessageList
@@ -276,7 +292,7 @@ angular.module('unchatbar')
                      *
                      */
                     _sendToGroup: function (text) {
-                        var group = PhoneBook.getGroup([this._selectedRoom.id]),
+                        var group = PhoneBook.getGroup(this._selectedRoom.id),
                             message = {
                                 action: 'textMessage',
                                 from: Broker.getPeerId(),

@@ -84,7 +84,7 @@ describe('Serivce: phoneBook', function () {
                     spyOn(PhoneBookService, 'removeGroup').and.returnValue(true);
                     rootScope.$broadcast('connection:getMessage:removeGroup',
                         {
-                            peerId: 'peerId'
+                            message:{id: 'peerId'}
                         });
                     expect(PhoneBookService.removeGroup).toHaveBeenCalledWith('peerId');
                 });
@@ -145,7 +145,8 @@ describe('Serivce: phoneBook', function () {
                 expect(PhoneBookService._storagePhoneBook.user).toEqual(
                     {
                         peerId : {
-                            label : 'testLabel'
+                            label : 'testLabel',
+                            id: 'peerId'
                         }
                     }
                 );

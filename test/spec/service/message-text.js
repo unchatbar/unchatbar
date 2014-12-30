@@ -90,6 +90,11 @@ describe('Serivce: MessageText', function () {
                     id: 'id'
                 });
             });
+            it('should reset  `MessageText._selectedRoom` when id is empty', function () {
+                MessageTextService.setRoom('test', '');
+
+                expect(MessageTextService._selectedRoom).toEqual({});
+            });
             it('should broadcast `chat:setRoom`', function () {
                 spyOn(rootScope, '$broadcast').and.returnValue(true);
 
@@ -101,6 +106,20 @@ describe('Serivce: MessageText', function () {
 
         });
 
+        describe('setRoom', function () {
+            it('should return true , when room id is defined', function () {
+                MessageTextService._selectedRoom.id = 'X';
+
+                expect(MessageTextService.isRoomOpen()).toBeTruthy();
+            });
+            it('should return false , when no room id is defined', function () {
+                MessageTextService._selectedRoom = {};
+
+                expect(MessageTextService.isRoomOpen()).toBeFalsy();
+            });
+
+
+        });
         describe('getMessageList', function () {
             it('should return object from `_storageMessages.messages`', function () {
                 MessageTextService._storageMessages.messages = {

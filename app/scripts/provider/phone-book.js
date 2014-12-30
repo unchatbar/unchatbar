@@ -83,7 +83,7 @@ angular.module('unchatbar')
                         }.bind(this));
 
                         $rootScope.$on('connection:getMessage:removeGroup', function (event, data) {
-                            this.removeGroup(data.peerId);
+                            this.removeGroup(data.message.id);
                         }.bind(this));
                     },
 
@@ -139,7 +139,8 @@ angular.module('unchatbar')
                      */
                     updateClient: function (id, label) {
                         this._storagePhoneBook.user[id] = {
-                            label: label || id
+                            label: label || id,
+                            id: id
                         };
                         this._sendUpdateEvent();
                     },

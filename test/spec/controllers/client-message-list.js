@@ -150,11 +150,19 @@ describe('Controller: connection', function () {
                 spyOn(MessageTextService, 'getMessageList').and.returnValue(['newList']);
             });
             it('should set `$scope.isRoomSelected` to true' , function(){
-                scope.isRoomSelected = false;
+                spyOn(MessageTextService,'isRoomOpen').and.returnValue(true);
 
                 scope.$broadcast('chat:setRoom', {});
 
                 expect(scope.isRoomSelected).toBeTruthy();
+            });
+
+            it('should set `$scope.isRoomSelected` to true' , function(){
+                spyOn(MessageTextService,'isRoomOpen').and.returnValue(false);
+
+                scope.$broadcast('chat:setRoom', {});
+
+                expect(scope.isRoomSelected).toBeFalsy();
             });
 
             it('should set `$scope.messageList` to return value of `MessageText.getMessageList`' , function(){

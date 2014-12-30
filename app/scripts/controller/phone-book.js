@@ -58,11 +58,19 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'P
         $scope.getClientAndGroups = function () {
             $scope.clientMap = PhoneBook.getClientMap();
             $scope.groupMap = PhoneBook.getGroupMap();
+
+            if ($scope.selectedGroup && !$scope.groupMap[$scope.selectedGroup]) {
+                $scope.setGroup('');
+            }
+
+            if ($scope.selectedUser && !$scope.clientMap[$scope.selectedUser]) {
+                $scope.setClient('');
+            }
         };
 
         /**
          * @ngdoc methode
-         * @name selectClient
+         * @name setClient
          * @methodOf unchatbar.controller:phoneBook
          * @params {String} peerId id of client
          * @description
@@ -70,16 +78,16 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'P
          * select room for single client chat
          *
          */
-        $scope.selectClient = function (peerId) {
+        $scope.setClient = function (peerId) {
             MessageText.setRoom('user', peerId);
             $scope.selectedGroup = '';
-            $scope.selectedUser = $scope.clientMap[peerId].label;
+            $scope.selectedUser = peerId;
 
         };
 
         /**
          * @ngdoc methode
-         * @name selectGroup
+         * @name setGroup
          * @methodOf unchatbar.controller:phoneBook
          * @params {String} peerId id of client
          * @description
@@ -87,9 +95,9 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'P
          * select room for group chat
          *
          */
-        $scope.selectGroup = function (roomId) {
+        $scope.setGroup = function (roomId) {
             MessageText.setRoom('group', roomId);
-            $scope.selectedGroup = $scope.groupMap[roomId].label;
+            $scope.selectedGroup = roomId;
             $scope.selectedUser = '';
         };
 

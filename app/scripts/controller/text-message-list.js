@@ -96,7 +96,7 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', 'MessageTex
         });
 
         $scope.$on('chat:setRoom', function () {
-            $scope.isRoomSelected = true;
+            $scope.isRoomSelected = MessageText.isRoomOpen();
             $scope.messageList = MessageText.getMessageList();
         });
 
