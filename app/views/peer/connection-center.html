@@ -48,15 +48,18 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" >
-            <h4 class="panel-title">
-                <span data-ng-click="setView('stream')">
-                    Media stream {{panelInfo.stream || ''}}
-                </span>
-            </h4>
+            <div class="row">
+                <div class="col-md-3" data-ng-click="setView('stream')">
+                    <h4 class="panel-title">Audio/Video</h4>
+                </div>
+                <div class="col-md-9">
+                    <phone-book-stream></phone-book-stream>
+                </div>
+            </div>
         </div>
         <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'stream'}" role="tabpanel" aria-labelledby="headingOne">
             <div class="panel-body">
-                comming soon
+                <stream></stream>
             </div>
         </div>
     </div>

@@ -131,6 +131,21 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
+                     * @name connect
+                     * @methodOf unchatbar.Broker
+                     * @params {String} id client id
+                     * @description
+                     *
+                     * connect to client
+                     * TODO TEST
+                     */
+                    connectStream: function (id,stream) {
+                        peerService.get().call(id,stream);
+                    },
+
+
+                    /**
+                     * @ngdoc methode
                      * @name getPeerId
                      * @methodOf unchatbar.Broker
                      * @return {String} own peer id
@@ -189,6 +204,42 @@ angular.module('unchatbar')
                                  * @param {String} id own peer id
                                  */
                                 $rootScope.$broadcast('peer:open', {id: id});
+                            }.bind(this));
+                        }.bind(this));
+                        //TODO TEST
+                        peer.on('call', function (call) {
+                            $rootScope.$apply(function () {
+
+                                /**
+                                 * @ngdoc event
+                                 * @name peer:open
+                                 * @eventOf unchatbar.Broker
+                                 * @eventType broadcast on root scope
+                                 * @description
+                                 *
+                                 * Broadcasted after peer server connection is open
+                                 *
+                                 * @param {String} id own peer id
+                                 */
+                                $rootScope.$broadcast('peer:call', {call: call});
+                            }.bind(this));
+                        }.bind(this));
+                        //TODO TEST
+                        peer.on('call', function (stream) {
+                            $rootScope.$apply(function () {
+
+                                /**
+                                 * @ngdoc event
+                                 * @name peer:open
+                                 * @eventOf unchatbar.Broker
+                                 * @eventType broadcast on root scope
+                                 * @description
+                                 *
+                                 * Broadcasted after peer server connection is open
+                                 *
+                                 * @param {String} id own peer id
+                                 */
+                                $rootScope.$broadcast('peer:addStream', {stream: stream});
                             }.bind(this));
                         }.bind(this));
 

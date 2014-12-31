@@ -11,8 +11,8 @@
  * select client/room for connection
  *
  */
-angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'PhoneBook',
-    function ($scope, MessageText, PhoneBook) {
+angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'PhoneBook', 'Stream',
+    function ($scope, MessageText, PhoneBook, Stream) {
         /**
          * @ngdoc property
          * @name clientMap
@@ -66,6 +66,35 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'P
             if ($scope.selectedUser && !$scope.clientMap[$scope.selectedUser]) {
                 $scope.setClient('');
             }
+        };
+
+        /**
+         * @ngdoc methode
+         * @name setClient
+         * @methodOf unchatbar.controller:phoneBook
+         * @params {String} peerId id of client
+         * @description
+         *
+         * select room for single client chat
+         * TODO TEST
+         */
+        $scope.streamToClient = function (peerId) {
+            Stream.callUser( peerId);
+        };
+
+        /**
+         * @ngdoc methode
+         * @name setClient
+         * @methodOf unchatbar.controller:phoneBook
+         * @params {String} peerId id of client
+         * @description
+         *
+         * select room for single client chat
+         * TODO TEST
+         */
+        $scope.streamToGroup = function (peerId) {
+            alert("TODO");
+            //Stream.callUser( peerId);
         };
 
         /**
