@@ -131,13 +131,13 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
-                     * @name connect
+                     * @name connectStream
                      * @methodOf unchatbar.Broker
                      * @params {String} id client id
                      * @description
                      *
-                     * connect to client
-                     * TODO TEST
+                     * connect a stream to client
+                     *
                      */
                     connectStream: function (id,stream) {
                         return peerService.get().call(id,stream);
@@ -206,7 +206,7 @@ angular.module('unchatbar')
                                 $rootScope.$broadcast('peer:open', {id: id});
                             }.bind(this));
                         }.bind(this));
-                        //TODO TEST
+
                         peer.on('call', function (call) {
                             $rootScope.$apply(function () {
 
@@ -217,27 +217,26 @@ angular.module('unchatbar')
                                  * @eventType broadcast on root scope
                                  * @description
                                  *
-                                 * Broadcasted after peer server connection is open
+                                 * Broadcasted after get client call for stream
                                  *
-                                 * @param {String} id own peer id
+                                 * @param {Object} call client call
                                  */
                                 $rootScope.$broadcast('peer:call', {client: call});
                             }.bind(this));
                         }.bind(this));
-                        //TODO TEST
                         peer.on('stream', function (stream) {
                             $rootScope.$apply(function () {
 
                                 /**
                                  * @ngdoc event
-                                 * @name peer:open
+                                 * @name peer:addStream
                                  * @eventOf unchatbar.Broker
                                  * @eventType broadcast on root scope
                                  * @description
                                  *
-                                 * Broadcasted after peer server connection is open
+                                 * Broadcasted after get client stream
                                  *
-                                 * @param {String} id own peer id
+                                 * @param {Object} stream client stream
                                  */
                                 $rootScope.$broadcast('peer:addStream', {stream: stream});
                             }.bind(this));

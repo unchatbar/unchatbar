@@ -4,9 +4,13 @@
  * @author Lars Wiedemann
  * @ngdoc service
  * @name unchatbar.Stream
+ * @require $rootScope
+ * @require $q
+ * @require Broker
+
  * @description
  * # peer
- * config storage for Stream
+ * manage stream connection's
  */
 angular.module('unchatbar')
     .service('Stream', ['$rootScope', '$q', 'Broker',
@@ -16,10 +20,10 @@ angular.module('unchatbar')
             return {
                 /**
                  * @ngdoc methode
-                 * @name _storageProfile
-                 * @propertyOf unchatbar.Profile
+                 * @name _stream
+                 * @propertyOf unchatbar.Stream
                  * @private
-                 * @returns {Object} user/group storage
+                 * @returns {Object} store for user/client streams
                  *
                  */
                 _stream: {
@@ -29,7 +33,7 @@ angular.module('unchatbar')
                 /**
                  * @ngdoc methode
                  * @name init
-                 * @methodOf unchatbar.Profile
+                 * @methodOf unchatbar.Stream
                  * @description
                  *
                  * init listener
@@ -40,29 +44,89 @@ angular.module('unchatbar')
                         if (this.getOwnStream() !== null) {
                             data.client.answer(this.getOwnStream());
                         } else {
-                            this.createOwnStream().then(function (stream) {
+                            this._createOwnStream().then(function (stream) {
                                 data.client.answer(stream);
                             });
                         }
-                        this.listenOnClientAnswer(data.client);
-
-                        $rootScope.$broadcast('stream:add', {});
+                        this._listenOnClientAnswer(data.client);
                     }.bind(this));
                 },
+
+                /**
+                 * @ngdoc methode
+                 * @name callUser
+                 * @methodOf unchatbar.Stream
+                 * @param {String} peerId Id of peer client
+                 * @description
+                 *
+                 * call to client
+                 *
+                 */
                 callUser: function (peerId) {
-                    var stream = this.getOwnStream();
-                    if (stream === null) {
-                        this.createOwnStream().then(function (stream) {
-                            this.listenOnClientAnswer(Broker.connectStream(peerId, stream));
+                    if (this.getOwnStream() === null) {
+                        this._createOwnStream().then(function (stream) {
+                            this._listenOnClientAnswer(Broker.connectStream(peerId, stream));
                         }.bind(this));
                     } else {
-                        this.listenOnClientAnswer(Broker.connectStream(peerId, stream));
+                        this._listenOnClientAnswer(Broker.connectStream(peerId, this.getOwnStream()));
                     }
                 },
+
+                /**
+                 * @ngdoc methode
+                 * @name getOwnStream
+                 * @methodOf unchatbar.Stream
+                 * @returns {Object} own stream
+                 * @description
+                 *
+                 * get own stream
+                 *
+                 */
+                getOwnStream: function () {
+                    return this._stream.ownStream || null;
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name getClientStream
+                 * @methodOf unchatbar.Stream
+                 * @param {String} streamId Id of stream
+                 * @returns {Object} own stream
+                 * @description
+                 *
+                 * get client stream by stream id
+                 *
+                 */
                 getClientStream: function (streamId) {
                     return this._stream.stream[streamId];
                 },
-                listenOnClientAnswer: function (call) {
+
+                /**
+                 * @ngdoc methode
+                 * @name getClientStreamMap
+                 * @methodOf unchatbar.Stream
+                 * @returns {Object} own stream
+                 * @description
+                 *
+                 * get a map of all client stream
+                 *
+                 */
+                getClientStreamMap: function () {
+                    return this._stream.stream;
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name _listenOnClientAnswer
+                 * @methodOf unchatbar.Stream
+                 * @param {Object} call connection call
+                 * @private
+                 * @description
+                 *
+                 * listen to stream event after call
+                 *
+                 */
+                _listenOnClientAnswer: function (call) {
                     call.on('stream', function (stream) {
                         this._stream.stream[stream.id] = stream;
                         $rootScope.$apply(function () {
@@ -71,7 +135,18 @@ angular.module('unchatbar')
                     }.bind(this));
                 },
 
-                createOwnStream: function () {
+                /**
+                 * @ngdoc methode
+                 * @name _createOwnStream
+                 * @methodOf unchatbar.Stream
+                 * @returns {Object} promise
+                 * @private
+                 * @description
+                 *
+                 * create own stream
+                 *
+                 */
+                _createOwnStream: function () {
                     var defer = $q.defer();
                     navigator.getUserMedia = this._getUserMediaApi();
                     if (navigator.getUserMedia === 0) {
@@ -96,14 +171,17 @@ angular.module('unchatbar')
                     return defer.promise;
                 },
 
-                getOwnStream: function () {
-                    return this._stream.ownStream || null;
-                },
-
-                getClientStreamMap : function () {
-                    return this._stream.stream;
-                },
-
+                /**
+                 * @ngdoc methode
+                 * @name _getUserMediaApi
+                 * @methodOf unchatbar.Stream
+                 * @returns {Object} usermedia Api
+                 * @private
+                 * @description
+                 *
+                 * get usermedia api for browser
+                 *
+                 */
                 _getUserMediaApi: function () {
                     return ( navigator.getUserMedia ||
                     navigator.webkitGetUserMedia ||

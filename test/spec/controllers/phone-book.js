@@ -4,10 +4,11 @@ describe('Controller: phoneBook', function () {
 
     beforeEach(module('unchatbar'));
 
-    var phoneBookCTRL, scope, PhoneBookService,MessageTextService;
+    var phoneBookCTRL,StreamService, scope, PhoneBookService,MessageTextService;
 
-    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook) {
+    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook, Stream) {
         PhoneBookService = PhoneBook;
+        StreamService = Stream;
         scope = $rootScope.$new();
         MessageTextService = MessageText;
         phoneBookCTRL = function () {
@@ -139,7 +140,16 @@ describe('Controller: phoneBook', function () {
 
         });
 
+        describe('streamToClient' , function(){
+           it('should call `Stream.callUser` with peerId' , function(){
+               spyOn(StreamService,'callUser').and.returnValue(true);
+               phoneBookCTRL();
 
+               scope.streamToClient('peerId');
+
+               expect(StreamService.callUser).toHaveBeenCalledWith('peerId');
+           });
+        });
     });
     describe('check event', function () {
         describe('phonebook:update', function () {

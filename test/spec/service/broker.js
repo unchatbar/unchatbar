@@ -97,6 +97,30 @@ describe('Serivce: Broker', function () {
                 });
             });
 
+            describe('listener `call`', function () {
+                it('should call peer.call with param `call`', function () {
+                    expect(peer.on).toHaveBeenCalledWith('call', jasmine.any(Function));
+                });
+
+                it('should broadcast call on $rootscope', function () {
+                    spyOn(rootScope, '$broadcast').and.returnValue(true);
+                    peerCallBack.call('call');
+                    expect(rootScope.$broadcast).toHaveBeenCalledWith('peer:call', {client: 'call'});
+                });
+            });
+
+            describe('listener `stream`', function () {
+                it('should call peer.stream with param `stream`', function () {
+                    expect(peer.on).toHaveBeenCalledWith('stream', jasmine.any(Function));
+                });
+
+                it('should broadcast `peer:addStream` with stream on $rootscope', function () {
+                    spyOn(rootScope, '$broadcast').and.returnValue(true);
+                    peerCallBack.stream('stream');
+                    expect(rootScope.$broadcast).toHaveBeenCalledWith('peer:addStream', {stream: 'stream'});
+                });
+            });
+
             describe('listener `connection`', function () {
                 it('should call peer.on with param `connection`', function () {
                     expect(peer.on).toHaveBeenCalledWith('connection', jasmine.any(Function));
@@ -146,6 +170,22 @@ describe('Serivce: Broker', function () {
                     connection: 'clientConnection'
                 });
             }));
+        });
+
+        describe('connectStream', function () {
+            var peer = {};
+            beforeEach(function(){
+                peer.call = function(){};
+                spyOn(peerService, 'get').and.returnValue(peer);
+
+            });
+            it('should call `peer.connect` with connect id' , function(){
+                spyOn(peer,'call').and.returnValue('clientConnection');
+
+                brokerService.connectStream('clientId','stream');
+
+                expect(peer.call).toHaveBeenCalledWith('clientId','stream');
+            });
         });
 
         describe('getPeerId', function () {

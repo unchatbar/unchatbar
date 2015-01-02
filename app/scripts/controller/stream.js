@@ -2,10 +2,9 @@
 
 /**
  * @ngdoc controller
- * @name  unchatbar.controller:phoneBook
+ * @name  unchatbar.controller:stream
  * @require $scope
- * @require MessageText
- * @require PhoneBook
+ * @require Stream
  * @description
  *
  * display streams
@@ -13,10 +12,18 @@
  */
 angular.module('unchatbar').controller('stream', ['$scope', 'Stream',
     function ($scope, Stream) {
-        $scope.streamList = [];
+
+        /**
+         * @ngdoc property
+         * @name streamMap
+         * @propertyOf unchatbar.controller:stream
+         * @returns {Object} map of all client stream's
+         */
+        $scope.streamMap = {};
+
 
         $scope.$on('stream:add' , function(){
-            $scope.streamList = Stream.getClientStreamMap();
+            $scope.streamMap = Stream.getClientStreamMap();
         });
 
     }

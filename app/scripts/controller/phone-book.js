@@ -6,6 +6,7 @@
  * @require $scope
  * @require MessageText
  * @require PhoneBook
+ * @require Stream
  * @description
  *
  * select client/room for connection
@@ -70,31 +71,16 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'P
 
         /**
          * @ngdoc methode
-         * @name setClient
+         * @name streamToClient
          * @methodOf unchatbar.controller:phoneBook
          * @params {String} peerId id of client
          * @description
          *
-         * select room for single client chat
-         * TODO TEST
+         * stream audio/video to client
+         *
          */
         $scope.streamToClient = function (peerId) {
             Stream.callUser( peerId);
-        };
-
-        /**
-         * @ngdoc methode
-         * @name setClient
-         * @methodOf unchatbar.controller:phoneBook
-         * @params {String} peerId id of client
-         * @description
-         *
-         * select room for single client chat
-         * TODO TEST
-         */
-        $scope.streamToGroup = function (peerId) {
-            alert("TODO");
-            //Stream.callUser( peerId);
         };
 
         /**

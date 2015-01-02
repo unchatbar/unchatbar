@@ -17,7 +17,6 @@ angular.module('unchatbar').directive('ownStreamVideo', ['Stream',
             templateUrl: 'views/peer/stream-video.html',
             replace : true,
             link : function(scope, element, attrs){
-                console.log('OK');
                 scope.isVisible = false;
                 scope.$on('stream:add' , function() {
                     scope.isVisible = true;
