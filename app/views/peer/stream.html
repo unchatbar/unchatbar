@@ -1,10 +1,11 @@
 <div >
     Stream LIST
-    <div data-ng-repeat="stream in streamList">
-        {{mess}}
+    <div data-ng-repeat="(streamId,stream) in streamList">
+        <client-stream-video stream-id="{{streamId}}" width="200" ></client-stream-video>
     </div>
-    {{ownStream}}
-    <div ng-if="ownStream.url">
-        <video id="video" src="ownStream.url"autoplay="autoplay" controls="true"></video>
-    </div>
+    <hr>
+    <br>
+    <br>MY VIDEO
+    <own-stream-video ></own-stream-video>
+
 </div>

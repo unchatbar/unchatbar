@@ -14,11 +14,9 @@
 angular.module('unchatbar').controller('stream', ['$scope', 'Stream',
     function ($scope, Stream) {
         $scope.streamList = [];
-        $scope.ownStream = {};
 
         $scope.$on('stream:add' , function(){
-            $scope.ownStream = Stream.getOwnStreamSrc();
-            $scope.streamList = Stream.getClientStreamSrc();
+            $scope.streamList = Stream.getClientStreamMap();
         });
 
     }

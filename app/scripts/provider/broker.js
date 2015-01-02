@@ -140,7 +140,7 @@ angular.module('unchatbar')
                      * TODO TEST
                      */
                     connectStream: function (id,stream) {
-                        peerService.get().call(id,stream);
+                        return peerService.get().call(id,stream);
                     },
 
 
@@ -221,11 +221,11 @@ angular.module('unchatbar')
                                  *
                                  * @param {String} id own peer id
                                  */
-                                $rootScope.$broadcast('peer:call', {call: call});
+                                $rootScope.$broadcast('peer:call', {client: call});
                             }.bind(this));
                         }.bind(this));
                         //TODO TEST
-                        peer.on('call', function (stream) {
+                        peer.on('stream', function (stream) {
                             $rootScope.$apply(function () {
 
                                 /**
