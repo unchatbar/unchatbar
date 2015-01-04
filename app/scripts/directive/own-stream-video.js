@@ -18,7 +18,9 @@ angular.module('unchatbar').directive('ownStreamVideo', ['Stream',
             replace : true,
             link : function(scope, element, attrs){
                 scope.$on('stream:add' , function() {
-                    element.prop('src', URL.createObjectURL(Stream.getOwnStream()));//myURL.createObjectURL(scope.stream));
+                    alert("ADD");
+                    element.prop('src', URL.createObjectURL(Stream.getOwnStream()));
+                    alert("DONE");
                 });
 
             }
