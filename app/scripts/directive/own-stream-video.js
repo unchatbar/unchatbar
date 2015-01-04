@@ -17,10 +17,10 @@ angular.module('unchatbar').directive('ownStreamVideo', ['Stream',
             templateUrl: 'views/peer/stream-video.html',
             replace : true,
             link : function(scope, element, attrs){
-                scope.$on('stream:add' , function() {
-                    alert("ADD");
-                    element.prop('src', URL.createObjectURL(Stream.getOwnStream()));
-                    alert("DONE");
+                scope.isVisible = false;
+                scope.$on('stream:addOwn' , function(event,data) {
+                    scope.isVisible = true;
+                    element.prop('src', URL.createObjectURL(Stream.getOwnStream(data.streamOption)));//myURL.createObjectURL(scope.stream));
                 });
 
             }

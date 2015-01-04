@@ -340,7 +340,7 @@ describe('Serivce: Profile', function () {
                     it('should broadcast `stream:add`', function () {
                         userMediaSuccess('stream');
 
-                        expect(rootScope.$broadcast).toHaveBeenCalledWith('stream:add');
+                        expect(rootScope.$broadcast).toHaveBeenCalledWith('stream:addOwn', { streamOption: 'streamOption' } );
                     });
 
                     it('should return stream', function () {
@@ -356,7 +356,7 @@ describe('Serivce: Profile', function () {
 
         describe('_getOwnStreamKeyByOption', function () {
             it('should return all key as string from object', function () {
-                expect(StreamService._getOwnStreamKeyByOption({test: 'value', testX: 'value2'})).toBe('test_testX');
+                expect(StreamService._getOwnStreamKeyByOption({test: 'value', testX: 'value2'})).toBe('test_valuetestX_value2');
             });
         });
     });

@@ -22,7 +22,10 @@ angular.module('unchatbar').directive('clientStream', ['Stream','PhoneBook',
             },
             link : function(scope){
                 scope.close = function() {
-                    Stream.getClientStream(scope.streamId).call.close();
+                    var clientCall = Stream.getClientStream(scope.streamId);
+                    if (clientCall) {
+                        clientCall.call.close();
+                    }
                 };
                 scope.streamType = '';
                 var clientPeerId = Stream.getClientStream(scope.streamId).peerId;

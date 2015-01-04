@@ -86,8 +86,9 @@ angular.module('unchatbar')
                  *
                  */
                 getOwnStream: function (streamOption) {
-                    var strKey = this._getOwnStreamKeyByOption(streamOption);
-                    return this._stream.ownStream[strKey] || null;
+                    var key = this._getOwnStreamKeyByOption(streamOption);
+
+                    return this._stream.ownStream[key] || null;
                 },
 
                 /**
@@ -103,7 +104,9 @@ angular.module('unchatbar')
                  *
                  */
                 _getOwnStreamKeyByOption: function (streamOption) {
-                    return _.keys(streamOption).toString().replace(',', '_');
+                    var storageKey = '';
+                    _(streamOption).forEach(function(value,key) {storageKey+= key + '_' + value;});
+                    return storageKey;
                 },
                 /**
                  * @ngdoc methode
@@ -152,6 +155,7 @@ angular.module('unchatbar')
                             peerId: this.peer,
                             call: this
                         };
+
                         $rootScope.$apply(function () {
                             $rootScope.$broadcast('stream:add');
                         });
@@ -186,9 +190,9 @@ angular.module('unchatbar')
                         navigator.getUserMedia(
                             streamOption,
                             function (stream) {
-                                var strKey = this._getOwnStreamKeyByOption(streamOption);
-                                this._stream.ownStream[strKey] = stream;
-                                $rootScope.$broadcast('stream:add');
+                                var key = this._getOwnStreamKeyByOption(streamOption);
+                                this._stream.ownStream[key] = stream;
+                                $rootScope.$broadcast('stream:addOwn',{streamOption:streamOption});
                                 defer.resolve(stream);
                             }.bind(this),
                             function (error) {
