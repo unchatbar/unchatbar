@@ -26,5 +26,9 @@ angular.module('unchatbar').controller('stream', ['$scope', 'Stream',
             $scope.streamMap = Stream.getClientStreamMap();
         });
 
+        $scope.$on('stream:delete' , function(){
+            $scope.streamMap = Stream.getClientStreamMap();
+        });
+
     }
 ]);

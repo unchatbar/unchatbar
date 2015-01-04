@@ -10,8 +10,8 @@
  * output client stream
  *
  */
-angular.module('unchatbar').directive('clientStream', ['Stream',
-    function (Stream) {
+angular.module('unchatbar').directive('clientStream', ['Stream','PhoneBook',
+    function (Stream, PhoneBook) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/client-stream.html',
@@ -21,8 +21,14 @@ angular.module('unchatbar').directive('clientStream', ['Stream',
 
             },
             link : function(scope){
+                scope.close = function() {
+                    Stream.getClientStream(scope.streamId).call.close();
+                };
                 scope.streamType = '';
-                var stream = Stream.getClientStream(scope.streamId);
+                var clientPeerId = Stream.getClientStream(scope.streamId).peerId;
+                scope.user = PhoneBook.getClient(clientPeerId);
+                var stream = Stream.getClientStream(scope.streamId).stream;
+
                 if(stream.getVideoTracks()[0]) {
                     scope.streamType = 'video';
                 } else {

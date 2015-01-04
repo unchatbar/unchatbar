@@ -17,7 +17,7 @@ angular.module('unchatbar')
         function ($rootScope, $q, Broker) {
 
 
-            return {
+            var api = {
                 /**
                  * @ngdoc methode
                  * @name _stream
@@ -64,13 +64,13 @@ angular.module('unchatbar')
                  * call to client
                  *
                  */
-                callUser: function (peerId,streamOption) {
+                callUser: function (peerId, streamOption) {
                     if (this.getOwnStream(streamOption) === null) {
                         this._createOwnStream(streamOption).then(function (stream) {
-                            this._listenOnClientAnswer(Broker.connectStream(peerId, stream,{streamOption: streamOption}));
+                            this._listenOnClientAnswer(Broker.connectStream(peerId, stream, {streamOption: streamOption}));
                         }.bind(this));
                     } else {
-                        this._listenOnClientAnswer(Broker.connectStream(peerId, this.getOwnStream(streamOption),{streamOption:streamOption}));
+                        this._listenOnClientAnswer(Broker.connectStream(peerId, this.getOwnStream(streamOption), {streamOption: streamOption}));
                     }
                 },
 
@@ -95,15 +95,15 @@ angular.module('unchatbar')
                  * @name _getOwnStreamKeyByOption
                  * @methodOf unchatbar.Stream
                  * @params {Object} streamOption audio/video option
-                 * @returns {String}
+                 * @returns {String} storage key
                  * @private
                  * @description
                  *
                  * get key for streamOption
                  *
                  */
-                _getOwnStreamKeyByOption : function (streamOption) {
-                    return _.keys(streamOption).toString().replace(',','_');
+                _getOwnStreamKeyByOption: function (streamOption) {
+                    return _.keys(streamOption).toString().replace(',', '_');
                 },
                 /**
                  * @ngdoc methode
@@ -147,11 +147,22 @@ angular.module('unchatbar')
                  */
                 _listenOnClientAnswer: function (call) {
                     call.on('stream', function (stream) {
-                        this._stream.stream[stream.id] = stream;
+                        api._stream.stream[this.peer] = {
+                            stream: stream,
+                            peerId: this.peer,
+                            call: this
+                        };
                         $rootScope.$apply(function () {
                             $rootScope.$broadcast('stream:add');
                         });
-                    }.bind(this));
+                    });
+                    call.on('close', function () {
+                        if (api._stream.stream[this.peer]) {
+                            delete api._stream.stream[this.peer];
+                        }
+                        $rootScope.$broadcast('stream:delete');
+                    });
+
                 },
 
                 /**
@@ -208,5 +219,6 @@ angular.module('unchatbar')
                 }
 
             };
+            return api;
         }
     ]);

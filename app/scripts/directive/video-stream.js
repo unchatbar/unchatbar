@@ -20,7 +20,7 @@ angular.module('unchatbar').directive('videoStream', ['Stream',
                 streamId : '@'
             },
             link : function(scope, element){
-                element.prop('src', URL.createObjectURL(Stream.getClientStream(scope.streamId)));
+                element.prop('src', URL.createObjectURL(Stream.getClientStream(scope.streamId).stream));
             }
         };
     }

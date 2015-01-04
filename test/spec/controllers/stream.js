@@ -34,6 +34,13 @@ describe('Controller: profile', function () {
             expect(scope.streamMap).toEqual({test:'data'});
         });
 
+        it('should set return value from `Stream.getClientStreamMap` to `$scope.streamMap`' , function(){
+            spyOn(StreamService,'getClientStreamMap').and.returnValue({test:'data'});
+            scope.$broadcast('stream:delete', {});
+
+            expect(scope.streamMap).toEqual({test:'data'});
+        });
+
 
     });
 });
