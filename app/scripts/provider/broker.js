@@ -134,13 +134,15 @@ angular.module('unchatbar')
                      * @name connectStream
                      * @methodOf unchatbar.Broker
                      * @params {String} id client id
+                     * @params {String} id client id
+                     * @params {Object} streamOption audio/video option
                      * @description
                      *
                      * connect a stream to client
                      *
                      */
-                    connectStream: function (id,stream) {
-                        return peerService.get().call(id,stream);
+                    connectStream: function (id,stream,metaData) {
+                        return peerService.get().call(id,stream,{metadata:metaData});
                     },
 
 

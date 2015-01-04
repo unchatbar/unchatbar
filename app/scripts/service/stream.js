@@ -28,7 +28,7 @@ angular.module('unchatbar')
                  */
                 _stream: {
                     stream: {},
-                    ownStream: null
+                    ownStream: {}
                 },
                 /**
                  * @ngdoc methode
@@ -41,10 +41,11 @@ angular.module('unchatbar')
                  */
                 init: function () {
                     $rootScope.$on('peer:call', function (event, data) {
-                        if (this.getOwnStream() !== null) {
-                            data.client.answer(this.getOwnStream());
+                        var streamOption = data.client.metadata.streamOption;
+                        if (this.getOwnStream(streamOption) !== null) {
+                            data.client.answer(this.getOwnStream(streamOption));
                         } else {
-                            this._createOwnStream().then(function (stream) {
+                            this._createOwnStream(streamOption).then(function (stream) {
                                 data.client.answer(stream);
                             });
                         }
@@ -56,19 +57,20 @@ angular.module('unchatbar')
                  * @ngdoc methode
                  * @name callUser
                  * @methodOf unchatbar.Stream
-                 * @param {String} peerId Id of peer client
+                 * @params {String} peerId Id of peer client
+                 * @params {Object} streamOption audio/video option
                  * @description
                  *
                  * call to client
                  *
                  */
-                callUser: function (peerId) {
-                    if (this.getOwnStream() === null) {
-                        this._createOwnStream().then(function (stream) {
-                            this._listenOnClientAnswer(Broker.connectStream(peerId, stream));
+                callUser: function (peerId,streamOption) {
+                    if (this.getOwnStream(streamOption) === null) {
+                        this._createOwnStream(streamOption).then(function (stream) {
+                            this._listenOnClientAnswer(Broker.connectStream(peerId, stream,{streamOption: streamOption}));
                         }.bind(this));
                     } else {
-                        this._listenOnClientAnswer(Broker.connectStream(peerId, this.getOwnStream()));
+                        this._listenOnClientAnswer(Broker.connectStream(peerId, this.getOwnStream(streamOption),{streamOption:streamOption}));
                     }
                 },
 
@@ -76,16 +78,32 @@ angular.module('unchatbar')
                  * @ngdoc methode
                  * @name getOwnStream
                  * @methodOf unchatbar.Stream
+                 * @params {Object} streamOption audio/video option
                  * @returns {Object} own stream
                  * @description
                  *
                  * get own stream
                  *
                  */
-                getOwnStream: function () {
-                    return this._stream.ownStream || null;
+                getOwnStream: function (streamOption) {
+                    var strKey = this._getOwnStreamKeyByOption(streamOption);
+                    return this._stream.ownStream[strKey] || null;
                 },
 
+                /**
+                 * @ngdoc methode
+                 * @name _getOwnStreamKeyByOption
+                 * @methodOf unchatbar.Stream
+                 * @params {Object} streamOption audio/video option
+                 * @returns {String} streamKey
+                 * @description
+                 *
+                 * get key for streamOption
+                 *
+                 */
+                _getOwnStreamKeyByOption : function (streamOption) {
+                    return _.keys(streamOption).toString().replace(',','_');
+                },
                 /**
                  * @ngdoc methode
                  * @name getClientStream
@@ -139,6 +157,7 @@ angular.module('unchatbar')
                  * @ngdoc methode
                  * @name _createOwnStream
                  * @methodOf unchatbar.Stream
+                 * @params {Object} streamOption audio/video option
                  * @returns {Object} promise
                  * @private
                  * @description
@@ -146,19 +165,17 @@ angular.module('unchatbar')
                  * create own stream
                  *
                  */
-                _createOwnStream: function () {
+                _createOwnStream: function (streamOption) {
                     var defer = $q.defer();
                     navigator.getUserMedia = this._getUserMediaApi();
                     if (navigator.getUserMedia === 0) {
                         defer.reject('no media api');
                     } else {
                         navigator.getUserMedia(
-                            {
-                                video: true,
-                                audio: true
-                            },
+                            streamOption,
                             function (stream) {
-                                this._stream.ownStream = stream;
+                                var strKey = this._getOwnStreamKeyByOption(streamOption);
+                                this._stream.ownStream[strKey] = stream;
                                 $rootScope.$broadcast('stream:add');
                                 defer.resolve(stream);
                             }.bind(this),

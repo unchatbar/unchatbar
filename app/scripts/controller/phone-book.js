@@ -12,8 +12,8 @@
  * select client/room for connection
  *
  */
-angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'PhoneBook', 'Stream',
-    function ($scope, MessageText, PhoneBook, Stream) {
+angular.module('unchatbar').controller('phoneBook', ['$scope', '$modal','MessageText', 'PhoneBook', 'Stream',
+    function ($scope,$modal, MessageText, PhoneBook, Stream) {
         /**
          * @ngdoc property
          * @name clientMap
@@ -80,7 +80,13 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', 'MessageText', 'P
          *
          */
         $scope.streamToClient = function (peerId) {
-            Stream.callUser( peerId);
+            $modal.open({
+                templateUrl: 'views/peer/modal/streamOption.html',
+                controller: 'modalStreamOption',
+                size: 'sm'
+            }).result.then(function (streamOption) {
+                    Stream.callUser(peerId,streamOption);
+                });
         };
 
         /**

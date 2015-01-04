@@ -1,0 +1,15 @@
+<div>
+    Client Stream
+    <div ng-switch="streamType">
+        <div ng-switch-when="video">
+            <video-stream stream-id="{{streamId}}"></video-stream>
+        </div>
+        <div ng-switch-when="audio">
+            <audio-stream stream-id="{{streamId}}"></audio-stream>
+        </div>
+    </div>
+</div>
+
+
+
+
