@@ -182,9 +182,9 @@ describe('Serivce: Broker', function () {
             it('should call `peer.connect` with connect id' , function(){
                 spyOn(peer,'call').and.returnValue('clientConnection');
 
-                brokerService.connectStream('clientId','stream');
+                brokerService.connectStream('clientId','stream','metadata');
 
-                expect(peer.call).toHaveBeenCalledWith('clientId','stream');
+                expect(peer.call).toHaveBeenCalledWith('clientId','stream',{metadata: 'metadata'});
             });
         });
 

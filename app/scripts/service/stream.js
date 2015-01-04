@@ -95,7 +95,8 @@ angular.module('unchatbar')
                  * @name _getOwnStreamKeyByOption
                  * @methodOf unchatbar.Stream
                  * @params {Object} streamOption audio/video option
-                 * @returns {String} streamKey
+                 * @returns {String}
+                 * @private
                  * @description
                  *
                  * get key for streamOption

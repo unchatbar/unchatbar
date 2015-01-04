@@ -18,6 +18,7 @@ describe('Serivce: Profile', function () {
             beforeEach(function () {
                 StreamService.init();
                 callObject = {
+                    metadata : {streamOption : 'streamOption'},
                     answer: function () {
                     }
                 };
@@ -33,10 +34,14 @@ describe('Serivce: Profile', function () {
                         spyOn(StreamService, 'getOwnStream').and.returnValue('stream');
                     });
                     it('should call `Stream.getOwnStream` with peerId ,action `profile` and userprofile', function () {
-                        var callObject = {
-                            answer: function () {
-                            }
-                        };
+
+                        spyOn(callObject, 'answer').and.returnValue(true);
+                        rootScope.$broadcast('peer:call', {client: callObject});
+
+                        expect(StreamService.getOwnStream).toHaveBeenCalledWith('streamOption');
+                    });
+                    it('should call `call.answer` with peerId ,action `profile` and userprofile', function () {
+
                         spyOn(callObject, 'answer').and.returnValue(true);
                         rootScope.$broadcast('peer:call', {client: callObject});
 
@@ -48,7 +53,9 @@ describe('Serivce: Profile', function () {
                         rootScope.$broadcast('peer:call', {client: callObject});
                         rootScope.$apply();
 
-                        expect(StreamService._listenOnClientAnswer).toHaveBeenCalledWith({answer: jasmine.any(Function)});
+                        expect(StreamService._listenOnClientAnswer).toHaveBeenCalledWith({
+                            metadata: { streamOption: 'streamOption' },
+                            answer: jasmine.any(Function)});
                     });
                 });
 
@@ -62,13 +69,18 @@ describe('Serivce: Profile', function () {
                             defer.resolve('stream');
                             return defer.promise;
                         });
-                        callObject = {
-                            answer: function () {
-                            }
-                        };
+
                     }));
 
-                    it('should call `Stream._listenOnClientAnswer` with peerId ,action `profile` and userprofile', function () {
+                    it('should call `Stream.getOwnStream` with peerId ,action `profile` and userprofile', function () {
+
+                        spyOn(callObject, 'answer').and.returnValue(true);
+                        rootScope.$broadcast('peer:call', {client: callObject});
+
+                        expect(StreamService.getOwnStream).toHaveBeenCalledWith('streamOption');
+                    });
+
+                    it('should call `cal.answer` with peerId ,action `profile` and userprofile', function () {
                         spyOn(callObject, 'answer').and.returnValue(true);
                         rootScope.$broadcast('peer:call', {client: callObject});
                         rootScope.$apply();
@@ -81,7 +93,9 @@ describe('Serivce: Profile', function () {
                         rootScope.$broadcast('peer:call', {client: callObject});
                         rootScope.$apply();
 
-                        expect(StreamService._listenOnClientAnswer).toHaveBeenCalledWith({answer: jasmine.any(Function)});
+                        expect(StreamService._listenOnClientAnswer).toHaveBeenCalledWith({
+                            metadata: { streamOption: 'streamOption' },
+                            answer: jasmine.any(Function)});
                     });
                 });
 
@@ -96,10 +110,10 @@ describe('Serivce: Profile', function () {
             describe('has own stream', function () {
                 beforeEach(function () {
                     spyOn(StreamService, 'getOwnStream').and.returnValue('stream');
-                    StreamService.callUser('peerId');
+                    StreamService.callUser('peerId','streamOption');
                 });
                 it('should call `Broker.connectStream` with peerId and stream', function () {
-                    expect(BrokerService.connectStream).toHaveBeenCalledWith('peerId', 'stream');
+                    expect(BrokerService.connectStream).toHaveBeenCalledWith('peerId', 'stream', { streamOption: 'streamOption' } );
                 });
                 it('should call `Stream._listenOnClientAnswer', function () {
                     expect(StreamService._listenOnClientAnswer).toHaveBeenCalledWith('streamCall');
@@ -114,11 +128,11 @@ describe('Serivce: Profile', function () {
                         defer.resolve('stream');
                         return defer.promise;
                     });
-                    StreamService.callUser('peerId');
+                    StreamService.callUser('peerId','streamOption');
                     rootScope.$apply();
                 }));
                 it('should call `Broker.connectStream` with peerId and stream', function () {
-                    expect(BrokerService.connectStream).toHaveBeenCalledWith('peerId', 'stream');
+                    expect(BrokerService.connectStream).toHaveBeenCalledWith('peerId', 'stream',{ streamOption: 'streamOption' });
                 });
                 it('should call `Stream._listenOnClientAnswer', function () {
                     expect(StreamService._listenOnClientAnswer).toHaveBeenCalledWith('streamCall');
@@ -127,9 +141,18 @@ describe('Serivce: Profile', function () {
         });
 
         describe('getOwnStream', function () {
+            beforeEach(function(){
+                spyOn(StreamService,'_getOwnStreamKeyByOption').and.returnValue('storageKey');
+            });
+            it('should call `Stream._getOwnStreamKeyByOption`' , function(){
+                StreamService.getOwnStream('streamOption');
+                expect(StreamService._getOwnStreamKeyByOption).toHaveBeenCalledWith('streamOption');
+            });
             it('should return value from `Stream._stream.ownStream`' , function(){
-                StreamService._stream.ownStream = 'testValue';
-                expect(StreamService.getOwnStream()).toBe('testValue');
+                StreamService._stream.ownStream = {
+                    storageKey : 'testValue'
+                    };
+                expect(StreamService.getOwnStream('streamOption')).toBe('testValue');
             });
         });
 
@@ -158,7 +181,7 @@ describe('Serivce: Profile', function () {
             describe('trigger on stream event' , function(){
                var streamEventTrigger;
                 beforeEach(function(){
-                   streamEventTrigger = function(){}
+                   streamEventTrigger = function(){};
                    var call = {on : function (event,callback) {
                        streamEventTrigger = callback;
                    }};
@@ -210,63 +233,72 @@ describe('Serivce: Profile', function () {
 
                 });
                 it('should call api with audi/video option an success/error Methode' , function(){
-                    StreamService._createOwnStream();
+                    StreamService._createOwnStream('streamOption');
                     rootScope.$apply();
                     expect(fakeUserMedia.api).toHaveBeenCalledWith(
-                        { video: true, audio: true },
+                        'streamOption',
                         jasmine.any(Function),
                         jasmine.any(Function)
                         );
                 });
                 describe('userMedia return error' , function() {
                     it('should reject error' , function(){
-                        userMediaError('MediaError');
-
+                        var error = '';
                         StreamService._createOwnStream()
                             .then(function(){
 
                             })
                             .catch(function(err){
-                                expect(err).toBe('MediaError');
+                                error = err;
                             });
-
+                        userMediaError('MediaError');
                         rootScope.$apply();
+                        expect(error).toBe('MediaError');
                     });
                 });
                 describe('userMedia was successfull' , function() {
+                    var streamReturn = {};
                     beforeEach(function(){
-                        userMediaSuccess('stream');
+                        spyOn(StreamService,'_getOwnStreamKeyByOption').and.returnValue('storageKey');
+                        spyOn(rootScope,'$broadcast').and.returnValue(true);
+                        StreamService._stream.ownStream = {};
+                        StreamService._createOwnStream('streamOption').then(function(stream){
+                            streamReturn = stream;
+                        });
+
                     });
 
                     it('should set stream to `Stream._stream.ownStream`', function () {
-                        StreamService._stream.ownStream = '';
-                        StreamService._createOwnStream()
-                            .then(function () {
-                                expect(StreamService._stream.ownStream).toBe('stream');
-                            });
-                        rootScope.$apply();
-                    });
+                        userMediaSuccess('stream');
 
+                        expect(StreamService._stream.ownStream).toEqual({ storageKey: 'stream' });
+                    });
+                    it('should call `Stream._getOwnStreamKeyByOption`' , function(){
+                        userMediaSuccess('stream');
+
+                        expect(StreamService._getOwnStreamKeyByOption).toHaveBeenCalledWith('streamOption');
+
+                    });
                     it('should broadcast `stream:add`', function () {
-                        spyOn(rootScope,'$broadcast').and.returnValue(true);
-                        StreamService._stream.ownStream = '';
-                        StreamService._createOwnStream()
-                            .then(function () {
-                                expect(rootScope.$broadcast).toHaveBeenCalledWith('stream:add');
-                            });
-                        rootScope.$apply();
+                        userMediaSuccess('stream');
+
+                        expect(rootScope.$broadcast).toHaveBeenCalledWith('stream:add');
                     });
 
                     it('should return stream', function () {
-                        spyOn(rootScope,'$broadcast').and.returnValue(true);
-                        StreamService._stream.ownStream = '';
-                        StreamService._createOwnStream()
-                            .then(function (stream) {
-                                expect(stream).toHaveBeenCalledWith('stream');
-                            });
+                        userMediaSuccess('stream');
+
                         rootScope.$apply();
+
+                        expect(streamReturn).toBe('stream');
                     });
                 });
+            });
+        });
+
+        describe('_getOwnStreamKeyByOption' , function(){
+            it('should return all key as string from object' , function(){
+                expect(StreamService._getOwnStreamKeyByOption({test:'value',testX : 'value2'})).toBe('test_testX');
             });
         });
     });

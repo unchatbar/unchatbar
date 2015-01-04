@@ -10,7 +10,7 @@
  * display streams
  *
  */
-angular.module('unchatbar').controller('modalStreamOption', ['$scope', '$modalInstance', 'Stream',
+angular.module('unchatbar').controller('modalStreamOption', ['$scope', '$modalInstance',
     function ($scope, $modalInstance) {
 
         $scope.videoCall = function () {
