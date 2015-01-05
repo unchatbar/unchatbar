@@ -172,6 +172,37 @@ describe('Controller: phoneBook', function () {
                 });
             });
         });
+
+        describe('streamToConference', function () {
+            it('should call `modal.open`' , inject(function($q){
+                spyOn(modal, 'open').and.callFake(function () {
+                    var defer = $q.defer();
+                    return {result: defer.promise};
+                });
+
+                phoneBookCTRL();
+                scope.streamToConference('peerId');
+                expect(modal.open).toHaveBeenCalled();
+            }));
+            describe('after $modal.open', function () {
+                beforeEach(inject(function ($q) {
+                    spyOn(modal, 'open').and.callFake(function () {
+                        var defer = $q.defer();
+                        defer.resolve('streamOption');
+                        return {result: defer.promise};
+                    });
+                }));
+
+                it('should call `Stream.callUser` with peerId', function () {
+                    spyOn(StreamService, 'callConference').and.returnValue(true);
+                    phoneBookCTRL();
+
+                    scope.streamToConference('peerId');
+                    scope.$apply();
+                    expect(StreamService.callConference).toHaveBeenCalledWith('peerId','streamOption');
+                });
+            });
+        });
     });
     describe('check event', function () {
         describe('phonebook:update', function () {

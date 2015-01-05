@@ -27,7 +27,10 @@ angular.module('unchatbar')
                  *
                  */
                 _stream: {
-                    stream: {},
+                    stream: {
+                        single : {},
+                        conference : {}
+                    },
                     ownStream: {}
                 },
                 /**
@@ -42,6 +45,7 @@ angular.module('unchatbar')
                 init: function () {
                     $rootScope.$on('peer:call', function (event, data) {
                         var streamOption = data.client.metadata.streamOption;
+
                         if (this.getOwnStream(streamOption) !== null) {
                             data.client.answer(this.getOwnStream(streamOption));
                         } else {
@@ -67,13 +71,46 @@ angular.module('unchatbar')
                 callUser: function (peerId, streamOption) {
                     if (this.getOwnStream(streamOption) === null) {
                         this._createOwnStream(streamOption).then(function (stream) {
-                            this._listenOnClientAnswer(Broker.connectStream(peerId, stream, {streamOption: streamOption}));
+                            this._listenOnClientAnswer(Broker.connectStream(peerId, stream, {type:'single', streamOption: streamOption}));
                         }.bind(this));
                     } else {
-                        this._listenOnClientAnswer(Broker.connectStream(peerId, this.getOwnStream(streamOption), {streamOption: streamOption}));
+                        this._listenOnClientAnswer(Broker.connectStream(peerId, this.getOwnStream(streamOption), {type:'single', streamOption: streamOption}));
                     }
                 },
 
+                /**
+                 * @ngdoc methode
+                 * @name callConference
+                 * @methodOf unchatbar.Stream
+                 * @params {String} peerId Id of peer client
+                 * @params {Object} streamOption audio/video option
+                 * @description
+                 *
+                 * call client to conference
+                 *
+                 */
+                callConference : function (peerId, streamOption) {
+                    var conferenceUser;
+                    if (this.getOwnStream(streamOption) === null) {
+                        this._createOwnStream(streamOption).then(function (stream) {
+                            conferenceUser = api.getConferenceClientsMap();
+                            api._listenOnClientAnswer(Broker.connectStream(peerId, stream, {
+                                streamOption: streamOption,
+                                type:'conference',
+                                conferenceUser : _.keys(conferenceUser)
+                            }));
+                        });
+                    } else {
+                        conferenceUser = api.getConferenceClientsMap();
+                        this._listenOnClientAnswer(Broker.connectStream(peerId,this.getOwnStream(streamOption),
+                            {
+                                streamOption: streamOption,
+                                type:'conference',
+                                conferenceUser : _.keys(conferenceUser)
+                            }
+                        ));
+                    }
+                },
                 /**
                  * @ngdoc methode
                  * @name getOwnStream
@@ -87,7 +124,6 @@ angular.module('unchatbar')
                  */
                 getOwnStream: function (streamOption) {
                     var key = this._getOwnStreamKeyByOption(streamOption);
-
                     return this._stream.ownStream[key] || null;
                 },
 
@@ -108,6 +144,36 @@ angular.module('unchatbar')
                     _(streamOption).forEach(function(value,key) {storageKey+= key + '_' + value;});
                     return storageKey;
                 },
+
+                /**
+                 * @ngdoc methode
+                 * @name getConferenceClientsMap
+                 * @methodOf unchatbar.Stream
+                 * @returns {Object} own stream
+                 * @description
+                 *
+                 * get all glients from conference
+                 *
+                 */
+                getConferenceClientsMap: function () {
+                    return this._stream.stream.conference;
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name getConferenceClientsMap
+                 * @methodOf unchatbar.Stream
+                 * @param {String} peerId Id client
+                 * @returns {Object} own stream
+                 * @description
+                 *
+                 * get client from conference
+                 *
+                 */
+                getConferenceClient: function (peerId) {
+                    return this._stream.stream.conference[peerId] || null;
+                },
+
                 /**
                  * @ngdoc methode
                  * @name getClientStream
@@ -120,7 +186,7 @@ angular.module('unchatbar')
                  *
                  */
                 getClientStream: function (streamId) {
-                    return this._stream.stream[streamId];
+                    return this._stream.stream.single[streamId];
                 },
 
                 /**
@@ -134,7 +200,7 @@ angular.module('unchatbar')
                  *
                  */
                 getClientStreamMap: function () {
-                    return this._stream.stream;
+                    return this._stream.stream.single;
                 },
 
                 /**
@@ -150,21 +216,48 @@ angular.module('unchatbar')
                  */
                 _listenOnClientAnswer: function (call) {
                     call.on('stream', function (stream) {
-                        api._stream.stream[this.peer] = {
-                            stream: stream,
-                            peerId: this.peer,
-                            call: this
-                        };
 
-                        $rootScope.$apply(function () {
-                            $rootScope.$broadcast('stream:add');
-                        });
+
+                        if (this.metadata.type === 'single') {
+                            api._stream.stream.single[this.peer] = {
+                                stream: stream,
+                                peerId: this.peer,
+                                call: this
+                            };
+                            $rootScope.$apply(function () {
+                                $rootScope.$broadcast('stream:add');
+                            });
+                        } else if (this.metadata.type === 'conference') {
+                            var conferenceUser = this.metadata.conferenceUser || [];
+                            _.forEach(conferenceUser,function(peerId){
+                                if (api.getConferenceClient(peerId) === null) {
+                                    api.callConference(peerId);
+                                }
+                            });
+                            api._stream.stream.conference[this.peer] = {
+                                stream: stream,
+                                peerId: this.peer,
+                                call: this
+                            };
+                            $rootScope.$apply(function () {
+                                $rootScope.$broadcast('stream:conferenceUser:add');
+                            });
+                        }
                     });
                     call.on('close', function () {
-                        if (api._stream.stream[this.peer]) {
-                            delete api._stream.stream[this.peer];
-                        }
-                        $rootScope.$broadcast('stream:delete');
+                            if (this.metadata.type === 'single') {
+                                if (api._stream.stream.single[this.peer]) {
+                                    delete api._stream.stream.single[this.peer];
+                                    $rootScope.$broadcast('stream:delete');
+                                }
+                            } else if (this.metadata.type === 'conference') {
+                                if (api._stream.stream.conference[this.peer]) {
+                                    delete api._stream.stream.conference[this.peer];
+                                    $rootScope.$broadcast('stream:conferenceUser:delete');
+                                }
+
+                            }
+
                     });
 
                 },

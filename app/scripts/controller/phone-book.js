@@ -91,6 +91,26 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$modal','Message
 
         /**
          * @ngdoc methode
+         * @name streamToConference
+         * @methodOf unchatbar.controller:phoneBook
+         * @params {String} peerId id of client
+         * @description
+         *
+         * call client for conference
+         *
+         */
+        $scope.streamToConference = function (peerId) {
+            $modal.open({
+                templateUrl: 'views/peer/modal/streamOption.html',
+                controller: 'modalStreamOption',
+                size: 'sm'
+            }).result.then(function (streamOption) {
+                    Stream.callConference(peerId,streamOption);
+            });
+        };
+
+        /**
+         * @ngdoc methode
          * @name setClient
          * @methodOf unchatbar.controller:phoneBook
          * @params {String} peerId id of client
