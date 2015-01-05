@@ -21,6 +21,14 @@ angular.module('unchatbar').controller('stream', ['$scope', 'Stream',
          */
         $scope.streamMap = {};
 
+        /**
+         * @ngdoc property
+         * @name streamConferenceMap
+         * @propertyOf unchatbar.controller:stream
+         * @returns {Object} map of all client from conference
+         */
+        $scope.streamConferenceMap = {};
+
 
         $scope.$on('stream:add' , function(){
             $scope.streamMap = Stream.getClientStreamMap();
@@ -28,6 +36,14 @@ angular.module('unchatbar').controller('stream', ['$scope', 'Stream',
 
         $scope.$on('stream:delete' , function(){
             $scope.streamMap = Stream.getClientStreamMap();
+        });
+
+        $scope.$on('stream:conferenceUser:add' , function(){
+            $scope.streamConferenceMap = Stream.getConferenceClientsMap();
+        });
+
+        $scope.$on('stream:conferenceUser:delete' , function(){
+            $scope.streamConferenceMap = Stream.getConferenceClientsMap();
         });
 
     }

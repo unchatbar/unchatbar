@@ -27,7 +27,18 @@ describe('Serivce: Profile', function () {
             describe('check listener `peer:call`', function () {
                 beforeEach(function () {
                     spyOn(StreamService, '_listenOnClientAnswer').and.returnValue(true);
+                    spyOn(BrokerService, 'connect').and.returnValue(true);
 
+                });
+                it('should call Broker connect' , function(){
+                    StreamService.init();
+                    callObject.peer = 'peerId';
+                    spyOn(StreamService, 'getOwnStream').and.returnValue('stream');
+                    spyOn(callObject, 'answer').and.returnValue(true);
+
+                    rootScope.$broadcast('peer:call', { client: callObject});
+
+                    expect(BrokerService.connect).toHaveBeenCalledWith('peerId');
                 });
                 describe('has own Data stream', function () {
                     beforeEach(function () {
@@ -329,13 +340,13 @@ describe('Serivce: Profile', function () {
                 });
                 it('should call `Stream.callConference` with peerId', function () {
                     spyOn(StreamService, 'getConferenceClient').and.returnValue(null);
-                    streamEventTrigger.metadata = {type: 'conference', conferenceUser: ['peerIdA']};
+                    streamEventTrigger.metadata = {streamOption: 'streamOption',type: 'conference', conferenceUser: ['peerIdA']};
 
                     StreamService._listenOnClientAnswer(call);
 
                     streamEventTrigger.stream({id: 'StreamId', data: 'test'});
 
-                    expect(StreamService.callConference).toHaveBeenCalledWith('peerIdA');
+                    expect(StreamService.callConference).toHaveBeenCalledWith('peerIdA','streamOption');
                 });
                 it('should not call `Stream.callConference` peerId when peerId is stored in conference', function () {
                     streamEventTrigger.metadata = {type: 'conference', conferenceUser: ['peerIdA']};

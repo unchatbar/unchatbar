@@ -17,10 +17,15 @@ angular.module('unchatbar').directive('audioStream', ['Stream',
             templateUrl: 'views/peer/stream/audio.html',
             replace : true,
             scope : {
-                streamId : '@'
+                streamId : '@',
+                type : '@'
             },
             link : function(scope, element){
-                element.prop('src', URL.createObjectURL(Stream.getClientStream(scope.streamId).stream));
+                if (scope.type === 'conference') {
+                    element.prop('src', URL.createObjectURL(Stream.getConferenceClient(scope.streamId).stream));
+                } else if (scope.type === 'single') {
+                    element.prop('src', URL.createObjectURL(Stream.getClientStream(scope.streamId).stream));
+                }
             }
         };
     }

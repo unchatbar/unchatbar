@@ -53,6 +53,7 @@ angular.module('unchatbar')
                                 data.client.answer(stream);
                             });
                         }
+                        Broker.connect(data.client.peer);
                         this._listenOnClientAnswer(data.client);
                     }.bind(this));
                 },
@@ -225,13 +226,24 @@ angular.module('unchatbar')
                                 call: this
                             };
                             $rootScope.$apply(function () {
+                                /**
+                                 * @ngdoc event
+                                 * @name stream:add
+                                 * @eventOf unchatbar.Stream
+                                 * @eventType broadcast on root scope
+                                 * @description
+                                 *
+                                 * new single stream added
+                                 *
+                                 */
                                 $rootScope.$broadcast('stream:add');
                             });
                         } else if (this.metadata.type === 'conference') {
+                            var streamOption = this.metadata.streamOption;
                             var conferenceUser = this.metadata.conferenceUser || [];
                             _.forEach(conferenceUser,function(peerId){
                                 if (api.getConferenceClient(peerId) === null) {
-                                    api.callConference(peerId);
+                                    api.callConference(peerId,streamOption);
                                 }
                             });
                             api._stream.stream.conference[this.peer] = {
@@ -240,6 +252,16 @@ angular.module('unchatbar')
                                 call: this
                             };
                             $rootScope.$apply(function () {
+                                /**
+                                 * @ngdoc event
+                                 * @name stream:conferenceUser:add
+                                 * @eventOf unchatbar.Stream
+                                 * @eventType broadcast on root scope
+                                 * @description
+                                 *
+                                 * new conference stream added
+                                 *
+                                 */
                                 $rootScope.$broadcast('stream:conferenceUser:add');
                             });
                         }
@@ -248,11 +270,31 @@ angular.module('unchatbar')
                             if (this.metadata.type === 'single') {
                                 if (api._stream.stream.single[this.peer]) {
                                     delete api._stream.stream.single[this.peer];
+                                    /**
+                                     * @ngdoc event
+                                     * @name stream:delete
+                                     * @eventOf unchatbar.Stream
+                                     * @eventType broadcast on root scope
+                                     * @description
+                                     *
+                                     * single stream closed
+                                     *
+                                     */
                                     $rootScope.$broadcast('stream:delete');
                                 }
                             } else if (this.metadata.type === 'conference') {
                                 if (api._stream.stream.conference[this.peer]) {
                                     delete api._stream.stream.conference[this.peer];
+                                    /**
+                                     * @ngdoc event
+                                     * @name stream:conferenceUser:delete
+                                     * @eventOf unchatbar.Stream
+                                     * @eventType broadcast on root scope
+                                     * @description
+                                     *
+                                     * conference stream closed
+                                     *
+                                     */
                                     $rootScope.$broadcast('stream:conferenceUser:delete');
                                 }
 

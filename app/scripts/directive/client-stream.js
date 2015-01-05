@@ -17,26 +17,37 @@ angular.module('unchatbar').directive('clientStream', ['Stream','PhoneBook',
             templateUrl: 'views/peer/client-stream.html',
             replace : true,
             scope : {
-                streamId : '@'
+                streamId : '@',
+                type : '@'
 
             },
             link : function(scope){
-                scope.close = function() {
-                    var clientCall = Stream.getClientStream(scope.streamId);
-                    if (clientCall) {
-                        clientCall.call.close();
+
+                function getClientStream () {
+                    if (scope.type === 'conference') {
+                        return Stream.getConferenceClient(scope.streamId);
+                    } else if (scope.type === 'single') {
+                        return Stream.getClientStream(scope.streamId);
                     }
-                };
+                }
+                var clientPeerId = getClientStream().peerId;
                 scope.streamType = '';
-                var clientPeerId = Stream.getClientStream(scope.streamId).peerId;
+
                 scope.user = PhoneBook.getClient(clientPeerId);
-                var stream = Stream.getClientStream(scope.streamId).stream;
+                var stream = getClientStream().stream;
 
                 if(stream.getVideoTracks()[0]) {
                     scope.streamType = 'video';
                 } else {
                     scope.streamType = 'audio';
                 }
+                scope.close = function() {
+                    var clientCall = getClientStream();
+                    if (clientCall) {
+                        clientCall.call.close();
+                    }
+                };
+
             }
         };
     }

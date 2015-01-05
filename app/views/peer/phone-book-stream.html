@@ -2,7 +2,7 @@
     <div class="btn-group" dropdown >
         <button type="button" class="btn btn-default dropdown-toggle"
                 dropdown-toggle >
-            User: {{clientMap[selectedUser].label || 'no selection'}}<span class="caret"></span>
+            single Call
         </button>
         <ul class="dropdown-menu">
             <li ng-repeat="(peerId,connection) in clientMap">
@@ -15,11 +15,12 @@
     <div class="btn-group" dropdown >
         <button type="button" class="btn btn-default dropdown-toggle"
                 dropdown-toggle >
-            Room: {{groupMap[selectedGroup].label || 'no selection'}}<span class="caret"></span>
+            Conference
         </button>
         <ul class="dropdown-menu">
-            <li ng-repeat="(groupId,group) in groupMap">
-                <a data-ng-click="streamToGroup(groupId)">{{group.label}}</a>
+            <li ng-repeat="(peerId,connection) in clientMap">
+                <a data-ng-click="streamToConference(peerId)" >{{connection.label}}</a>
+
             </li>
         </ul>
     </div>

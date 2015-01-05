@@ -2,11 +2,11 @@
     user : {{user.label}}
     <div ng-switch="streamType">
         <div ng-switch-when="video">
-            <video-stream stream-id="{{streamId}}"></video-stream>
+            <video-stream type="{{type}}" stream-id="{{streamId}}"></video-stream>
         </div>
         <div ng-switch-when="audio">
             <i class="glyphicon glyphicon-volume-up"></i>
-            <audio-stream stream-id="{{streamId}}"></audio-stream>
+            <audio-stream type="{{type}}" stream-id="{{streamId}}"></audio-stream>
         </div>
         <button ng-click="close()" type="button" class="btn btn-danger">hangup</button>
 

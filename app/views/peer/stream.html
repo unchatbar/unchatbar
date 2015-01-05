@@ -1,7 +1,13 @@
 <div >
+    Conference
+    <div data-ng-repeat="(streamId,stream) in streamConferenceMap">
+        <client-stream stream-id="{{streamId}}" type="conference" width="200" ></client-stream>
+    </div>
+    <br>
+    <hr>
     Stream LIST
     <div data-ng-repeat="(streamId,stream) in streamMap">
-        <client-stream stream-id="{{streamId}}" width="200" ></client-stream>
+        <client-stream stream-id="{{streamId}}" type="single" width="200" ></client-stream>
     </div>
     <hr>
     <br>
