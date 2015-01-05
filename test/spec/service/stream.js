@@ -281,7 +281,7 @@ describe('Serivce: Profile', function () {
 
                     });
 
-                    it('should broatcast `stream:delete`', function () {
+                    it('should broadcast `stream:delete`', function () {
                         StreamService._stream.stream.single = {
                             'peerId': 'stream'
                         };
@@ -309,7 +309,7 @@ describe('Serivce: Profile', function () {
 
                     });
 
-                    it('should broatcast `stream:delete`', function () {
+                    it('should broadcast `stream:delete`', function () {
                         spyOn(rootScope, '$broadcast').and.returnValue(true);
                         StreamService._stream.stream.conference = {
                             'peerId': 'stream'
@@ -371,7 +371,7 @@ describe('Serivce: Profile', function () {
                     });
                 });
 
-                it('should broatcast `stream:conferenceUser:add`', function () {
+                it('should broadcast `stream:conferenceUser:add`', function () {
                     streamEventTrigger.metadata = {type: 'conference', conferenceUser: ['peerIdA']};
                     StreamService._listenOnClientAnswer(call);
                     spyOn(rootScope, '$broadcast').and.returnValue(true);
@@ -412,7 +412,7 @@ describe('Serivce: Profile', function () {
                     });
                 });
 
-                it('should broatcast `stream:add`', function () {
+                it('should broadcast `stream:add`', function () {
                     StreamService._stream.stream.single = {};
                     spyOn(rootScope, '$broadcast').and.returnValue(true);
                     streamEventTrigger.stream({id: 'StreamId', data: 'test'});
