@@ -3,20 +3,19 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name unchatbar.directive:phoneBook
+ * @name unchatbar.directive:profile
  * @restrict E
  * @description
  *
  * save client connections , for recall
  *
  */
-angular.module('unchatbar').directive('phoneBook', [
+angular.module('unchatbar').directive('stream', [
     function () {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
-            replace: true,
-            templateUrl:'views/peer/phone-book.html',
-            controller: 'phoneBook'
+            templateUrl: 'views/peer/stream/stream.html',
+            controller: 'stream'
         };
     }
 ]);

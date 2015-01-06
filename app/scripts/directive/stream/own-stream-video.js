@@ -14,7 +14,7 @@ angular.module('unchatbar').directive('ownStreamVideo', ['Stream',
     function (Stream) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
-            templateUrl: 'views/peer/stream-video.html',
+            templateUrl: 'views/peer/stream/stream-video.html',
             replace : true,
             link : function(scope, element, attrs){
                 scope.isVisible = false;

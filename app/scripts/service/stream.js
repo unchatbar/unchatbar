@@ -44,6 +44,7 @@ angular.module('unchatbar')
                  */
                 init: function () {
                     $rootScope.$on('peer:call', function (event, data) {
+
                         var streamOption = data.client.metadata.streamOption;
 
                         if (this.getOwnStream(streamOption) !== null) {

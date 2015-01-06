@@ -3,18 +3,18 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name unchatbar.directive:audioStream
+ * @name unchatbar.directive:videoStream
  * @restrict E
  * @description
  *
- * output audio stream
+ * output video stream
  *
  */
-angular.module('unchatbar').directive('audioStream', ['Stream',
+angular.module('unchatbar').directive('videoStream', ['Stream',
     function (Stream) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
-            templateUrl: 'views/peer/stream/audio.html',
+            templateUrl: 'views/peer/stream/type/video.html',
             replace : true,
             scope : {
                 streamId : '@',

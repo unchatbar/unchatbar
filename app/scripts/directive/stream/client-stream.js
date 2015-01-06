@@ -14,7 +14,7 @@ angular.module('unchatbar').directive('clientStream', ['Stream','PhoneBook',
     function (Stream, PhoneBook) {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
-            templateUrl: 'views/peer/client-stream.html',
+            templateUrl: 'views/peer/stream/client-stream.html',
             replace : true,
             scope : {
                 streamId : '@',

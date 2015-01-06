@@ -3,20 +3,20 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name unchatbar.directive:phoneBook
+ * @name unchatbar.directive:phoneBookAdmin
  * @restrict E
  * @description
  *
- * save client connections , for recall
+ * phonebook administration
  *
  */
-angular.module('unchatbar').directive('phoneBookStream', [
+angular.module('unchatbar').directive('phoneBookAdmin', [
     function () {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             replace: true,
-            templateUrl:'views/peer/phone-book-stream.html',
-            controller: 'phoneBook'
+            templateUrl:'views/peer/phoneBook/book-admin.html',
+            controller: 'phoneBookAdmin'
         };
     }
 ]);
