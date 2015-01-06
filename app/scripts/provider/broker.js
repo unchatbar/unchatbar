@@ -84,7 +84,7 @@ angular.module('unchatbar')
          */
         this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'BrokerHeartbeat', 'Peer',
             function ($rootScope, $localStorage, $sessionStorage, BrokerHeartbeat, peerService) {
-                return {
+                var api =  {
                     /**
                      * @ngdoc methode
                      * @name _storage
@@ -124,7 +124,7 @@ angular.module('unchatbar')
                      */
                     connect: function (id) {
                         var connection = peerService.get().connect(id);
-                        $rootScope.$broadcast('client:connect', {
+                        $rootScope.$broadcast('BrokerPeerConnection', {
                             connection: connection
                         });
                     },
@@ -191,94 +191,132 @@ angular.module('unchatbar')
                     _peerListener: function () {
                         var peer = peerService.get();
 
-                        peer.on('open', function (id) {
-                            $rootScope.$apply(function () {
-                                this._storage.peerId = id;
-                                /**
-                                 * @ngdoc event
-                                 * @name peer:open
-                                 * @eventOf unchatbar.Broker
-                                 * @eventType broadcast on root scope
-                                 * @description
-                                 *
-                                 * Broadcasted after peer server connection is open
-                                 *
-                                 * @param {String} id own peer id
-                                 */
-                                $rootScope.$broadcast('peer:open', {id: id});
-                            }.bind(this));
-                        }.bind(this));
+                        peer.on('open', function (peerId) {
+                            api._onOpen(peerId);
+                        });
 
                         peer.on('call', function (call) {
-                            $rootScope.$apply(function () {
+                            api._onCall(call);
+                        });
 
-                                /**
-                                 * @ngdoc event
-                                 * @name peer:open
-                                 * @eventOf unchatbar.Broker
-                                 * @eventType broadcast on root scope
-                                 * @description
-                                 *
-                                 * Broadcasted after get client call for stream
-                                 *
-                                 * @param {Object} call client call
-                                 */
-                                $rootScope.$broadcast('peer:call', {client: call});
-                            }.bind(this));
-                        }.bind(this));
-                        peer.on('stream', function (stream) {
-                            $rootScope.$apply(function () {
-
-                                /**
-                                 * @ngdoc event
-                                 * @name peer:addStream
-                                 * @eventOf unchatbar.Broker
-                                 * @eventType broadcast on root scope
-                                 * @description
-                                 *
-                                 * Broadcasted after get client stream
-                                 *
-                                 * @param {Object} stream client stream
-                                 */
-                                $rootScope.$broadcast('peer:addStream', {stream: stream});
-                            }.bind(this));
-                        }.bind(this));
-
-                        peer.on('connection', function (connect) {
-                            $rootScope.$apply(function () {
-                                /**
-                                 * @ngdoc event
-                                 * @name client:connect
-                                 * @eventOf unchatbar.Broker
-                                 * @eventType broadcast on root scope
-                                 * @description
-                                 *
-                                 * Broadcasted after client connect
-                                 *
-                                 * @param {Object} connection client connection
-                                 */
-                                $rootScope.$broadcast('client:connect', {connection: connect});
-                            });
+                        peer.on('connection', function (connection) {
+                            api._onConnection(connection);
                         });
 
                         peer.on('error', function (error) {
-                            $rootScope.$apply(function () {
-                                /**
-                                 * @ngdoc event
-                                 * @name peer:error
-                                 * @eventOf unchatbar.Broker
-                                 * @eventType broadcast on root scope
-                                 * @description
-                                 *
-                                 * Broadcasted after error in peer conncetion
-                                 *
-                                 * @param {Object} error error object
-                                 */
-                                $rootScope.$broadcast('peer:error', {error: error});
-                            });
+                            api._onError(error);
+                        });
+                    },
+                    /**
+                     * @ngdoc methode
+                     * @name _onOpen
+                     * @methodOf unchatbar.Broker
+                     * @params {String} peerId peerId
+                     * @description
+                     *
+                     * handle peer open
+                     *
+                     */
+                    _onOpen : function (peerId) {
+                        $rootScope.$apply(function () {
+                            api._storage.peerId = peerId;
+                            /**
+                             * @ngdoc event
+                             * @name BrokerPeerOpen
+                             * @eventOf unchatbar.Broker
+                             * @eventType broadcast on root scope
+                             * @description
+                             *
+                             * Broadcasted after peer server connection is open
+                             *
+                             * @param {String} id own peer id
+                             */
+                            $rootScope.$broadcast('BrokerPeerOpen', {id: peerId});
+                        });
+                    },
+                    /**
+                     * @ngdoc methode
+                     * @name _onCall
+                     * @methodOf unchatbar.Broker
+                     * @params {Object} call connection
+                     * @description
+                     *
+                     * handle peer call
+                     *
+                     */
+                    _onCall : function (call) {
+                        $rootScope.$apply(function () {
+
+                            /**
+                             * @ngdoc event
+                             * @name BrokerPeerOpen
+                             * @eventOf unchatbar.Broker
+                             * @eventType broadcast on root scope
+                             * @description
+                             *
+                             * Broadcasted after get client call for stream
+                             *
+                             * @param {Object} call client call
+                             */
+                            $rootScope.$broadcast('BrokerPeerCall', {client: call});
+                        });
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _onConnection
+                     * @methodOf unchatbar.Broker
+                     * @params {Object} connection connection
+                     * @description
+                     *
+                     * handle peer connection
+                     *
+                     */
+                    _onConnection : function (connection) {
+                        $rootScope.$apply(function () {
+                            /**
+                             * @ngdoc event
+                             * @name BrokerPeerConnection
+                             * @eventOf unchatbar.Broker
+                             * @eventType broadcast on root scope
+                             * @description
+                             *
+                             * Broadcasted after client connect
+                             *
+                             * @param {Object} connection client connection
+                             */
+                            $rootScope.$broadcast('BrokerPeerConnection', {connection: connection});
+                        });
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _onConnection
+                     * @methodOf unchatbar.Broker
+                     * @params {Object} error connection
+                     * @description
+                     *
+                     * handle peer error
+                     *
+                     */
+                    _onError : function (error) {
+                        $rootScope.$apply(function () {
+                            /**
+                             * @ngdoc event
+                             * @name BrokerPeerError
+                             * @eventOf unchatbar.Broker
+                             * @eventType broadcast on root scope
+                             * @description
+                             *
+                             * Broadcasted after error in peer conncetion
+                             *
+                             * @param {Object} error error object
+                             */
+                            $rootScope.$broadcast('BrokerPeerError', {error: error});
                         });
                     }
                 };
+                return api;
             }
         ];
     }

@@ -89,13 +89,13 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', 'MessageTex
             return Profile.get().label;
         };
 
-        $scope.$on('chat:getMessage', function () {
+        $scope.$on('MessageTextGetMessage', function () {
             if ($scope.isOpen) {
                 $scope.messageList = MessageText.getMessageList();
             }
         });
 
-        $scope.$on('chat:setRoom', function () {
+        $scope.$on('MessageTextSetRoom', function () {
             $scope.isRoomSelected = MessageText.isRoomOpen();
             $scope.messageList = MessageText.getMessageList();
         });

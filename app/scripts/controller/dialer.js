@@ -43,7 +43,7 @@ angular.module('unchatbar').controller('dialer', ['$scope', 'Broker',
             $scope.connectId = '';
         };
 
-        $scope.$on('peer:open', function () {
+        $scope.$on('BrokerPeerOpen', function () {
             $scope.peerId = Broker.getPeerId();
 
         });

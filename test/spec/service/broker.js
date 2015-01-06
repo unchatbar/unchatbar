@@ -1,7 +1,7 @@
 'use strict';
 
 describe('Serivce: Broker', function () {
-    var brokerService, brokerProvider,peerService, BrokerHeartbeatService;
+    var brokerService, brokerProvider,peerService,rootScope, BrokerHeartbeatService;
     beforeEach(module('unchatbar', ['BrokerProvider', function (_brokerProvider) {
         brokerProvider = _brokerProvider;
         brokerProvider.setHost('host.de');
@@ -11,7 +11,8 @@ describe('Serivce: Broker', function () {
     }]));
 
 
-    beforeEach(inject(function (Broker, Peer, BrokerHeartbeat) {
+    beforeEach(inject(function (Broker, Peer, BrokerHeartbeat,$rootScope) {
+        rootScope = $rootScope;
         brokerService = Broker;
         peerService = Peer;
         BrokerHeartbeatService = BrokerHeartbeat;
@@ -81,68 +82,106 @@ describe('Serivce: Broker', function () {
                 });
                 brokerService._peerListener();
             }));
+            describe('peer.open' , function() {
+                beforeEach(function(){
+                    spyOn(brokerService,'_onOpen').and.returnValue(true);
+                });
 
-            describe('listener `open`', function () {
                 it('should call peer.on with param `open`', function () {
                     expect(peer.on).toHaveBeenCalledWith('open', jasmine.any(Function));
                 });
-                it('should set peerid from callback storage peerId', function () {
-                    peerCallBack.open('newPeerId');
-                    expect(brokerService._storage.peerId).toBe('newPeerId');
+                it('should call `brokerService._onOpen` with `peer`and peerId' , function(){
+                    peerCallBack.open('peerId');
+                    expect(brokerService._onOpen).toHaveBeenCalledWith('peerId');
                 });
-                it('should broadcast on $rootscope new peerid', function () {
-                    spyOn(rootScope, '$broadcast').and.returnValue(true);
-                    peerCallBack.open('newPeerId');
-                    expect(rootScope.$broadcast).toHaveBeenCalledWith('peer:open', {id: 'newPeerId'});
-                });
-            });
 
-            describe('listener `call`', function () {
+            });
+            describe('peer.call' , function() {
+                beforeEach(function(){
+                    spyOn(brokerService,'_onCall').and.returnValue(true);
+                });
+
                 it('should call peer.call with param `call`', function () {
                     expect(peer.on).toHaveBeenCalledWith('call', jasmine.any(Function));
                 });
-
-                it('should broadcast call on $rootscope', function () {
-                    spyOn(rootScope, '$broadcast').and.returnValue(true);
+                it('should call `brokerService._onCall` with `peer`and peerId' , function(){
                     peerCallBack.call('call');
-                    expect(rootScope.$broadcast).toHaveBeenCalledWith('peer:call', {client: 'call'});
+                    expect(brokerService._onCall).toHaveBeenCalledWith('call');
                 });
             });
 
-            describe('listener `stream`', function () {
-                it('should call peer.stream with param `stream`', function () {
-                    expect(peer.on).toHaveBeenCalledWith('stream', jasmine.any(Function));
+            describe('peer.connection' , function() {
+                beforeEach(function(){
+                    spyOn(brokerService,'_onConnection').and.returnValue(true);
                 });
 
-                it('should broadcast `peer:addStream` with stream on $rootscope', function () {
-                    spyOn(rootScope, '$broadcast').and.returnValue(true);
-                    peerCallBack.stream('stream');
-                    expect(rootScope.$broadcast).toHaveBeenCalledWith('peer:addStream', {stream: 'stream'});
-                });
-            });
-
-            describe('listener `connection`', function () {
                 it('should call peer.on with param `connection`', function () {
                     expect(peer.on).toHaveBeenCalledWith('connection', jasmine.any(Function));
                 });
-                it('should broadcast on $rootscope new peerid', function () {
-                    spyOn(rootScope, '$broadcast').and.returnValue(true);
+                it('should call `brokerService._onConnection` with `peer`and peerId' , function(){
                     peerCallBack.connection('connection');
-                    expect(rootScope.$broadcast).toHaveBeenCalledWith('client:connect', {connection: 'connection'});
+                    expect(brokerService._onConnection).toHaveBeenCalledWith('connection');
                 });
             });
-            describe('listener `error`', function () {
+
+            describe('peer.error' , function() {
+                beforeEach(function(){
+                    spyOn(brokerService,'_onError').and.returnValue(true);
+                });
+
                 it('should call peer.on with param `error`', function () {
                     expect(peer.on).toHaveBeenCalledWith('error', jasmine.any(Function));
                 });
-                it('should broadcast on $rootscope error', function () {
-                    spyOn(rootScope, '$broadcast').and.returnValue(true);
+                it('should call `brokerService._onError` with `peer`and peerId' , function(){
                     peerCallBack.error('error');
-                    expect(rootScope.$broadcast).toHaveBeenCalledWith('peer:error', {error: 'error'});
+                    expect(brokerService._onError).toHaveBeenCalledWith('error');
                 });
-
             });
 
+
+        });
+
+        describe('_onOpen' , function(){
+            beforeEach(function(){
+                spyOn(rootScope, '$broadcast').and.returnValue(true);
+                brokerService._onOpen('newPeerId');
+            });
+            it('should set peerid from callback storage peerId', function () {
+                 expect(brokerService._storage.peerId).toBe('newPeerId');
+            });
+            it('should broadcast on $rootscope new peerid', function () {
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('BrokerPeerOpen', {id: 'newPeerId'});
+            });
+        });
+
+        describe('_onCall' , function() {
+            beforeEach(function () {
+                spyOn(rootScope, '$broadcast').and.returnValue(true);
+                brokerService._onCall('call');
+            });
+            it('should broadcast call on $rootscope', function () {
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('BrokerPeerCall', {client: 'call'});
+            });
+        });
+
+        describe('_onConnection' , function() {
+            beforeEach(function () {
+                spyOn(rootScope, '$broadcast').and.returnValue(true);
+                brokerService._onConnection('connection');
+            });
+            it('should broadcast call on $rootscope', function () {
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('BrokerPeerConnection', {connection: 'connection'});
+            });
+        });
+
+        describe('_onError' , function() {
+            beforeEach(function () {
+                spyOn(rootScope, '$broadcast').and.returnValue(true);
+                brokerService._onError('error');
+            });
+            it('should broadcast call on $rootscope', function () {
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('BrokerPeerError', {error: 'error'});
+            });
         });
 
         describe('connect', function () {
@@ -160,13 +199,13 @@ describe('Serivce: Broker', function () {
                 expect(peer.connect).toHaveBeenCalledWith('clientId');
             });
 
-            it('should broadcast `client:connect` with return from peer.connect' , inject(function($rootScope){
+            it('should broadcast `BrokerPeerConnection` with return from peer.connect' , inject(function($rootScope){
                 spyOn(peer,'connect').and.returnValue('clientConnection');
                 spyOn($rootScope,'$broadcast').and.returnValue(true);
 
                 brokerService.connect('clientId');
 
-                expect($rootScope.$broadcast).toHaveBeenCalledWith('client:connect', {
+                expect($rootScope.$broadcast).toHaveBeenCalledWith('BrokerPeerConnection', {
                     connection: 'clientConnection'
                 });
             }));

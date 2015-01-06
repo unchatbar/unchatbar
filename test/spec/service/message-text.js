@@ -95,12 +95,12 @@ describe('Serivce: MessageText', function () {
 
                 expect(MessageTextService._selectedRoom).toEqual({});
             });
-            it('should broadcast `chat:setRoom`', function () {
+            it('should broadcast `MessageTextSetRoom`', function () {
                 spyOn(rootScope, '$broadcast').and.returnValue(true);
 
                 MessageTextService.setRoom('test', 'id');
 
-                expect(rootScope.$broadcast).toHaveBeenCalledWith('chat:setRoom', {});
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('MessageTextSetRoom', {});
 
             });
 
@@ -284,7 +284,7 @@ describe('Serivce: MessageText', function () {
                 );
             });
 
-            it('should broadcast `chat:getMessage`', function () {
+            it('should broadcast `MessageTextGetMessage`', function () {
                 spyOn(rootScope, '$broadcast').and.returnValue(true);
                 MessageTextService._addStoStorage('roomId', 'fromUser', {
                     text: 'testText',
@@ -292,7 +292,7 @@ describe('Serivce: MessageText', function () {
                     own: 'ownMessage'
                 });
 
-                expect(rootScope.$broadcast).toHaveBeenCalledWith('chat:getMessage');
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('MessageTextGetMessage');
             });
 
             describe('owner of group is sender', function () {

@@ -35,7 +35,7 @@ angular.module('unchatbar')
                  *
                  */
                 init: function () {
-                    $rootScope.$on('client:connect', function (event, data) {
+                    $rootScope.$on('BrokerPeerConnection', function (event, data) {
                         this._add(data.connection);
                     }.bind(this));
                 },

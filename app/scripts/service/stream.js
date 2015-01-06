@@ -43,7 +43,7 @@ angular.module('unchatbar')
                  *
                  */
                 init: function () {
-                    $rootScope.$on('peer:call', function (event, data) {
+                    $rootScope.$on('BrokerPeerCall', function (event, data) {
 
                         var streamOption = data.client.metadata.streamOption;
 

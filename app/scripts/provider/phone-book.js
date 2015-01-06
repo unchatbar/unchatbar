@@ -65,13 +65,13 @@ angular.module('unchatbar')
                      */
                     init: function () {
                         this._initStorage();
-                        $rootScope.$on('client:connect', function (event, data) {
+                        $rootScope.$on('BrokerPeerConnection', function (event, data) {
                             var clientMap = this.getClientMap();
                             if (!clientMap[data.connection.peer]) {
                                 this.addClient(data.connection.peer, data.connection.peer);
                             }
                         }.bind(this));
-                        $rootScope.$on('peer:open', function () {
+                        $rootScope.$on('BrokerPeerOpen', function () {
                             _.forEach(this.getClientMap(), function (item) {
                                 if (item.id) {
                                     Broker.connect(item.id);
@@ -301,7 +301,7 @@ angular.module('unchatbar')
                     _sendUpdateEvent: function () {
                         /**
                          * @ngdoc event
-                         * @name phonebook:update
+                         * @name PhoneBookUpdate
                          * @eventOf unchatbar.PhoneBook
                          * @eventType broadcast on root scope
                          * @description
@@ -309,7 +309,7 @@ angular.module('unchatbar')
                          * Broadcasted data in phonebook changed
                          *
                          */
-                        $rootScope.$broadcast('phonebook:update', {});
+                        $rootScope.$broadcast('PhoneBookUpdate', {});
                     }
                 };
             }

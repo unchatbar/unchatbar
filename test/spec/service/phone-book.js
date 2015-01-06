@@ -22,43 +22,43 @@ describe('Serivce: phoneBook', function () {
             it('should call PhoneBook._initStorage', function () {
                 expect(PhoneBookService._initStorage).toHaveBeenCalled();
             });
-            describe('check listener `client:connect`', function () {
+            describe('check listener `BrokerPeerConnection`', function () {
                 beforeEach(function () {
                     spyOn(PhoneBookService, 'addClient').and.returnValue(true);
                     spyOn(PhoneBookService, 'getClientMap').and.returnValue({'peerId': true});
                 });
                 it('should call `PhoneBook.getClientMap`', function () {
-                    rootScope.$broadcast('client:connect', {connection: {peer: 'xx'}});
+                    rootScope.$broadcast('BrokerPeerConnection', {connection: {peer: 'xx'}});
                     rootScope.$apply();
                     expect(PhoneBookService.getClientMap).toHaveBeenCalled();
                 });
 
                 describe('user is not in phonebook', function () {
                     it('should call `PhoneBook.addClient`', function () {
-                        rootScope.$broadcast('client:connect', {connection: {peer: 'newPeerId'}});
+                        rootScope.$broadcast('BrokerPeerConnection', {connection: {peer: 'newPeerId'}});
                         expect(PhoneBookService.addClient).toHaveBeenCalledWith('newPeerId', 'newPeerId');
                     });
                 });
 
                 describe('user is in phonebook', function () {
                     it('should call `PhoneBook.addClient`', function () {
-                        rootScope.$broadcast('client:connect', {connection: {peer: 'peerId'}});
+                        rootScope.$broadcast('BrokerPeerConnection', {connection: {peer: 'peerId'}});
                         expect(PhoneBookService.addClient).not.toHaveBeenCalled();
                     });
                 });
             });
 
-            describe('check listener `peer:open`', function () {
+            describe('check listener `BrokerPeerOpen`', function () {
                 beforeEach(function () {
                     spyOn(PhoneBookService, 'getClientMap').and.returnValue([{id: 'userId'}]);
                     spyOn(BrokerService, 'connect').and.returnValue(true);
                 });
                 it('should call `PhoneBook.getClientMap`', function () {
-                    rootScope.$broadcast('peer:open');
+                    rootScope.$broadcast('BrokerPeerOpen');
                     expect(PhoneBookService.getClientMap).toHaveBeenCalled();
                 });
                 it('should call `Broker.connect` with user id', function () {
-                    rootScope.$broadcast('peer:open');
+                    rootScope.$broadcast('BrokerPeerOpen');
                     expect(BrokerService.connect).toHaveBeenCalledWith('userId');
                 });
             });
@@ -297,11 +297,11 @@ describe('Serivce: phoneBook', function () {
         });
 
         describe('_sendUpdateEvent', function(){
-            it('should call `$rootScope.$broadcast` with `phonebook:update` ' , function(){
+            it('should call `$rootScope.$broadcast` with `PhoneBookUpdate` ' , function(){
                 spyOn(rootScope,'$broadcast').and.returnValue(true);
                 PhoneBookService._sendUpdateEvent();
 
-                expect(rootScope.$broadcast).toHaveBeenCalledWith('phonebook:update', {});
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('PhoneBookUpdate', {});
 
             });
         });

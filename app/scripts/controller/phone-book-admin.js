@@ -112,7 +112,7 @@ angular.module('unchatbar').controller('phoneBookAdmin', ['$scope', 'MessageText
             return PhoneBook.getClient(id).label || id;
         };
 
-        $scope.$on('phonebook:update', function () {
+        $scope.$on('PhoneBookUpdate', function () {
             $scope.getClientAndGroups();
         });
     }

@@ -142,7 +142,7 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$modal','Message
             $scope.selectedUser = '';
         };
 
-        $scope.$on('phonebook:update', function () {
+        $scope.$on('PhoneBookUpdate', function () {
             $scope.getClientAndGroups();
         });
 

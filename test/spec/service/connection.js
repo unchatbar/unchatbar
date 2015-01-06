@@ -15,7 +15,7 @@ describe('Serivce: Connection', function () {
            it('should call Connection.add with connection' , function(){
                spyOn(ConnectionService,'_add').and.returnValue(true);
                ConnectionService.init();
-               rootScope.$broadcast('client:connect',{connection: 'connection'});
+               rootScope.$broadcast('BrokerPeerConnection',{connection: 'connection'});
 
                expect(ConnectionService._add).toHaveBeenCalledWith('connection');
            });

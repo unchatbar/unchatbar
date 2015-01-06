@@ -125,7 +125,7 @@ angular.module('unchatbar')
                         }
                         /**
                          * @ngdoc event
-                         * @name chat:setRoom
+                         * @name MessageTextSetRoom
                          * @eventOf unchatbar.MessageText
                          * @eventType broadcast on root scope
                          * @description
@@ -133,7 +133,7 @@ angular.module('unchatbar')
                          * Broadcasted after active chatroom set
                          *
                          */
-                        $rootScope.$broadcast('chat:setRoom', {});
+                        $rootScope.$broadcast('MessageTextSetRoom', {});
                     },
                     /**
                      * @ngdoc methode
@@ -243,7 +243,7 @@ angular.module('unchatbar')
                         }
                         /**
                          * @ngdoc event
-                         * @name chat:getMessage
+                         * @name MessageTextGetMessage
                          * @eventOf unchatbar.MessageText
                          * @eventType broadcast on root scope
                          * @description
@@ -251,7 +251,7 @@ angular.module('unchatbar')
                          * new message added
                          *
                          */
-                        $rootScope.$broadcast('chat:getMessage');
+                        $rootScope.$broadcast('MessageTextGetMessage');
                     },
 
                     /**

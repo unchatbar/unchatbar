@@ -205,13 +205,13 @@ describe('Controller: phoneBook', function () {
         });
     });
     describe('check event', function () {
-        describe('phonebook:update', function () {
+        describe('PhoneBookUpdate', function () {
             beforeEach(function () {
                 phoneBookCTRL();
             });
             it('should add connection to  `$scope.clientList`', function () {
                 spyOn(scope, 'getClientAndGroups').and.returnValue(true);
-                scope.$broadcast('phonebook:update', {connection: {peer: 'conId', 'send': 'function'}});
+                scope.$broadcast('PhoneBookUpdate', {connection: {peer: 'conId', 'send': 'function'}});
 
                 expect(scope.getClientAndGroups).toHaveBeenCalled();
             });

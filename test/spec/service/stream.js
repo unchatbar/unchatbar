@@ -24,7 +24,7 @@ describe('Serivce: Profile', function () {
                 };
             });
 
-            describe('check listener `peer:call`', function () {
+            describe('check listener `BrokerPeerCall`', function () {
                 beforeEach(function () {
                     spyOn(StreamService, '_listenOnClientAnswer').and.returnValue(true);
                     spyOn(BrokerService, 'connect').and.returnValue(true);
@@ -36,7 +36,7 @@ describe('Serivce: Profile', function () {
                     spyOn(StreamService, 'getOwnStream').and.returnValue('stream');
                     spyOn(callObject, 'answer').and.returnValue(true);
 
-                    rootScope.$broadcast('peer:call', { client: callObject});
+                    rootScope.$broadcast('BrokerPeerCall', { client: callObject});
 
                     expect(BrokerService.connect).toHaveBeenCalledWith('peerId');
                 });
@@ -48,21 +48,21 @@ describe('Serivce: Profile', function () {
                     it('should call `Stream.getOwnStream` with peerId ,action `profile` and userprofile', function () {
 
                         spyOn(callObject, 'answer').and.returnValue(true);
-                        rootScope.$broadcast('peer:call', {client: callObject});
+                        rootScope.$broadcast('BrokerPeerCall', {client: callObject});
 
                         expect(StreamService.getOwnStream).toHaveBeenCalledWith('streamOption');
                     });
                     it('should call `call.answer` with peerId ,action `profile` and userprofile', function () {
 
                         spyOn(callObject, 'answer').and.returnValue(true);
-                        rootScope.$broadcast('peer:call', {client: callObject});
+                        rootScope.$broadcast('BrokerPeerCall', {client: callObject});
 
                         expect(callObject.answer).toHaveBeenCalledWith('stream');
                     });
 
                     it('should call `Stream._listenOnClientAnswer` with peerId ,action `profile` and userprofile', function () {
                         spyOn(callObject, 'answer').and.returnValue(true);
-                        rootScope.$broadcast('peer:call', {client: callObject});
+                        rootScope.$broadcast('BrokerPeerCall', {client: callObject});
                         rootScope.$apply();
 
                         expect(StreamService._listenOnClientAnswer).toHaveBeenCalledWith({
@@ -88,14 +88,14 @@ describe('Serivce: Profile', function () {
                     it('should call `Stream.getOwnStream` with peerId ,action `profile` and userprofile', function () {
 
                         spyOn(callObject, 'answer').and.returnValue(true);
-                        rootScope.$broadcast('peer:call', {client: callObject});
+                        rootScope.$broadcast('BrokerPeerCall', {client: callObject});
 
                         expect(StreamService.getOwnStream).toHaveBeenCalledWith('streamOption');
                     });
 
                     it('should call `cal.answer` with peerId ,action `profile` and userprofile', function () {
                         spyOn(callObject, 'answer').and.returnValue(true);
-                        rootScope.$broadcast('peer:call', {client: callObject});
+                        rootScope.$broadcast('BrokerPeerCall', {client: callObject});
                         rootScope.$apply();
 
                         expect(callObject.answer).toHaveBeenCalledWith('stream');
@@ -103,7 +103,7 @@ describe('Serivce: Profile', function () {
 
                     it('should call `Stream._listenOnClientAnswer` with peerId ,action `profile` and userprofile', function () {
                         spyOn(callObject, 'answer').and.returnValue(true);
-                        rootScope.$broadcast('peer:call', {client: callObject});
+                        rootScope.$broadcast('BrokerPeerCall', {client: callObject});
                         rootScope.$apply();
 
                         expect(StreamService._listenOnClientAnswer).toHaveBeenCalledWith({

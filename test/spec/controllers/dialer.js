@@ -64,7 +64,7 @@ describe('Controller: dialer', function () {
         });
     });
     describe('check event', function () {
-        describe('peer:open', function () {
+        describe('BrokerPeerOpen', function () {
             it('should set `$scope.peerId` to test', function () {
                 var peerId = '';
                 spyOn(brokerService, 'getPeerId').and.callFake(function(){
@@ -73,7 +73,7 @@ describe('Controller: dialer', function () {
                 dialerCTRL();
                 peerId = 'test';
 
-                scope.$broadcast('peer:open', {});
+                scope.$broadcast('BrokerPeerOpen', {});
 
                 expect(scope.peerId).toBe('test');
             });

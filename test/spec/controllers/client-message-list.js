@@ -113,7 +113,7 @@ describe('Controller: connection', function () {
         beforeEach(function () {
             connectionCTRL();
         });
-        describe('chat:getMessage', function () {
+        describe('MessageTextGetMessage', function () {
             describe('$scope.isOpen is true', function () {
                 beforeEach(function () {
                     scope.isOpen = true;
@@ -123,7 +123,7 @@ describe('Controller: connection', function () {
                     spyOn(MessageTextService, 'getMessageList').and.returnValue(['newList']);
                     scope.messageList = [];
 
-                    scope.$broadcast('chat:getMessage', {});
+                    scope.$broadcast('MessageTextGetMessage', {});
 
                     expect(scope.messageList).toEqual(['newList']);
                 });
@@ -136,7 +136,7 @@ describe('Controller: connection', function () {
                     spyOn(MessageTextService, 'getMessageList').and.returnValue(['newList']);
                     scope.messageList = [];
 
-                    scope.$broadcast('chat:getMessage', {});
+                    scope.$broadcast('MessageTextGetMessage', {});
 
                     expect(scope.messageList).toEqual([]);
                 });
@@ -145,14 +145,14 @@ describe('Controller: connection', function () {
 
         });
 
-        describe('chat:setRoom', function() {
+        describe('MessageTextSetRoom', function() {
             beforeEach(function(){
                 spyOn(MessageTextService, 'getMessageList').and.returnValue(['newList']);
             });
             it('should set `$scope.isRoomSelected` to true' , function(){
                 spyOn(MessageTextService,'isRoomOpen').and.returnValue(true);
 
-                scope.$broadcast('chat:setRoom', {});
+                scope.$broadcast('MessageTextSetRoom', {});
 
                 expect(scope.isRoomSelected).toBeTruthy();
             });
@@ -160,7 +160,7 @@ describe('Controller: connection', function () {
             it('should set `$scope.isRoomSelected` to true' , function(){
                 spyOn(MessageTextService,'isRoomOpen').and.returnValue(false);
 
-                scope.$broadcast('chat:setRoom', {});
+                scope.$broadcast('MessageTextSetRoom', {});
 
                 expect(scope.isRoomSelected).toBeFalsy();
             });
@@ -168,7 +168,7 @@ describe('Controller: connection', function () {
             it('should set `$scope.messageList` to return value of `MessageText.getMessageList`' , function(){
                 scope.isRoomSelected = false;
 
-                scope.$broadcast('chat:setRoom', {});
+                scope.$broadcast('MessageTextSetRoom', {});
 
                 expect(scope.messageList).toEqual(['newList']);
             });
