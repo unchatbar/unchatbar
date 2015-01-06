@@ -47,61 +47,6 @@ angular.module('unchatbar')
                         api._onBrokerCall(data.client, data.client.metadata.streamOption);
                     });
                 },
-                /**
-                 * @ngdoc methode
-                 * @name _onBrokerCall
-                 * @methodOf unchatbar.Stream
-                 * @params {Object} connection connection
-                 * @params {Object} streamOption audio/video option
-                 * @description
-                 *
-                 * handle peer call
-                 *
-                 */
-                _onBrokerCall: function (connection, streamOption) {
-                    this._createOwnStream(streamOption).then(function (stream) {
-                        connection.answer(stream);
-                        api._listenOnClientAnswer(connection);
-                    });
-
-                },
-
-                /**
-                 * @ngdoc methode
-                 * @name _createOwnStream
-                 * @methodOf unchatbar.Stream
-                 * @params {Object} streamOption audio/video option
-                 * @returns {Object} promise
-                 * @private
-                 * @description
-                 *
-                 * create own stream
-                 *
-                 */
-                _createOwnStream: function (streamOption) {
-                    var defer = $q.defer();
-                    navigator.getUserMedia = this._getUserMediaApi();
-                    if (navigator.getUserMedia === 0) {
-                        defer.reject('no media api');
-                    } else if (this.getOwnStream(streamOption)) {
-                        defer.resolve(this.getOwnStream(streamOption));
-                    } else {
-                        navigator.getUserMedia(
-                            streamOption,
-                            function (stream) {
-                                var key = this._getOwnStreamKeyByOption(streamOption);
-                                this._stream.ownStream[key] = stream;
-                                $rootScope.$broadcast('stream:addOwn', {streamOption: streamOption});
-                                defer.resolve(stream);
-                            }.bind(this),
-                            function (error) {
-                                return defer.reject(error);
-                            }
-                        );
-                    }
-
-                    return defer.promise;
-                },
 
                 /**
                  * @ngdoc methode
@@ -116,7 +61,7 @@ angular.module('unchatbar')
                  */
                 callUser: function (peerId, streamOption) {
                     this._createOwnStream(streamOption).then(function (stream) {
-                        api._listenOnClientAnswer(Broker.connectStream(peerId, stream,
+                        api._listenOnClientStreamConnection(Broker.connectStream(peerId, stream,
                             {profile: Profile.get(), type: 'single', streamOption: streamOption}
                         ));
                     });
@@ -136,7 +81,7 @@ angular.module('unchatbar')
                 callConference: function (peerId, streamOption) {
                     this._createOwnStream(streamOption).then(function (stream) {
                         var conferenceUser = api.getConferenceClientsMap();
-                        api._listenOnClientAnswer(Broker.connectStream(peerId, stream, {
+                        api._listenOnClientStreamConnection(Broker.connectStream(peerId, stream, {
                             profile: Profile.get(),
                             streamOption: streamOption,
                             type: 'conference',
@@ -158,26 +103,6 @@ angular.module('unchatbar')
                 getOwnStream: function (streamOption) {
                     var key = this._getOwnStreamKeyByOption(streamOption);
                     return this._stream.ownStream[key] || null;
-                },
-
-                /**
-                 * @ngdoc methode
-                 * @name _getOwnStreamKeyByOption
-                 * @methodOf unchatbar.Stream
-                 * @params {Object} streamOption audio/video option
-                 * @returns {String} storage key
-                 * @private
-                 * @description
-                 *
-                 * get key for streamOption
-                 *
-                 */
-                _getOwnStreamKeyByOption: function (streamOption) {
-                    var storageKey = '';
-                    _(streamOption).forEach(function (value, key) {
-                        storageKey += key + '_' + value;
-                    });
-                    return storageKey;
                 },
 
                 /**
@@ -240,6 +165,91 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
+                 * @name _onBrokerCall
+                 * @methodOf unchatbar.Stream
+                 * @params {Object} connection connection
+                 * @params {Object} streamOption audio/video option
+                 * @description
+                 *
+                 * handle peer call
+                 *
+                 */
+                _onBrokerCall: function (connection, streamOption) {
+                    this._createOwnStream(streamOption).then(function (stream) {
+                        connection.answer(stream);
+                        api._listenOnClientStreamConnection(connection);
+                    });
+
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name _createOwnStream
+                 * @methodOf unchatbar.Stream
+                 * @params {Object} streamOption audio/video option
+                 * @returns {Object} promise
+                 * @private
+                 * @description
+                 *
+                 * create own stream
+                 *
+                 */
+                _createOwnStream: function (streamOption) {
+                    var defer = $q.defer();
+                    navigator.getUserMedia = this._getUserMediaApi();
+                    if (navigator.getUserMedia === 0) {
+                        defer.reject('no media api');
+                    } else if (this.getOwnStream(streamOption)) {
+                        defer.resolve(this.getOwnStream(streamOption));
+                    } else {
+                        navigator.getUserMedia(
+                            streamOption,
+                            function (stream) {
+                                var key = this._getOwnStreamKeyByOption(streamOption);
+                                this._stream.ownStream[key] = stream;
+                                /**
+                                 * @ngdoc event
+                                 * @name StreamAddOwn
+                                 * @eventOf unchatbar.Stream
+                                 * @eventType broadcast on root scope
+                                 * @description
+                                 *
+                                 * new own stream created
+                                 *
+                                 */
+                                $rootScope.$broadcast('StreamAddOwn', {streamOption: streamOption});
+                                defer.resolve(stream);
+                            }.bind(this),
+                            function (error) {
+                                return defer.reject(error);
+                            }
+                        );
+                    }
+                    return defer.promise;
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name _getOwnStreamKeyByOption
+                 * @methodOf unchatbar.Stream
+                 * @params {Object} streamOption audio/video option
+                 * @returns {String} storage key
+                 * @private
+                 * @description
+                 *
+                 * get key for streamOption
+                 *
+                 */
+                _getOwnStreamKeyByOption: function (streamOption) {
+                    var storageKey = '';
+                    _(streamOption).forEach(function (value, key) {
+                        storageKey += key + '_' + value;
+                    });
+                    return storageKey;
+                },
+
+                /**
+                 * @ngdoc methode
                  * @name _getUserMediaApi
                  * @methodOf unchatbar.Stream
                  * @returns {Object} usermedia Api
@@ -257,7 +267,7 @@ angular.module('unchatbar')
                 },
                 /**
                  * @ngdoc methode
-                 * @name _listenOnClientAnswer
+                 * @name _listenOnClientStreamConnection
                  * @methodOf unchatbar.Stream
                  * @param {Object} call connection call
                  * @private
@@ -266,7 +276,7 @@ angular.module('unchatbar')
                  * listen to stream event after call
                  *
                  */
-                _listenOnClientAnswer: function (call) {
+                _listenOnClientStreamConnection: function (call) {
                     call.on('stream', function (stream) {
                         if (this.metadata.type === 'single') {
                             api._onStreamSingle(this, stream);
@@ -283,6 +293,18 @@ angular.module('unchatbar')
                     });
                 },
 
+                /**
+                 * @ngdoc methode
+                 * @name _onStreamSingle
+                 * @methodOf unchatbar.Stream
+                 * @param {Object} connection client connection
+                 * @param {Object} stream client stream
+                 * @private
+                 * @description
+                 *
+                 * handle single stream start
+                 *
+                 */
                 _onStreamSingle: function (connection, stream) {
                     api._stream.stream.single[connection.peer] = {
                         stream: stream,
@@ -292,7 +314,7 @@ angular.module('unchatbar')
                     $rootScope.$apply(function () {
                         /**
                          * @ngdoc event
-                         * @name stream:add
+                         * @name StreamAddClient
                          * @eventOf unchatbar.Stream
                          * @eventType broadcast on root scope
                          * @description
@@ -300,15 +322,27 @@ angular.module('unchatbar')
                          * new single stream added
                          *
                          */
-                        $rootScope.$broadcast('stream:add');
+                        $rootScope.$broadcast('StreamAddClient');
                     });
                 },
+
+                /**
+                 * @ngdoc methode
+                 * @name _onStreamSingleClose
+                 * @methodOf unchatbar.Stream
+                 * @param {String} peerId client peerId
+                 * @private
+                 * @description
+                 *
+                 * handle single stream close
+                 *
+                 */
                 _onStreamSingleClose : function(peerId) {
                     if (api._stream.stream.single[peerId]) {
                         delete api._stream.stream.single[peerId];
                         /**
                          * @ngdoc event
-                         * @name stream:delete
+                         * @name StreamDeleteClient
                          * @eventOf unchatbar.Stream
                          * @eventType broadcast on root scope
                          * @description
@@ -316,10 +350,22 @@ angular.module('unchatbar')
                          * single stream closed
                          *
                          */
-                        $rootScope.$broadcast('stream:delete');
+                        $rootScope.$broadcast('StreamDeleteClient');
                     }
                 },
 
+                /**
+                 * @ngdoc methode
+                 * @name _onStreamConference
+                 * @methodOf unchatbar.Stream
+                 * @param {Object} connection client connection
+                 * @param {Object} stream client stream
+                 * @private
+                 * @description
+                 *
+                 * handle conference stream start
+                 *
+                 */
                 _onStreamConference: function (connection, stream) {
                     var streamOption = connection.metadata.streamOption;
                     var conferenceUser = connection.metadata.conferenceUser || [];
@@ -336,7 +382,7 @@ angular.module('unchatbar')
                     $rootScope.$apply(function () {
                         /**
                          * @ngdoc event
-                         * @name stream:conferenceUser:add
+                         * @name StreamAddClientToConference
                          * @eventOf unchatbar.Stream
                          * @eventType broadcast on root scope
                          * @description
@@ -344,16 +390,27 @@ angular.module('unchatbar')
                          * new conference stream added
                          *
                          */
-                        $rootScope.$broadcast('stream:conferenceUser:add');
+                        $rootScope.$broadcast('StreamAddClientToConference');
                     });
                 },
 
+                /**
+                 * @ngdoc methode
+                 * @name _onStreamConferenceClose
+                 * @methodOf unchatbar.Stream
+                 * @param {String} peerId client peerId
+                 * @private
+                 * @description
+                 *
+                 * handle conference stream close
+                 *
+                 */
                 _onStreamConferenceClose : function (peerId) {
                     if (api._stream.stream.conference[peerId]) {
                         delete api._stream.stream.conference[peerId];
                         /**
                          * @ngdoc event
-                         * @name stream:conferenceUser:delete
+                         * @name StreamDeleteClientToConference
                          * @eventOf unchatbar.Stream
                          * @eventType broadcast on root scope
                          * @description
@@ -361,11 +418,9 @@ angular.module('unchatbar')
                          * conference stream closed
                          *
                          */
-                        $rootScope.$broadcast('stream:conferenceUser:delete');
+                        $rootScope.$broadcast('StreamDeleteClientToConference');
                     }
                 }
-
-
             };
             return api;
         }

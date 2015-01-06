@@ -33,35 +33,35 @@ describe('Controller: profile', function () {
             streamCTRL();
         });
 
-        describe('stream:add' , function(){
+        describe('StreamAddClient' , function(){
             it('should set return value from `Stream.getClientStreamMap` to `$scope.streamMap`' , function(){
                 spyOn(StreamService,'getClientStreamMap').and.returnValue({test:'data'});
-                scope.$broadcast('stream:add', {});
+                scope.$broadcast('StreamAddClient', {});
 
                 expect(scope.streamMap).toEqual({test:'data'});
             });
         });
-        describe('stream:delete' , function(){
+        describe('StreamDeleteClient' , function(){
             it('should set return value from `Stream.getClientStreamMap` to `$scope.streamMap`' , function(){
                 spyOn(StreamService,'getClientStreamMap').and.returnValue({test:'data'});
-                scope.$broadcast('stream:delete', {});
+                scope.$broadcast('StreamDeleteClient', {});
 
                 expect(scope.streamMap).toEqual({test:'data'});
             });
         });
-        describe('stream:conferenceUser:add' , function() {
+        describe('StreamAddClientToConference' , function() {
             it('should set return value from `Stream.getConferenceClientsMap` to `$scope.streamConferenceMap`', function () {
                 spyOn(StreamService, 'getConferenceClientsMap').and.returnValue({test: 'data'});
-                scope.$broadcast('stream:conferenceUser:add', {});
+                scope.$broadcast('StreamAddClientToConference', {});
 
                 expect(scope.streamConferenceMap).toEqual({test: 'data'});
             });
         });
 
-        describe('stream:conferenceUser:delete' , function() {
+        describe('StreamDeleteClientToConference' , function() {
             it('should set return value from `Stream.getConferenceClientsMap` to `$scope.streamConferenceMap`', function () {
                 spyOn(StreamService, 'getConferenceClientsMap').and.returnValue({test: 'data'});
-                scope.$broadcast('stream:conferenceUser:delete', {});
+                scope.$broadcast('StreamDeleteClientToConference', {});
 
                 expect(scope.streamConferenceMap).toEqual({test: 'data'});
             });

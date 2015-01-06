@@ -30,19 +30,19 @@ angular.module('unchatbar').controller('stream', ['$scope', 'Stream',
         $scope.streamConferenceMap = {};
 
 
-        $scope.$on('stream:add' , function(){
+        $scope.$on('StreamAddClient' , function(){
             $scope.streamMap = Stream.getClientStreamMap();
         });
 
-        $scope.$on('stream:delete' , function(){
+        $scope.$on('StreamDeleteClient' , function(){
             $scope.streamMap = Stream.getClientStreamMap();
         });
 
-        $scope.$on('stream:conferenceUser:add' , function(){
+        $scope.$on('StreamAddClientToConference' , function(){
             $scope.streamConferenceMap = Stream.getConferenceClientsMap();
         });
 
-        $scope.$on('stream:conferenceUser:delete' , function(){
+        $scope.$on('StreamDeleteClientToConference' , function(){
             $scope.streamConferenceMap = Stream.getConferenceClientsMap();
         });
 
