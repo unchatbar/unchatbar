@@ -41,7 +41,7 @@ angular.module('unchatbar')
         this.$get = ['$rootScope', '$sessionStorage', '$localStorage', 'Broker',
             function ($rootScope, $sessionStorage, $localStorage, Broker) {
 
-                return {
+                var api =  {
                     /**
                      * @ngdoc methode
                      * @name _storagePhoneBook
@@ -66,25 +66,25 @@ angular.module('unchatbar')
                     init: function () {
                         this._initStorage();
                         $rootScope.$on('BrokerPeerConnection', function (event, data) {
-                            var clientMap = this.getClientMap();
-                            if (!clientMap[data.connection.peer]) {
-                                this.addClient(data.connection.peer, data.connection.peer);
-                            }
-                        }.bind(this));
+                            api.addClient(data.connection.peer, {label : data.connection.peer });
+                        });
+                        $rootScope.$on('BrokerPeerCall', function (event, data) {
+                            api.addClient(data.client.peer, data.client.metadata.profile);
+                        });
                         $rootScope.$on('BrokerPeerOpen', function () {
-                            _.forEach(this.getClientMap(), function (item) {
+                            _.forEach(api.getClientMap(), function (item) {
                                 if (item.id) {
                                     Broker.connect(item.id);
                                 }
-                            }.bind(this));
-                        }.bind(this));
-                        $rootScope.$on('connection:getMessage:profile', function (event, data) {
-                            this.updateClient(data.peerId, data.message.profile.label || '');
-                        }.bind(this));
+                            });
+                        });
+                        $rootScope.$on('ConnectionGetMessageprofile', function (event, data) {
+                            api.updateClient(data.peerId, data.message.profile.label || '');
+                        });
 
-                        $rootScope.$on('connection:getMessage:removeGroup', function (event, data) {
-                            this.removeGroup(data.message.id);
-                        }.bind(this));
+                        $rootScope.$on('ConnectionGetMessageremoveGroup', function (event, data) {
+                            api.removeGroup(data.message.id);
+                        });
                     },
 
                     /**
@@ -117,11 +117,12 @@ angular.module('unchatbar')
                      * add new client
                      *
                      */
-                    addClient: function (id, label) {
-                        this._storagePhoneBook.user[id] = {
-                            label: label,
-                            id: id
-                        };
+                    addClient: function (id, profile) {
+                        if(!this._storagePhoneBook.user[id]) {
+                            profile.id = id;
+                            this._storagePhoneBook.user[id] = profile;
+                        }
+
                         this._sendUpdateEvent();
 
                     },
@@ -312,6 +313,7 @@ angular.module('unchatbar')
                         $rootScope.$broadcast('PhoneBookUpdate', {});
                     }
                 };
+                return api;
             }
         ];
     }

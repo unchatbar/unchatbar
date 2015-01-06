@@ -66,7 +66,7 @@ angular.module('unchatbar')
                      */
                     init: function () {
                         this._initStorage();
-                        $rootScope.$on('connection:open', function (event, data) {
+                        $rootScope.$on('ConnectionOpen', function (event, data) {
                             Connection.send(data.peerId, {action: 'profile', profile: this.get()});
                         }.bind(this));
                     },

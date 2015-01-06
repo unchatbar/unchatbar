@@ -79,31 +79,14 @@ angular.module('unchatbar')
                      */
                     init: function () {
                         this._initStorage();
-                        $rootScope.$on('connection:open', function (event, data) {
+                        $rootScope.$on('ConnectionOpen', function (event, data) {
                             this._sendFromQueue(data.peerId);
                         }.bind(this));
-                        $rootScope.$on('connection:getMessage:textMessage', function (event, data) {
+                        $rootScope.$on('ConnectionGetMessagetextMessage', function (event, data) {
                             this._addStoStorage(data.message.group.id || data.peerId, data.peerId, data.message);
                         }.bind(this));
                     },
 
-                    /**
-                     * @ngdoc methode
-                     * @name _initStorage
-                     * @methodOf unchatbar.MessageText
-                     * @description
-                     *
-                     * init storage
-                     */
-                    _initStorage : function(){
-                        var storage = useLocalStorage ? $localStorage : $sessionStorage;
-                        this._storageMessages = storage.$default({
-                            message: {
-                                messages: {},
-                                queue: {}
-                            }
-                        }).message;
-                    },
                     /**
                      * @ngdoc methode
                      * @name setRoom
@@ -210,6 +193,24 @@ angular.module('unchatbar')
                                 }
                             }.bind(this));
                         }
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _initStorage
+                     * @methodOf unchatbar.MessageText
+                     * @description
+                     *
+                     * init storage
+                     */
+                    _initStorage : function(){
+                        var storage = useLocalStorage ? $localStorage : $sessionStorage;
+                        this._storageMessages = storage.$default({
+                            message: {
+                                messages: {},
+                                queue: {}
+                            }
+                        }).message;
                     },
 
                     /**

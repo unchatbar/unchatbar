@@ -13,8 +13,8 @@
  * manage stream connection's
  */
 angular.module('unchatbar')
-    .service('Stream', ['$rootScope', '$q', 'Broker',
-        function ($rootScope, $q, Broker) {
+    .service('Stream', ['$rootScope', '$q', 'Broker','Profile',
+        function ($rootScope, $q, Broker, Profile) {
 
 
             var api = {
@@ -44,19 +44,63 @@ angular.module('unchatbar')
                  */
                 init: function () {
                     $rootScope.$on('BrokerPeerCall', function (event, data) {
+                        api._onBrokerCall(data.client,data.client.metadata.streamOption);
+                    });
+                },
+                /**
+                 * @ngdoc methode
+                 * @name _onBrokerCall
+                 * @methodOf unchatbar.Stream
+                 * @params {Object} connection connection
+                 * @params {Object} streamOption audio/video option
+                 * @description
+                 *
+                 * handle peer call
+                 *
+                 */
+                _onBrokerCall : function (connection,streamOption) {
+                    this._createOwnStream(streamOption).then(function (stream) {
+                        connection.answer(stream);
+                        api._listenOnClientAnswer(connection);
+                    });
 
-                        var streamOption = data.client.metadata.streamOption;
+                },
 
-                        if (this.getOwnStream(streamOption) !== null) {
-                            data.client.answer(this.getOwnStream(streamOption));
-                        } else {
-                            this._createOwnStream(streamOption).then(function (stream) {
-                                data.client.answer(stream);
-                            });
-                        }
-                        Broker.connect(data.client.peer);
-                        this._listenOnClientAnswer(data.client);
-                    }.bind(this));
+                /**
+                 * @ngdoc methode
+                 * @name _createOwnStream
+                 * @methodOf unchatbar.Stream
+                 * @params {Object} streamOption audio/video option
+                 * @returns {Object} promise
+                 * @private
+                 * @description
+                 *
+                 * create own stream
+                 *
+                 */
+                _createOwnStream: function (streamOption) {
+                    var defer = $q.defer();
+                    navigator.getUserMedia = this._getUserMediaApi();
+                    if (navigator.getUserMedia === 0) {
+                        defer.reject('no media api');
+                    } else if (this.getOwnStream(streamOption)){
+                        defer.resolve(this.getOwnStream(streamOption));
+                    } else {
+                        navigator.getUserMedia(
+                            streamOption,
+                            function (stream) {
+                                var key = this._getOwnStreamKeyByOption(streamOption);
+                                this._stream.ownStream[key] = stream;
+                                $rootScope.$broadcast('stream:addOwn',{streamOption:streamOption});
+                                defer.resolve(stream);
+                            }.bind(this),
+                            function (error) {
+                                return defer.reject(error);
+                            }
+                        );
+                    }
+
+                    return defer.promise;
                 },
 
                 /**
@@ -71,13 +115,11 @@ angular.module('unchatbar')
                  *
                  */
                 callUser: function (peerId, streamOption) {
-                    if (this.getOwnStream(streamOption) === null) {
-                        this._createOwnStream(streamOption).then(function (stream) {
-                            this._listenOnClientAnswer(Broker.connectStream(peerId, stream, {type:'single', streamOption: streamOption}));
-                        }.bind(this));
-                    } else {
-                        this._listenOnClientAnswer(Broker.connectStream(peerId, this.getOwnStream(streamOption), {type:'single', streamOption: streamOption}));
-                    }
+                    this._createOwnStream(streamOption).then(function (stream) {
+                        api._listenOnClientAnswer(Broker.connectStream(peerId, stream,
+                            {profile: Profile.get(),type:'single', streamOption: streamOption}
+                        ));
+                    });
                 },
 
                 /**
@@ -92,26 +134,15 @@ angular.module('unchatbar')
                  *
                  */
                 callConference : function (peerId, streamOption) {
-                    var conferenceUser;
-                    if (this.getOwnStream(streamOption) === null) {
-                        this._createOwnStream(streamOption).then(function (stream) {
-                            conferenceUser = api.getConferenceClientsMap();
-                            api._listenOnClientAnswer(Broker.connectStream(peerId, stream, {
-                                streamOption: streamOption,
-                                type:'conference',
-                                conferenceUser : _.keys(conferenceUser)
-                            }));
-                        });
-                    } else {
-                        conferenceUser = api.getConferenceClientsMap();
-                        this._listenOnClientAnswer(Broker.connectStream(peerId,this.getOwnStream(streamOption),
-                            {
-                                streamOption: streamOption,
-                                type:'conference',
-                                conferenceUser : _.keys(conferenceUser)
-                            }
-                        ));
-                    }
+                    this._createOwnStream(streamOption).then(function (stream) {
+                        var conferenceUser = api.getConferenceClientsMap();
+                        api._listenOnClientAnswer(Broker.connectStream(peerId, stream, {
+                            profile: Profile.get(),
+                            streamOption: streamOption,
+                            type:'conference',
+                            conferenceUser : _.keys(conferenceUser)
+                        }));
+                    });
                 },
                 /**
                  * @ngdoc methode
@@ -305,40 +336,7 @@ angular.module('unchatbar')
 
                 },
 
-                /**
-                 * @ngdoc methode
-                 * @name _createOwnStream
-                 * @methodOf unchatbar.Stream
-                 * @params {Object} streamOption audio/video option
-                 * @returns {Object} promise
-                 * @private
-                 * @description
-                 *
-                 * create own stream
-                 *
-                 */
-                _createOwnStream: function (streamOption) {
-                    var defer = $q.defer();
-                    navigator.getUserMedia = this._getUserMediaApi();
-                    if (navigator.getUserMedia === 0) {
-                        defer.reject('no media api');
-                    } else {
-                        navigator.getUserMedia(
-                            streamOption,
-                            function (stream) {
-                                var key = this._getOwnStreamKeyByOption(streamOption);
-                                this._stream.ownStream[key] = stream;
-                                $rootScope.$broadcast('stream:addOwn',{streamOption:streamOption});
-                                defer.resolve(stream);
-                            }.bind(this),
-                            function (error) {
-                                return defer.reject(error);
-                            }
-                        );
-                    }
 
-                    return defer.promise;
-                },
 
                 /**
                  * @ngdoc methode

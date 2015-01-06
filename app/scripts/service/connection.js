@@ -15,7 +15,7 @@ angular.module('unchatbar')
         function ($rootScope) {
 
 
-            return {
+            var api =  {
                 /**
                  * @ngdoc methode
                  * @name _connectionMap
@@ -90,7 +90,7 @@ angular.module('unchatbar')
                     connection.on('open', function () {
                         /**
                          * @ngdoc event
-                         * @name connection:open
+                         * @name ConnectionOpen
                          * @eventOf unchatbar.Connection
                          * @eventType broadcast on root scope
                          * @param {String} peerId id of client
@@ -99,16 +99,17 @@ angular.module('unchatbar')
                          * new connection to client is open
                          *
                          */
-                        $rootScope.$broadcast('connection:open', {peerId: connection.peer});
+                        $rootScope.$broadcast('ConnectionOpen', {peerId: connection.peer});
                     });
                     connection.on('close', function () {
-                        delete this._connectionMap[connection.peer];
-                    }.bind(this));
+                        delete api._connectionMap[this.peer];
+                    });
                     connection.on('data', function (data) {
+                        var  peerId = this.peer;
                         $rootScope.$apply(function () {
                             /**
                              * @ngdoc event
-                             * @name connection:getMessage:[action]
+                             * @name ConnectionGetMessage[action]
                              * @eventOf unchatbar.Connection
                              * @eventType broadcast on root scope
                              * @param {String} peerId id of client
@@ -116,20 +117,20 @@ angular.module('unchatbar')
                              * @description
                              *
                              * receive message from client event name is dynamic
-                             * `connection:getMessage:[data.action]`
+                             * `ConnectionGetMessage[data.action]`
                              *
                              */
-                            $rootScope.$broadcast('connection:getMessage:' + data.action,
+                            $rootScope.$broadcast('ConnectionGetMessage' + data.action,
                                 {
-                                    peerId: connection.peer,
+                                    peerId: peerId,
                                     message: data
                                 }
                             );
                         });
-
                     });
                 }
             };
+            return api;
         }
     ]);
 
