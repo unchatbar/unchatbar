@@ -26,13 +26,13 @@ describe('Serivce: MessageText', function () {
                 expect(MessageTextService._initStorage).toHaveBeenCalled();
             });
 
-            it('should call `MessageText._sendFromQueue` after event `connection:open` with eventdata `peerId`', function () {
-                rootScope.$broadcast('connection:open', {peerId: 'userPeerId'});
+            it('should call `MessageText._sendFromQueue` after event `ConnectionOpen` with eventdata `peerId`', function () {
+                rootScope.$broadcast('ConnectionOpen', {peerId: 'userPeerId'});
                 expect(MessageTextService._sendFromQueue).toHaveBeenCalledWith('userPeerId');
             });
 
             it('should call `MessageText._addStoStorage` after event `onnection:getMessage:textMessage` with eventdata `message.group.id`', function () {
-                rootScope.$broadcast('connection:getMessage:textMessage',
+                rootScope.$broadcast('ConnectionGetMessagetextMessage',
                     {
                         peerId: 'userId',
                         message: {
@@ -49,7 +49,7 @@ describe('Serivce: MessageText', function () {
                 });
             });
             it('should call `MessageText._addStoStorage` after event `onnection:getMessage:textMessage` with eventdata `peerId`', function () {
-                rootScope.$broadcast('connection:getMessage:textMessage',
+                rootScope.$broadcast('ConnectionGetMessagetextMessage',
                     {
                         peerId: 'userId',
                         message: {group: {}}

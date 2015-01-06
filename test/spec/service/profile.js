@@ -22,11 +22,11 @@ describe('Serivce: Profile', function () {
             it('should call PhoneBook._initStorage', function () {
                 expect(ProfileService._initStorage).toHaveBeenCalled();
             });
-            describe('check listener `connection:open`' , function(){
+            describe('check listener `ConnectionOpen`' , function(){
                it('should call `Connection.send` with peerId ,action `profile` and userprofile' , function(){
                  spyOn(ProfileService,'get').and.returnValue('profile');
                  spyOn(ConnectionService,'send').and.returnValue(true);
-                 rootScope.$broadcast('connection:open',{peerId: 'peerId'});
+                 rootScope.$broadcast('ConnectionOpen',{peerId: 'peerId'});
 
                  expect(ConnectionService.send).toHaveBeenCalledWith('peerId',{action:'profile' ,profile :'profile'});
 

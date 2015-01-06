@@ -25,6 +25,7 @@ describe('Serivce: Connection', function () {
             var connection = {}, peerCallBack = {};
             beforeEach(function () {
                 connection.peer = 'peerId';
+                peerCallBack.peer = 'peerId';
                 connection.on = function () {
                 };
                 spyOn(connection, 'on').and.callFake(function (eventName, callBack) {
@@ -49,7 +50,7 @@ describe('Serivce: Connection', function () {
                 });
                 it('should broadcast connection open', function () {
                     peerCallBack.open('newPeerId');
-                    expect(rootScope.$broadcast).toHaveBeenCalledWith('connection:open', {peerId: 'peerId'});
+                    expect(rootScope.$broadcast).toHaveBeenCalledWith('ConnectionOpen', {peerId: 'peerId'});
                 });
             });
 
@@ -70,7 +71,7 @@ describe('Serivce: Connection', function () {
                 it('should broadcast message', function () {
                     peerCallBack.data({action : 'myAction' , message: 'daten'});
                     expect(rootScope.$broadcast).toHaveBeenCalledWith(
-                        'connection:getMessage:myAction',  {
+                        'ConnectionGetMessagemyAction',  {
                             peerId: 'peerId',
                             message: {action : 'myAction' , message: 'daten'}
                         });
