@@ -22,13 +22,6 @@ angular.module('unchatbar').controller('profile', ['$scope', 'Profile','Broker',
          */
         $scope.profile = {};
 
-        /**
-         * @ngdoc property
-         * @name showName
-         * @propertyOf unchatbar.controller:profile
-         * @returns {Boolean} editable name
-         */
-        $scope.showName = false;
 
         /**
          * @ngdoc methode
@@ -40,7 +33,6 @@ angular.module('unchatbar').controller('profile', ['$scope', 'Profile','Broker',
          *
          */
         $scope.init = function(){
-            $scope.showName = false;
             $scope.profile =  Profile.get();
         };
         /**
@@ -53,9 +45,13 @@ angular.module('unchatbar').controller('profile', ['$scope', 'Profile','Broker',
          *
          */
         $scope.update = function () {
-            $scope.showName = false;
             Profile.set($scope.profile);
             $scope.profile =  Profile.get();
+
         };
+
+        $scope.$on('profileUpdate' , function(){
+           $scope.init();
+        });
     }
 ]);

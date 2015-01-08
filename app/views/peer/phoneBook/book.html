@@ -1,26 +1,17 @@
-<div data-ng-init="getClientAndGroups()">
-    <div class="btn-group" dropdown >
-       <button type="button" class="btn btn-default dropdown-toggle"
-               dropdown-toggle >
-           User: {{clientMap[selectedUser].label || 'no selection'}}<span class="caret"></span>
-       </button>
-      <ul class="dropdown-menu">
-          <li ng-repeat="(peerId,connection) in clientMap">
-              <a data-ng-click="setClient(peerId)" >{{connection.label}}</a>
-          </li>
-      </ul>
-    </div>
-
-    <div class="btn-group" dropdown >
-        <button type="button" class="btn btn-default dropdown-toggle"
-                dropdown-toggle >
-            Room: {{groupMap[selectedGroup].label || 'no selection'}}<span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li ng-repeat="(groupId,group) in groupMap">
-                <a data-ng-click="setGroup(groupId)">{{group.label}}</a>
-            </li>
-        </ul>
-    </div>
-
+<div data-ng-init="init()">
+    <dialer></dialer>
+    <tabset justified="true">
+        <tab heading="user" active="selectedUser">
+            <br>
+            <div ng-repeat="(peerId,connection) in clientMap">
+                <a ui-sref-active="active" ui-sref='chat.user({peerId: peerId})' class="list-group-item" >{{connection.label}}</a>
+            </div>
+        </tab>
+        <tab heading="Groupps" active="selectedGroup">
+            <br>
+            <div ng-repeat="(groupId,group) in groupMap">
+                <a ui-sref-active="active" ui-sref='chat.group({groupId: groupId})' class="list-group-item" >{{group.label}}</a>
+            </div>
+        </tab>
+    </tabset>
 </div>

@@ -112,6 +112,8 @@ angular.module('unchatbar')
                     set: function (profile) {
                         this._storageProfile.profile = profile;
                         this._sendProfileUpdate();
+                        //TODO
+                        $rootScope.$broadcast('profileUpdate');
                     },
 
                     /**

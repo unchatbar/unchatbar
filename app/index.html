@@ -1,7 +1,8 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="unchatbar">
 <head>
     <meta charset="utf-8">
+
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
@@ -9,36 +10,22 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/angular-notify/dist/angular-notify.css" />
     <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/offcanvas.css">
+    <link rel="stylesheet" href="styles/custom.css">
     <!-- endbuild -->
 </head>
-<body ng-app="unchatbar">
+<body >
+<div ui-view></div>
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<!-- Add your site or application content here -->
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
 
-        </div>
-        <div class="col-md-6">
-            <profile></profile>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <connection-center></connection-center>
-        </div>
-
-    </div>
-
-</div>
 
 
 <!-- build:js(.) scripts/oldieshim.js -->
@@ -58,6 +45,7 @@
 <script src="bower_components/lodash/dist/lodash.compat.js"></script>
 <script src="bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -69,7 +57,9 @@
 <script src="scripts/provider/profile.js"></script>
 <script src="scripts/provider/phone-book.js"></script>
 <script src="scripts/provider/message-text.js"></script>
+
 <script src="scripts/config/server.js"></script>
+<script src="scripts/config/state.js"></script>
 
 <script src="scripts/service/stream.js"></script>
 
@@ -97,6 +87,7 @@
 <script src="scripts/directive/phoneBook/book-stream.js"></script>
 <script src="scripts/directive/phoneBook/book.js"></script>
 <script src="scripts/directive/phoneBook/book-admin.js"></script>
+<script src="scripts/directive/phoneBook/active-user.js"></script>
 
 
 

@@ -1,0 +1,18 @@
+<div data-ng-init="init()">
+    <div data-ng-show="selectedUser">
+        <i data-ng-click="offcanvas=!offcanvas" class="fa fa-user fa-4x"></i>
+        <p>{{clientMap[selectedUser].label}}</p>
+        <hr>
+        <div class="btn btn-success call" data-ng-click="streamToClient(selectedUser)">
+            <i class="fa fa-phone fa-4x"></i> call
+        </div>
+    </div>
+    <div data-ng-show="selectedGroup">
+        <i data-ng-click="offcanvas=!offcanvas" class="fa fa-users fa-4x"></i>
+        <p>{{groupMap[selectedGroup].label}}</p>
+        <hr>
+        <div class="btn btn-success call" data-ng-click="streamToConference(selectedUser)">
+            <i class="fa fa-phone fa-4x"></i> call
+        </div>
+    </div>
+</div>

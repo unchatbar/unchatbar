@@ -12,8 +12,9 @@
  * select client/room for connection
  *
  */
-angular.module('unchatbar').controller('phoneBook', ['$scope', '$modal','MessageText', 'PhoneBook', 'Stream',
-    function ($scope,$modal, MessageText, PhoneBook, Stream) {
+angular.module('unchatbar').controller('phoneBook', ['$scope', '$modal','$stateParams','MessageText', 'PhoneBook', 'Stream',
+    function ($scope,$modal,$stateParams, MessageText, PhoneBook, Stream) {
+
         /**
          * @ngdoc property
          * @name clientMap
@@ -35,8 +36,10 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$modal','Message
          * @name selectedUser
          * @propertyOf unchatbar.controller:phoneBook
          * @returns {String} name of selcted user
+         *
          */
         $scope.selectedUser = '';
+
 
         /**
          * @ngdoc property
@@ -46,6 +49,9 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$modal','Message
          */
         $scope.selectedGroup = '';
 
+
+        MessageText.setRoom($scope.selectedGroup);
+        MessageText.setRoom($scope.selectedUser);
         /**
          * @ngdoc methode
          * @name getClientAndGroups
@@ -144,6 +150,22 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$modal','Message
 
         $scope.$on('PhoneBookUpdate', function () {
             $scope.getClientAndGroups();
+        });
+        $scope.init = function() {
+            $scope.getClientAndGroups();
+            $scope.selectedUser = $stateParams.peerId || '';
+            $scope.selectedGroup = $stateParams.groupId || '';
+            if ($scope.selectedUser) {
+                MessageText.setRoom('user', $scope.selectedUser);
+            }
+            if ($scope.selectedGroup) {
+                MessageText.setRoom('group', $scope.selectedGroup);
+            }
+        };
+
+        //TODO TEST
+        $scope.$on('$stateChangeSuccess',function(){
+            $scope.init();
         });
 
     }
