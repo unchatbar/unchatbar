@@ -18,6 +18,7 @@ module.exports = function (grunt) {
     // Configurable paths for the application
     var appConfig = {
         app: require('./bower.json').appPath || 'app',
+        appName: require('./bower.json').name || 'app',
         dist: 'dist'
     };
 
@@ -374,14 +375,44 @@ module.exports = function (grunt) {
         },
         ngdocs: {
             options: {
-                dest: '.tmp/docs',
+                dest: '.tmp/docs'
                 //scripts: ['bower_components/**/*.js'],
             },
 
-        api: {
-            src: ['app/scripts/**/*.js'],
-            title: 'API Reference'
-        }
+            api: {
+                src: ['app/scripts/**/*.js'],
+                title: 'API Reference'
+            }
+        },
+        ngtemplates:  {
+            dist:        {
+                cwd:      'app',
+                src:      'views/**/*.html',
+                dest:     'app/scripts/template.js',
+                options:  {
+                    module : '<%= yeoman.appName %>',
+                    htmlmin:{
+                        collapseBooleanAttributes:      true,
+                        collapseWhitespace:             true,
+                        removeAttributeQuotes:          true,
+                        removeComments:                 true, // Only if you don't use comment directives!
+                        removeEmptyAttributes:          true,
+                        removeRedundantAttributes:      true,
+                        removeScriptTypeAttributes:     true,
+                        removeStyleLinkTypeAttributes:  true
+                    } // <~~ This came from the <!-- build:js --> block
+                }
+            },
+            dev:{
+                cwd:      'app',
+                src:      'app/views/**/*.html',
+                dest:     'app/scripts/template.js',
+                options:  {
+                    bootstrap:  function() {
+                        return '//no templates';
+                    }
+                }
+            }
         }
     });
 
@@ -392,6 +423,7 @@ module.exports = function (grunt) {
         }
 
         grunt.task.run([
+            'ngtemplates:dev',
             'clean:server',
             'ngconstant:dev',
             'wiredep',
@@ -409,6 +441,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('test', [
+        'ngtemplates:dev',
         'clean:server',
         'ngconstant:dev',
         'concurrent:test',
@@ -419,6 +452,7 @@ module.exports = function (grunt) {
     grunt.registerTask('doku', ['ngdocs']);
     grunt.registerTask('build', [
         'clean:dist',
+        'ngtemplates:dist',
         'ngconstant:dist',
         'wiredep',
         'useminPrepare',
