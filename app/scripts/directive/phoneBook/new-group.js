@@ -10,12 +10,12 @@
  * save client connections , for recall
  *
  */
-angular.module('unchatbar').directive('acticeUser', [
+angular.module('unchatbar').directive('phoneBookNewGroup', [
     function () {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             replace: true,
-            templateUrl:'views/peer/phoneBook/active-user.html',
+            templateUrl:'views/peer/phoneBook/addNewGroup.html',
             controller: 'phoneBookAdmin'
         };
     }

@@ -12,9 +12,9 @@
  * select client/room for connection
  *
  */
-angular.module('unchatbar').controller('phoneBook', ['$scope', '$modal','$stateParams','MessageText', 'PhoneBook', 'Stream',
-    function ($scope,$modal,$stateParams, MessageText, PhoneBook, Stream) {
-
+angular.module('unchatbar').controller('phoneBook', ['$scope', '$stateParams','MessageText', 'PhoneBook',
+    function ($scope,$stateParams, MessageText, PhoneBook) {
+        $scope.form = {};
         /**
          * @ngdoc property
          * @name clientMap
@@ -75,45 +75,7 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$modal','$stateP
             }
         };
 
-        /**
-         * @ngdoc methode
-         * @name streamToClient
-         * @methodOf unchatbar.controller:phoneBook
-         * @params {String} peerId id of client
-         * @description
-         *
-         * stream audio/video to client
-         *
-         */
-        $scope.streamToClient = function (peerId) {
-            $modal.open({
-                templateUrl: 'views/peer/modal/streamOption.html',
-                controller: 'modalStreamOption',
-                size: 'sm'
-            }).result.then(function (streamOption) {
-                    Stream.callUser(peerId,streamOption);
-                });
-        };
 
-        /**
-         * @ngdoc methode
-         * @name streamToConference
-         * @methodOf unchatbar.controller:phoneBook
-         * @params {String} peerId id of client
-         * @description
-         *
-         * call client for conference
-         *
-         */
-        $scope.streamToConference = function (peerId) {
-            $modal.open({
-                templateUrl: 'views/peer/modal/streamOption.html',
-                controller: 'modalStreamOption',
-                size: 'sm'
-            }).result.then(function (streamOption) {
-                    Stream.callConference(peerId,streamOption);
-            });
-        };
 
         /**
          * @ngdoc methode
@@ -163,10 +125,25 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$modal','$stateP
             }
         };
 
-        //TODO TEST
         $scope.$on('$stateChangeSuccess',function(){
             $scope.init();
         });
+
+
+        /**
+         * @ngdoc methode
+         * @name createGroup
+         * @methodOf unchatbar.controller:phoneBookAdmin
+         * @description
+         *
+         * create new group
+         *
+         */
+        $scope.createGroup = function () {
+            PhoneBook.addGroup($scope.form.newGroupName, []);
+            $scope.form.newGroupName = '';
+        };
+
 
     }
 ]);

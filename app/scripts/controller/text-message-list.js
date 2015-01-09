@@ -95,8 +95,10 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', '$statePara
         });
 
         $scope.$on('MessageTextGetMessage', function () {
-                $scope.messageList = MessageText.getMessageList();
+            $scope.messageList = MessageText.getMessageList();
         });
+
+
 
     }
 ]);

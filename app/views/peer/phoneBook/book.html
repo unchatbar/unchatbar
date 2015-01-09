@@ -1,16 +1,31 @@
 <div data-ng-init="init()">
-    <dialer></dialer>
     <tabset justified="true">
         <tab heading="user" active="selectedUser">
+            <dialer></dialer>
             <br>
+
             <div ng-repeat="(peerId,connection) in clientMap">
-                <a ui-sref-active="active" ui-sref='chat.user({peerId: peerId})' class="list-group-item" >{{connection.label}}</a>
+                <a ui-sref-active="active" ui-sref='chat.user({peerId: peerId})' class="list-group-item">{{connection.label}}</a>
             </div>
         </tab>
         <tab heading="Groupps" active="selectedGroup">
+            <div>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" data-ng-model="form.newGroupName"
+                                   placeholder="add new group">
+                            <div data-ng-click="createGroup()" class="input-group-addon">
+                                <i class="fa fa-check fa-1x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+            </div>
             <br>
             <div ng-repeat="(groupId,group) in groupMap">
-                <a ui-sref-active="active" ui-sref='chat.group({groupId: groupId})' class="list-group-item" >{{group.label}}</a>
+                <a ui-sref-active="active" ui-sref='chat.group({groupId: groupId})' class="list-group-item">{{group.label}}</a>
             </div>
         </tab>
     </tabset>
