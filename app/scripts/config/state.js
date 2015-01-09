@@ -1,19 +1,20 @@
 'use strict';
 angular.module('unchatbar')
-    .config(['$stateProvider',
-        function ($stateProvider) {
-
-            $stateProvider.state('login', {
-                url: '/login',
-                templateUrl: 'views/peer/layout/login.html'
-            })
+    .config(['$stateProvider','$locationProvider',
+        function ($stateProvider,$locationProvider) {
+            $locationProvider.html5Mode(true);
+            $stateProvider
+                .state('login', {
+                    url: '/login',
+                    templateUrl: 'views/peer/layout/login.html'
+                })
                 .state('layoutChat', {
                     abstract: true,
                     templateUrl: 'views/peer/layout/chat/index.html'
                 })
                 .state('chat', {
                     parent: 'layoutChat',
-                    url: '',
+                    url: '/chat',
                     views: {
                         header: {
                             templateUrl: 'views/peer/layout/chat/header.html'
@@ -59,7 +60,6 @@ angular.module('unchatbar')
                     }
 
                 });
-
 
 
         }

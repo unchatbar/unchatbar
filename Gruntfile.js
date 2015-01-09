@@ -21,7 +21,7 @@ module.exports = function (grunt) {
         appName: require('./bower.json').name || 'app',
         dist: 'dist'
     };
-
+    var modRewrite = require('connect-modrewrite');
     // Define the configuration for all the tasks
     grunt.initConfig({
 
@@ -75,16 +75,23 @@ module.exports = function (grunt) {
             livereload: {
                 options: {
                     open: true,
-                    middleware: function (connect) {
-                        return [
-                            connect.static('.tmp'),
-                            connect.static('.docs'),
-                            connect().use(
-                                '/bower_components',
-                                connect.static('./bower_components')
-                            ),
-                            connect.static(appConfig.app)
-                        ];
+                    base: [
+                        '.tmp',
+                        '.docs',
+                        '<%= yeoman.app %>'
+                    ],
+                    middleware: function(connect, options) {
+                        var middlewares = [];
+
+                        middlewares.push(modRewrite(['^[^\\.]*$ /index.html [L]'])); //Matches everything that does not contain a '.' (period)
+                        options.base.forEach(function(base) {
+                            middlewares.push(connect.static(base));
+                        });
+                        middlewares.push(connect().use(
+                            '/bower_components',
+                            connect.static('./bower_components')
+                        ));
+                        return middlewares;
                     }
                 }
             },
@@ -405,7 +412,7 @@ module.exports = function (grunt) {
             },
             dev:{
                 cwd:      'app',
-                src:      'app/views/**/*.html',
+                src:      'views/**/*.html',
                 dest:     'app/scripts/template.js',
                 options:  {
                     bootstrap:  function() {

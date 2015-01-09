@@ -39,7 +39,7 @@ module.exports = function (config) {
         exclude: ['app/scripts/run.js'],
 
         // web server port
-        port: 8080,
+        port: 9000,
 
         // Start these browsers, currently available:
         // - Chrome

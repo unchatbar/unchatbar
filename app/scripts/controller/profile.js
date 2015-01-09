@@ -13,6 +13,13 @@
  */
 angular.module('unchatbar').controller('profile', ['$scope', 'Profile','Broker',
     function ($scope, Profile,Broker) {
+        /**
+         * @ngdoc property
+         * @name peerId
+         * @propertyOf unchatbar.controller:profile
+         * @returns {String} peerId peerId from PeerServer
+         */
+
         $scope.peerId = Broker.getPeerId();
         /**
          * @ngdoc property
