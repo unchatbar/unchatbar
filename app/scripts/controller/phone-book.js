@@ -4,9 +4,9 @@
  * @ngdoc controller
  * @name  unchatbar.controller:phoneBook
  * @require $scope
+ * @require $stateParams
  * @require MessageText
  * @require PhoneBook
- * @require Stream
  * @description
  *
  * select client/room for connection
@@ -49,9 +49,6 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$stateParams','M
          */
         $scope.selectedGroup = '';
 
-
-        MessageText.setRoom($scope.selectedGroup);
-        MessageText.setRoom($scope.selectedUser);
         /**
          * @ngdoc methode
          * @name getClientAndGroups
@@ -110,30 +107,10 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$stateParams','M
             $scope.selectedUser = '';
         };
 
-        $scope.$on('PhoneBookUpdate', function () {
-            $scope.getClientAndGroups();
-        });
-        $scope.init = function() {
-            $scope.getClientAndGroups();
-            $scope.selectedUser = $stateParams.peerId || '';
-            $scope.selectedGroup = $stateParams.groupId || '';
-            if ($scope.selectedUser) {
-                MessageText.setRoom('user', $scope.selectedUser);
-            }
-            if ($scope.selectedGroup) {
-                MessageText.setRoom('group', $scope.selectedGroup);
-            }
-        };
-
-        $scope.$on('$stateChangeSuccess',function(){
-            $scope.init();
-        });
-
-
         /**
          * @ngdoc methode
          * @name createGroup
-         * @methodOf unchatbar.controller:phoneBookAdmin
+         * @methodOf unchatbar.controller:phoneBook
          * @description
          *
          * create new group
@@ -143,6 +120,36 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$stateParams','M
             PhoneBook.addGroup($scope.form.newGroupName, []);
             $scope.form.newGroupName = '';
         };
+
+        /**
+         * @ngdoc methode
+         * @name init
+         * @methodOf unchatbar.controller:phoneBook
+         * @description
+         *
+         * init controller
+         *
+         */
+        $scope.init = function() {
+            $scope.getClientAndGroups();
+            $scope.selectedUser = $stateParams.peerId || '';
+            $scope.selectedGroup = $stateParams.groupId || '';
+            if ($stateParams.peerId) {
+                $scope.setClient($stateParams.peerId);
+            } else if ($stateParams.groupId) {
+                $scope.setGroup($stateParams.groupId);
+            }
+        };
+
+        $scope.$on('$stateChangeSuccess',function(){
+            $scope.init();
+        });
+
+        $scope.$on('PhoneBookUpdate', function () {
+            $scope.getClientAndGroups();
+        });
+
+
 
 
     }

@@ -3,14 +3,14 @@
 /**
  * @author Lars Wiedemann
  * @ngdoc directive
- * @name unchatbar.directive:phoneBook
+ * @name unchatbar.directive:activeUser
  * @restrict E
  * @description
  *
- * save client connections , for recall
+ * output active user
  *
  */
-angular.module('unchatbar').directive('acticeUser', [
+angular.module('unchatbar').directive('activeUser', [
     function () {
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment

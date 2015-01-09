@@ -112,7 +112,16 @@ angular.module('unchatbar')
                     set: function (profile) {
                         this._storageProfile.profile = profile;
                         this._sendProfileUpdate();
-                        //TODO
+                        /**
+                         * @ngdoc event
+                         * @name profileUpdate
+                         * @eventOf unchatbar.Profile
+                         * @eventType broadcast on root scope
+                         * @description
+                         *
+                         * send notic profile update
+                         *
+                         */
                         $rootScope.$broadcast('profileUpdate');
                     },
 
@@ -131,8 +140,6 @@ angular.module('unchatbar')
                             Connection.send(peerId, {action: 'profile', profile: this.get()});
                         }.bind(this));
                     }
-
-
                 };
             }
         ];

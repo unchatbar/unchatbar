@@ -69,6 +69,13 @@ describe('Serivce: Profile', function () {
                 ProfileService.set('test');
                 expect(ProfileService._sendProfileUpdate).toHaveBeenCalled();
             });
+
+            it('should call `$rootScope.$broadcast` `profileUpdate`' , function(){
+                spyOn(ProfileService,'_sendProfileUpdate').and.returnValue(true);
+                spyOn(rootScope,'$broadcast').and.returnValue(true);
+                ProfileService.set('test');
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('profileUpdate');
+            });
         });
 
         describe('_sendProfileUpdate' , function(){

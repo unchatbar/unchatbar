@@ -4,15 +4,17 @@
  * @ngdoc controller
  * @name  unchatbar.controller:phoneBookAdmin
  * @require $scope
- * @require $localStorage
- * @require Broker
+ * @require $stateParams
+ * @require $modal
+ * @require MessageText
+ * @require PhoneBook
+ * @require Stream
  * @description
  *
  * phonebook administration
  *
  */
 
-//TODO add groups config local Storage
 angular.module('unchatbar').controller('phoneBookAdmin', [
     '$scope', '$state','$stateParams','$modal','MessageText','PhoneBook','Stream',
     function ($scope,$state, $stateParams,$modal, MessageText, PhoneBook, Stream) {
@@ -20,7 +22,7 @@ angular.module('unchatbar').controller('phoneBookAdmin', [
         /**
          * @ngdoc property
          * @name selectedUser
-         * @propertyOf unchatbar.controller:phoneBook
+         * @propertyOf unchatbar.controller:phoneBookAdmin
          * @returns {String} name of selcted user
          *
          */
@@ -30,7 +32,7 @@ angular.module('unchatbar').controller('phoneBookAdmin', [
         /**
          * @ngdoc property
          * @name selectedGroup
-         * @propertyOf unchatbar.controller:phoneBook
+         * @propertyOf unchatbar.controller:phoneBookAdmin
          * @returns {String} name of group
          */
         $scope.selectedGroup = '';
@@ -124,19 +126,10 @@ angular.module('unchatbar').controller('phoneBookAdmin', [
             return PhoneBook.getClient(id).label || id;
         };
 
-        $scope.$on('PhoneBookUpdate', function () {
-            $scope.getClientAndGroups();
-        });
-
-        $scope.$on('$stateChangeSuccess',function(){
-            $scope.selectedUser = $stateParams.peerId || '';
-            $scope.selectedGroup = $stateParams.groupId || '';
-        });
-
         /**
          * @ngdoc methode
          * @name streamToClient
-         * @methodOf unchatbar.controller:phoneBook
+         * @methodOf unchatbar.controller:phoneBookAdmin
          * @params {String} peerId id of client
          * @description
          *
@@ -156,7 +149,7 @@ angular.module('unchatbar').controller('phoneBookAdmin', [
         /**
          * @ngdoc methode
          * @name streamToConference
-         * @methodOf unchatbar.controller:phoneBook
+         * @methodOf unchatbar.controller:phoneBookAdmin
          * @params {String} peerId id of client
          * @description
          *
@@ -172,5 +165,16 @@ angular.module('unchatbar').controller('phoneBookAdmin', [
                     Stream.callConference(peerId,streamOption);
                 });
         };
+
+        $scope.$on('PhoneBookUpdate', function () {
+            $scope.getClientAndGroups();
+        });
+
+        $scope.$on('$stateChangeSuccess',function(){
+            $scope.selectedUser = $stateParams.peerId || '';
+            $scope.selectedGroup = $stateParams.groupId || '';
+        });
+
+
     }
 ]);

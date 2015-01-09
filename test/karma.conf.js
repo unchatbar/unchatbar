@@ -23,6 +23,7 @@ module.exports = function (config) {
             'bower_components/es5-shim/es5-shim.js',
             'bower_components/angular-notify/dist/angular-notify.js',
             'bower_components/ngstorage/ngStorage.js',
+            'bower_components/angular-ui-router/release/angular-ui-router.js',
             'bower_components/lodash/dist/lodash.compat.js',
             'bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js',
             'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',

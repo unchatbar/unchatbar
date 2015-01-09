@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc controller
- * @name  unchatbar.controller:connection
+ * @name  unchatbar.controller:textMessageList
  * @require $scope
  * @require $stateParams
  * @require MessageText
@@ -20,7 +20,7 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', '$statePara
         /**
          * @ngdoc property
          * @name isRoomSelected
-         * @propertyOf unchatbar.controller:connection
+         * @propertyOf unchatbar.controller:textMessageList
          * @returns {Boolean} is room selected
          */
         $scope.isRoomSelected = false;
@@ -28,7 +28,7 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', '$statePara
         /**
          * @ngdoc property
          * @name message
-         * @propertyOf unchatbar.controller:connection
+         * @propertyOf unchatbar.controller:textMessageList
          * @returns {String} user message text
          */
         $scope.message = '';
@@ -36,7 +36,7 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', '$statePara
         /**
          * @ngdoc property
          * @name message
-         * @propertyOf unchatbar.controller:connection
+         * @propertyOf unchatbar.controller:textMessageList
          * @returns {Array} list of all messages
          */
         $scope.messageList = [];
@@ -44,7 +44,7 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', '$statePara
         /**
          * @ngdoc methode
          * @name send
-         * @methodOf unchatbar.controller:connection
+         * @methodOf unchatbar.controller:textMessageList
          * @description
          *
          * send message to client
@@ -59,7 +59,7 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', '$statePara
         /**
          * @ngdoc methode
          * @name getUserName
-         * @methodOf unchatbar.controller:connection
+         * @methodOf unchatbar.controller:textMessageList
          * @params {String} id client id
          * @description
          *
@@ -70,6 +70,16 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', '$statePara
             return PhoneBook.getClient(id).label || id;
         };
 
+        /**
+         * @ngdoc methode
+         * @name init
+         * @methodOf unchatbar.controller:textMessageList
+         * @params {String} id of user
+         * @description
+         *
+         * init controller
+         *
+         */
         $scope.init = function () {
             $scope.isRoomSelected = ($stateParams.peerId || $stateParams.groupId);
             $scope.messageList = MessageText.getMessageList();
@@ -79,7 +89,7 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', '$statePara
         /**
          * @ngdoc methode
          * @name getProfileName
-         * @methodOf unchatbar.controller:connection
+         * @methodOf unchatbar.controller:textMessageList
          * @params {String} id of user
          * @description
          *
@@ -97,8 +107,5 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', '$statePara
         $scope.$on('MessageTextGetMessage', function () {
             $scope.messageList = MessageText.getMessageList();
         });
-
-
-
     }
 ]);
