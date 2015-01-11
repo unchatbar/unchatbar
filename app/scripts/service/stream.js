@@ -83,14 +83,18 @@ angular.module('unchatbar')
                  *
                  */
                 callConference: function (roomId, peerId, streamOption) {
-                    this._createOwnStream(streamOption).then(function (stream) {
-                        api._listenOnClientStreamConnection(Broker.connectStream(peerId, stream, {
-                            profile: Profile.get(),
-                            roomId: roomId,
-                            streamOption: streamOption,
-                            type: 'conference'
-                        }));
-                    });
+                    if (api.getConferenceClient(peerId) === null &&
+                        Broker.getPeerId() !== peerId) {
+
+                        this._createOwnStream(streamOption).then(function (stream) {
+                            api._listenOnClientStreamConnection(Broker.connectStream(peerId, stream, {
+                                profile: Profile.get(),
+                                roomId: roomId,
+                                streamOption: streamOption,
+                                type: 'conference'
+                            }));
+                        });
+                    }
                 },
                 /**
                  * @ngdoc methode
@@ -327,15 +331,12 @@ angular.module('unchatbar')
                  *
                  */
                 _callToGroupUsersFromClient: function (_peerId, users) {
-                    var streamOption,roomId;
+                    var streamOption, roomId;
                     if (api.getConferenceClient(_peerId) !== null) {
                         streamOption = api.getConferenceClient(_peerId).option;
                         roomId = api.getConferenceClient(_peerId).roomId;
                         _.forEach(users, function (peerId) {
-                            if (api.getConferenceClient(peerId) === null &&
-                                Broker.getPeerId() !== peerId) {
-                                api.callConference(roomId,peerId, streamOption);
-                            }
+                            api.callConference(roomId, peerId, streamOption);
                         });
                     }
                 },

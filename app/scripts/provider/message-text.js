@@ -40,8 +40,8 @@ angular.module('unchatbar')
          * store send receive text messages
          *
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker',  'PhoneBook', 'Connection',
-            function ($rootScope, $localStorage, $sessionStorage, Broker,  PhoneBook, Connection) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker', 'PhoneBook', 'Connection',
+            function ($rootScope, $localStorage, $sessionStorage, Broker, PhoneBook, Connection) {
 
 
                 return {
@@ -63,7 +63,7 @@ angular.module('unchatbar')
                      * @returns {Object} message storage
                      *
                      */
-                    _storageMessages:{
+                    _storageMessages: {
                         messages: {},
                         queue: {}
                     },
@@ -130,7 +130,7 @@ angular.module('unchatbar')
                      *
                      */
                     isRoomOpen: function () {
-                        return this._selectedRoom.id  ? true : false;
+                        return this._selectedRoom.id ? true : false;
                     },
                     /**
                      * @ngdoc methode
@@ -179,10 +179,10 @@ angular.module('unchatbar')
                      * send message for delete room, to all users from group
                      *
                      */
-                    sendGroupUpdateToUsers : function (users,updateGroup) {
+                    sendGroupUpdateToUsers: function (users, updateGroup) {
                         var message = {
                             action: 'updateUserGroup',
-                            group : updateGroup
+                            group: updateGroup
                         };
                         if (updateGroup.owner === Broker.getPeerId()) {
                             _.forEach(users, function (user) {
@@ -192,7 +192,6 @@ angular.module('unchatbar')
                             }.bind(this));
                         }
                     },
-
 
 
                     /**
@@ -206,19 +205,26 @@ angular.module('unchatbar')
                      *
                      */
                     sendRemoveGroup: function (roomId) {
-                        var groupUsers = {},message = {};
-                        if (PhoneBook.getGroup(roomId).owner === Broker.getPeerId()) {
-                            groupUsers = PhoneBook.getGroup(roomId).users;
-                                message = {
-                                    action: 'removeGroup',
-                                    id: roomId
-                                };
-                            _.forEach(groupUsers, function (user) {
+                        var groupUsers = {}, message = {};
+                        groupUsers = PhoneBook.getGroup(roomId).users;
+                        message = {
+                            action: 'removeGroup',
+                            roomId: roomId
+                        };
+                        if (PhoneBook.getGroup(roomId).owner !== Broker.getPeerId()) {
+                            if (Connection.send(PhoneBook.getGroup(roomId).owner, message) === false) {
+                                this._addToQueue(PhoneBook.getGroup(roomId).owner, message);
+                            }
+
+                        }
+                        _.forEach(groupUsers, function (user) {
+                            if (Broker.getPeerId() !== user.id) {
                                 if (Connection.send(user.id, message) === false) {
                                     this._addToQueue(user.id, message);
                                 }
-                            }.bind(this));
-                        }
+                            }
+                        }.bind(this));
+
                     },
 
                     /**
@@ -229,7 +235,7 @@ angular.module('unchatbar')
                      *
                      * init storage
                      */
-                    _initStorage : function(){
+                    _initStorage: function () {
                         var storage = useLocalStorage ? $localStorage : $sessionStorage;
                         this._storageMessages = storage.$default({
                             message: {
@@ -265,7 +271,7 @@ angular.module('unchatbar')
                             own: message.own
                         });
                         //WTF
-                        if (message.group.owner && message.group.owner === from ) {
+                        if (message.group.owner && message.group.owner === from) {
                             PhoneBook.copyGroupFromPartner(message.group.id, message.group);
                         }
                         /**

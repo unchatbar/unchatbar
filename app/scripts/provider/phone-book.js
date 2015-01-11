@@ -86,7 +86,7 @@ angular.module('unchatbar')
                             api.copyGroupFromPartner(data.message.group.id,data.message.group);
                         });
                         $rootScope.$on('ConnectionGetMessageremoveGroup', function (event, data) {
-                            api.removeGroup(data.message.id);
+                            api._removeGroupByClient(data.peerId,data.message.roomId);
                         });
                     },
 
@@ -298,6 +298,29 @@ angular.module('unchatbar')
                      */
                     removeGroup: function (roomId) {
                         delete this._storagePhoneBook.groups[roomId];
+                        this._sendUpdateEvent();
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _removeGroupByClient
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} clientPeer client peer id
+                     * @params {String} roomId id of room
+                     * @description
+                     *
+                     * remove group from phone book only run by remove event from other clients
+                     *
+                     */
+                    _removeGroupByClient: function (clientPeer,roomId) {
+                        if (this._storagePhoneBook.groups[roomId].owner === clientPeer) {
+                            delete this._storagePhoneBook.groups[roomId];
+                        } else {
+                            var userIndex = _.findIndex(this._storagePhoneBook.groups[roomId].users,{id : clientPeer});
+                            if(userIndex !== -1) {
+                                this._storagePhoneBook.groups[roomId].users.splice(userIndex, 1);
+                            }
+                        }
                         this._sendUpdateEvent();
                     },
 

@@ -98,13 +98,14 @@ describe('Serivce: phoneBook', function () {
                 });
             });
             describe('check listener `ConnectionGetMessageremoveGroup`', function () {
-                it('should call `PhoneBook.removeGroup` with peerId and label from profile', function () {
-                    spyOn(PhoneBookService, 'removeGroup').and.returnValue(true);
+                it('should call `PhoneBook._removeGroupByClient` with peerId and label from profile', function () {
+                    spyOn(PhoneBookService, '_removeGroupByClient').and.returnValue(true);
                     rootScope.$broadcast('ConnectionGetMessageremoveGroup',
                         {
-                            message: {id: 'peerId'}
+                            peerId : 'peerId',
+                            message: {roomId: 'roomId'}
                         });
-                    expect(PhoneBookService.removeGroup).toHaveBeenCalledWith('peerId');
+                    expect(PhoneBookService._removeGroupByClient).toHaveBeenCalledWith('peerId','roomId');
                 });
             });
 
@@ -348,6 +349,49 @@ describe('Serivce: phoneBook', function () {
                 spyOn(PhoneBookService, '_sendUpdateEvent').and.returnValue(true);
 
                 PhoneBookService.removeGroup('peerId');
+
+                expect(PhoneBookService._sendUpdateEvent).toHaveBeenCalled();
+            });
+        });
+
+
+        describe('_removeGroupByClient', function () {
+            describe('client-peer is owner of group' , function() {
+                it('should remove group from `_storagePhoneBook.group`', function () {
+                    PhoneBookService._storagePhoneBook.groups = {'roomId': {owner : 'theOwner', testIdNoRemove: 'aa'}};
+
+                    PhoneBookService._removeGroupByClient('theOwner','roomId');
+
+                    expect(PhoneBookService._storagePhoneBook.groups).toEqual({});
+                });
+            });
+            describe('client-peer is not htr owner of group' , function() {
+                it('should remove client from `_storagePhoneBook.group.users`', function () {
+                    PhoneBookService._storagePhoneBook.groups = {'roomId':
+                    {
+                        owner : 'theOwner',
+                        testIdNoRemove: 'aa',
+                        users :  [{id : 'noRemove'},{id : 'onlyUser'},{id : 'noRemoveAlso'}]
+                    }
+                    };
+
+                    PhoneBookService._removeGroupByClient('onlyUser','roomId');
+
+                    expect(PhoneBookService._storagePhoneBook.groups).toEqual({'roomId':
+                    {
+                        owner : 'theOwner',
+                        testIdNoRemove: 'aa',
+                        users :  [{id : 'noRemove'},{id : 'noRemoveAlso'}]
+                    }
+                    });
+                });
+            });
+
+            it('should call `PhoneBook._sendUpdateEvent`', function () {
+                PhoneBookService._storagePhoneBook.groups = {'roomId': {owner : 'XX', testIdNoRemove: 'aa'}};
+                spyOn(PhoneBookService, '_sendUpdateEvent').and.returnValue(true);
+
+                PhoneBookService._removeGroupByClient('theOwner','roomId');
 
                 expect(PhoneBookService._sendUpdateEvent).toHaveBeenCalled();
             });
