@@ -82,6 +82,9 @@ angular.module('unchatbar')
                             api.updateClient(data.peerId, data.message.profile.label || '');
                         });
 
+                        $rootScope.$on('ConnectionGetMessageupdateUserGroup', function (event, data) {
+                            api.copyGroupFromPartner(data.message.group.id,data.message.group);
+                        });
                         $rootScope.$on('ConnectionGetMessageremoveGroup', function (event, data) {
                             api.removeGroup(data.message.id);
                         });
@@ -203,10 +206,16 @@ angular.module('unchatbar')
                      *
                      */
                     copyGroupFromPartner: function (id, option) {
-
-                        option.editable = false;
-                        this._storagePhoneBook.groups[id] = option;
-                        this._sendUpdateEvent();
+                        if (_.findIndex(option.users,{id:   Broker.getPeerId()}) !== -1) {
+                            option.editable = false;
+                            this._storagePhoneBook.groups[id] = option;
+                            this._sendUpdateEvent();
+                        } else {
+                            if(this._storagePhoneBook.groups[id]) {
+                                delete this._storagePhoneBook.groups[id];
+                                this._sendUpdateEvent();
+                            }
+                        }
                     },
 
                     /**
@@ -232,6 +241,22 @@ angular.module('unchatbar')
                                 id: id
                             };
                         }
+                        this._sendUpdateEvent();
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name updateGroup
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} id id from group
+                     * @paranm {Object} option group options
+                     * @description
+                     *
+                     * update group, only local group update
+                     *
+                     */
+                    updateGroup: function (id, option) {
+                        this._storagePhoneBook.groups[id] = option;
                         this._sendUpdateEvent();
                     },
 
@@ -287,7 +312,7 @@ angular.module('unchatbar')
                      *
                      */
                     getGroupMap: function () {
-                        return this._storagePhoneBook.groups;
+                        return _.cloneDeep(this._storagePhoneBook.groups);
                     },
 
                     /**

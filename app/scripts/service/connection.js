@@ -5,6 +5,7 @@
  * @ngdoc service
  * @name unchatbar.Connection
  * @require $rootScope
+ * @require Broker
  * @description
  *
  * Wrapper for window.peer lib
@@ -25,6 +26,7 @@ angular.module('unchatbar')
                  *
                  */
                 _connectionMap : {},
+
                 /**
                  * @ngdoc methode
                  * @name init

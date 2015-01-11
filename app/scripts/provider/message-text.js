@@ -168,6 +168,32 @@ angular.module('unchatbar')
                             this._addStoStorage(this._selectedRoom.id, this._selectedRoom.id, message);
                         }
                     },
+                    /**
+                     * @ngdoc methode
+                     * @name sendGroupUpdateToUsers
+                     * @methodOf unchatbar.MessageText
+                     * @params {Array} users array of users from group
+                     * @params {Object} updateGroup updates group
+                     * @description
+                     *
+                     * send message for delete room, to all users from group
+                     *
+                     */
+                    sendGroupUpdateToUsers : function (users,updateGroup) {
+                        var message = {
+                            action: 'updateUserGroup',
+                            group : updateGroup
+                        };
+                        if (updateGroup.owner === Broker.getPeerId()) {
+                            _.forEach(users, function (user) {
+                                if (Connection.send(user.id, message) === false) {
+                                    this._addToQueue(user.id, message);
+                                }
+                            }.bind(this));
+                        }
+                    },
+
+
 
                     /**
                      * @ngdoc methode
@@ -238,7 +264,7 @@ angular.module('unchatbar')
                             group: message.group,
                             own: message.own
                         });
-
+                        //WTF
                         if (message.group.owner && message.group.owner === from ) {
                             PhoneBook.copyGroupFromPartner(message.group.id, message.group);
                         }

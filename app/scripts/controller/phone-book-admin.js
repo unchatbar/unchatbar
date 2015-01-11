@@ -114,6 +114,42 @@ angular.module('unchatbar').controller('phoneBookAdmin', [
 
         /**
          * @ngdoc methode
+         * @name addUserToGroup
+         * @methodOf unchatbar.controller:phoneBookAdmin
+         * @params {String} user id of client
+         * @description
+         *
+         * add new user to group
+         *
+         */
+        $scope.addUserToGroup = function(){
+            if($scope.selectedGroup) {
+                var users = $scope.groupMap[$scope.selectedGroup].users;
+                MessageText.sendGroupUpdateToUsers(users,$scope.groupMap[$scope.selectedGroup]);
+                PhoneBook.updateGroup($scope.selectedGroup,$scope.groupMap[$scope.selectedGroup]);
+            }
+        };
+
+        /**
+         * @ngdoc methode
+         * @name addUserToGroup
+         * @methodOf unchatbar.controller:phoneBookAdmin
+         * @params {String} user id of client
+         * @description
+         *
+         * add new user to group
+         *
+         */
+        $scope.removeUserFromGroup = function(){
+            if($scope.selectedGroup) {
+                var users = PhoneBook.getGroup($scope.selectedGroup).users;
+                MessageText.sendGroupUpdateToUsers(users,$scope.groupMap[$scope.selectedGroup]);
+                PhoneBook.updateGroup($scope.selectedGroup,$scope.groupMap[$scope.selectedGroup]);
+            }
+        };
+
+        /**
+         * @ngdoc methode
          * @name getUserName
          * @methodOf unchatbar.controller:phoneBookAdmin
          * @params  {String} id peerId from Client
@@ -146,25 +182,31 @@ angular.module('unchatbar').controller('phoneBookAdmin', [
                 });
         };
 
+
+
+
         /**
          * @ngdoc methode
-         * @name streamToConference
+         * @name streamToConferenceByGroupId
          * @methodOf unchatbar.controller:phoneBookAdmin
          * @params {String} peerId id of client
          * @description
          *
-         * call client for conference
+         * create conference for group
          *
          */
-        $scope.streamToConference = function (peerId) {
+        $scope.streamToConferenceByGroupId = function (roomId) {
             $modal.open({
                 templateUrl: 'views/peer/modal/streamOption.html',
                 controller: 'modalStreamOption',
                 size: 'sm'
             }).result.then(function (streamOption) {
-                    Stream.callConference(peerId,streamOption);
+                    _.forEach($scope.groupMap[roomId].users, function (user) {
+                        Stream.callConference(roomId,user.id, streamOption);
+                    });
                 });
         };
+
 
         $scope.$on('PhoneBookUpdate', function () {
             $scope.getClientAndGroups();

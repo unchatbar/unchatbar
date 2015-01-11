@@ -176,6 +176,74 @@ describe('Serivce: MessageText', function () {
 
         });
 
+        describe('sendGroupUpdateToUsers', function () {
+            beforeEach(function () {
+                spyOn(BrokerService, 'getPeerId').and.returnValue('userPeerId');
+
+            });
+            describe('group owner is not actual user', function () {
+                beforeEach(function () {
+                    spyOn(ConnectionService, 'send').and.returnValue(false);
+                });
+
+                it('should not call `ConnectionService.send`', function () {
+                    MessageTextService.sendGroupUpdateToUsers([{id: 'user1'}, {id: 'user1'}],{
+                        owner: 'otherUse',
+                        users: [{id: 'user1'}, {id: 'user1'}]
+                    });
+                    expect(ConnectionService.send).not.toHaveBeenCalled();
+                });
+            });
+            describe('group owner is actual user', function () {
+                describe('send to user was successful', function () {
+                    beforeEach(function () {
+                        spyOn(ConnectionService, 'send').and.returnValue(true);
+                        spyOn(MessageTextService, '_addToQueue').and.returnValue(true);
+                        MessageTextService.sendGroupUpdateToUsers([{id: 'user1'}],{
+                            owner: 'userPeerId',
+                            users: [{id: 'user1'}]
+                        });
+                    });
+                    it('should call `Connection.send`', function () {
+                        expect(ConnectionService.send).toHaveBeenCalledWith('user1', {
+                            action: 'updateUserGroup',
+                            group: {
+                                owner: 'userPeerId',
+                                users: [{id: 'user1'}]
+                            }
+                        });
+                    });
+
+                    it('should not call `MessageText._addToQueue`', function () {
+                        expect(MessageTextService._addToQueue).not.toHaveBeenCalled();
+                    });
+
+                });
+
+                describe('send to user was not successful', function () {
+                    beforeEach(function () {
+                        spyOn(ConnectionService, 'send').and.returnValue(false);
+                        spyOn(MessageTextService, '_addToQueue').and.returnValue(true);
+                        MessageTextService.sendGroupUpdateToUsers([{id:'user1'}],{
+                            owner: 'userPeerId',
+                            users: [{id: 'user1'}]
+                        });
+                    });
+                    it('should call `MessageText._addToQueue`', function () {
+                        expect(MessageTextService._addToQueue).toHaveBeenCalledWith('user1', {
+                            action: 'updateUserGroup',
+                            group: {
+                                owner: 'userPeerId',
+                                users: [{id: 'user1'}]
+                            }
+                        });
+                    });
+
+                });
+
+            });
+        });
+
         describe('sendRemoveGroup', function () {
             beforeEach(function () {
                 spyOn(BrokerService, 'getPeerId').and.returnValue('userPeerId');

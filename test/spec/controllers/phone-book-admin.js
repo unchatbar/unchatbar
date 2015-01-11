@@ -6,7 +6,7 @@ describe('Controller: phoneBook', function () {
 
     var phoneBookCTRL, scope, stateParams, StreamService, PhoneBookService, MessageTextService, modal, state;
 
-    beforeEach(inject(function ($controller, $rootScope, $modal,$state, MessageText, PhoneBook, Stream) {
+    beforeEach(inject(function ($controller, $rootScope, $modal, $state, MessageText, PhoneBook, Stream) {
         PhoneBookService = PhoneBook;
         scope = $rootScope.$new();
         StreamService = Stream;
@@ -19,7 +19,7 @@ describe('Controller: phoneBook', function () {
                 $scope: scope,
                 $modal: modal,
                 $state: state,
-                $stateParams : stateParams,
+                $stateParams: stateParams,
                 MessageText: MessageTextService,
                 PhoneBook: PhoneBookService
             });
@@ -47,8 +47,8 @@ describe('Controller: phoneBook', function () {
         describe('getClientAndGroups', function () {
             beforeEach(function () {
                 stateParams = {
-                    peerId : 'testPeerId',
-                    groupId : 'testGroupId'
+                    peerId: 'testPeerId',
+                    groupId: 'testGroupId'
                 };
                 phoneBookCTRL();
                 spyOn(PhoneBookService, 'getClientMap').and.returnValue(
@@ -81,7 +81,7 @@ describe('Controller: phoneBook', function () {
         describe('removeClient', function () {
             beforeEach(function () {
                 phoneBookCTRL();
-                spyOn(state,'go').and.returnValue(true);
+                spyOn(state, 'go').and.returnValue(true);
                 spyOn(PhoneBookService, 'removeClient').and.returnValue(true);
                 spyOn(PhoneBookService, 'getGroupMap').and.returnValue(
                     {'userGroupId': 'test'}
@@ -94,7 +94,7 @@ describe('Controller: phoneBook', function () {
                 expect(PhoneBookService.removeClient).toHaveBeenCalledWith('userPeerId');
             });
 
-            it('should call `$state.go` with `chat`' , function(){
+            it('should call `$state.go` with `chat`', function () {
                 scope.removeClient('userPeerId');
 
                 expect(state.go).toHaveBeenCalledWith('chat');
@@ -102,11 +102,109 @@ describe('Controller: phoneBook', function () {
 
 
         });
+        describe('addUserToGroup', function () {
+            beforeEach(function () {
+                phoneBookCTRL();
+                spyOn(MessageTextService, 'sendGroupUpdateToUsers').and.returnValue(true);
+                spyOn(PhoneBookService, 'updateGroup').and.returnValue(true);
+            });
+            it('should call `MessageText.sendGroupUpdateToUsers` with roomId, when `$scope.selectedGroup` is not empty', function () {
+                scope.groupMap = {
+                    roomId: {
+                        name: 'room',
+                        users : ['userA']
+                    }
+                };
+                scope.selectedGroup = 'roomId';
+                scope.addUserToGroup('roomId');
+
+                expect(MessageTextService.sendGroupUpdateToUsers).toHaveBeenCalledWith(['userA'], {
+                    name: 'room',
+                    users : ['userA']
+                });
+            });
+
+            it('should call `MessageText.updateGroup` with roomId new room Options is not empty', function () {
+                scope.groupMap = {
+                    roomId: {
+                        name: 'room'
+                    }
+                };
+                scope.selectedGroup = 'roomId';
+                scope.addUserToGroup('roomId');
+
+                expect(PhoneBookService.updateGroup).toHaveBeenCalledWith('roomId', {
+                    name: 'room'
+                });
+            });
+
+            it('should not call `MessageText.sendGroupUpdateToUsers` with roomId, when `$scope.selectedGroup` is empty', function () {
+                scope.selectedGroup = '';
+                scope.addUserToGroup('roomId');
+
+                expect(MessageTextService.sendGroupUpdateToUsers).not.toHaveBeenCalled();
+            });
+        });
+
+        describe('removeUserFromGroup', function () {
+            beforeEach(function () {
+                phoneBookCTRL();
+                spyOn(MessageTextService, 'sendGroupUpdateToUsers').and.returnValue(true);
+                spyOn(PhoneBookService, 'updateGroup').and.returnValue(true);
+                spyOn(PhoneBookService, 'getGroup').and.returnValue({users : ['userA']});
+
+            });
+            it('should call `MessageText.sendGroupUpdateToUsers` with roomId, when `$scope.selectedGroup` is not empty', function () {
+                scope.groupMap = {
+                    roomId: {
+                        name: 'room'
+                    }
+                };
+                scope.selectedGroup = 'roomId';
+                scope.removeUserFromGroup('roomId');
+
+                expect(MessageTextService.sendGroupUpdateToUsers).toHaveBeenCalledWith(['userA'], {name: 'room'});
+            });
+
+
+            it('should call `PhoneBook.getGroup` with `$scope.selectedGroup` is not empty', function () {
+                scope.groupMap = {
+                    roomId: {
+                        name: 'room'
+                    }
+                };
+                scope.selectedGroup = 'roomId';
+                scope.removeUserFromGroup('roomId');
+
+                expect(PhoneBookService.getGroup).toHaveBeenCalledWith('roomId');
+            });
+
+            it('should call `MessageText.updateGroup` with roomId new room Options is not empty', function () {
+                scope.groupMap = {
+                    roomId: {
+                        name: 'room'
+                    }
+                };
+                scope.selectedGroup = 'roomId';
+                scope.removeUserFromGroup('roomId');
+
+                expect(PhoneBookService.updateGroup).toHaveBeenCalledWith('roomId', {
+                    name: 'room'
+                });
+            });
+
+            it('should not call `MessageText.sendGroupUpdateToUsers` with roomId, when `$scope.selectedGroup` is empty', function () {
+                scope.selectedGroup = '';
+                scope.removeUserFromGroup('roomId');
+
+                expect(MessageTextService.sendGroupUpdateToUsers).not.toHaveBeenCalled();
+            });
+        });
 
         describe('removeGroup', function () {
             beforeEach(function () {
                 phoneBookCTRL();
-                spyOn(state,'go').and.returnValue(true);
+                spyOn(state, 'go').and.returnValue(true);
                 spyOn(MessageTextService, 'sendRemoveGroup').and.returnValue(true);
                 spyOn(PhoneBookService, 'removeGroup').and.returnValue(true);
 
@@ -121,7 +219,7 @@ describe('Controller: phoneBook', function () {
                 expect(PhoneBookService.removeGroup).toHaveBeenCalledWith('roomId');
             });
 
-            it('should call `$state.go` with `chat`' , function(){
+            it('should call `$state.go` with `chat`', function () {
                 scope.removeClient('userPeerId');
 
                 expect(state.go).toHaveBeenCalledWith('chat');
@@ -174,7 +272,7 @@ describe('Controller: phoneBook', function () {
             });
         });
 
-        describe('streamToConference', function () {
+        describe('streamToConferenceByGroupId', function () {
             it('should call `modal.open`', inject(function ($q) {
                 spyOn(modal, 'open').and.callFake(function () {
                     var defer = $q.defer();
@@ -182,7 +280,7 @@ describe('Controller: phoneBook', function () {
                 });
 
                 phoneBookCTRL();
-                scope.streamToConference('peerId');
+                scope.streamToConferenceByGroupId('roomId');
                 expect(modal.open).toHaveBeenCalled();
             }));
             describe('after $modal.open', function () {
@@ -194,13 +292,19 @@ describe('Controller: phoneBook', function () {
                     });
                 }));
 
-                it('should call `Stream.callUser` with peerId', function () {
+                it('should call `Stream.callUser` with userA', function () {
                     spyOn(StreamService, 'callConference').and.returnValue(true);
                     phoneBookCTRL();
-
-                    scope.streamToConference('peerId');
+                    scope.groupMap = {
+                        roomId: {
+                            users: [
+                                {id: 'userA'}
+                            ]
+                        }
+                    };
+                    scope.streamToConferenceByGroupId('roomId');
                     scope.$digest();
-                    expect(StreamService.callConference).toHaveBeenCalledWith('peerId', 'streamOption');
+                    expect(StreamService.callConference).toHaveBeenCalledWith('roomId', 'userA', 'streamOption');
                 });
             });
         });
@@ -209,8 +313,8 @@ describe('Controller: phoneBook', function () {
 
     describe('check event', function () {
 
-        describe('$stateChangeSuccess' , function(){
-            it('should set `$scope.selectedUser` from `$stateParams.peerId` ' , function(){
+        describe('$stateChangeSuccess', function () {
+            it('should set `$scope.selectedUser` from `$stateParams.peerId` ', function () {
                 phoneBookCTRL();
                 stateParams.peerId = 'testPeerId';
 
@@ -219,7 +323,7 @@ describe('Controller: phoneBook', function () {
                 expect(scope.selectedUser).toBe('testPeerId');
             });
 
-            it('should set `$scope.selectedGroup` from `$stateParams.groupId` ' , function(){
+            it('should set `$scope.selectedGroup` from `$stateParams.groupId` ', function () {
                 phoneBookCTRL();
                 stateParams.groupId = 'testGroupId';
 

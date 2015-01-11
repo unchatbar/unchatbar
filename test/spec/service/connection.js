@@ -101,7 +101,7 @@ describe('Serivce: Connection', function () {
                 });
             });
 
-            describe('connectionid exists' , function(){
+            describe('connection id not exists' , function(){
                 beforeEach(function(){
                     ConnectionService._connectionMap = {};
                 });

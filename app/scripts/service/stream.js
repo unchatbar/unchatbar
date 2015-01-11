@@ -7,14 +7,15 @@
  * @require $rootScope
  * @require $q
  * @require Broker
-
+ * @require Profile
+ * @require Connection
  * @description
  * # peer
  * manage stream connection's
  */
 angular.module('unchatbar')
-    .service('Stream', ['$rootScope', '$q', 'Broker', 'Profile',
-        function ($rootScope, $q, Broker, Profile) {
+    .service('Stream', ['$rootScope', '$q', 'Broker', 'Profile', 'Connection',
+        function ($rootScope, $q, Broker, Profile, Connection) {
 
 
             var api = {
@@ -45,6 +46,9 @@ angular.module('unchatbar')
                 init: function () {
                     $rootScope.$on('BrokerPeerCall', function (event, data) {
                         api._onBrokerCall(data.client, data.client.metadata.streamOption);
+                    });
+                    $rootScope.$on('ConnectionGetMessageupdateStreamGroup', function (event, data) {
+                        api._callToGroupUsersFromClient(data.peerId, data.message.users);
                     });
                 },
 
@@ -78,14 +82,13 @@ angular.module('unchatbar')
                  * call client to conference
                  *
                  */
-                callConference: function (peerId, streamOption) {
+                callConference: function (roomId, peerId, streamOption) {
                     this._createOwnStream(streamOption).then(function (stream) {
-                        var conferenceUser = api.getConferenceClientsMap();
                         api._listenOnClientStreamConnection(Broker.connectStream(peerId, stream, {
                             profile: Profile.get(),
+                            roomId: roomId,
                             streamOption: streamOption,
-                            type: 'conference',
-                            conferenceUser: _.keys(conferenceUser)
+                            type: 'conference'
                         }));
                     });
                 },
@@ -179,7 +182,6 @@ angular.module('unchatbar')
                         connection.answer(stream);
                         api._listenOnClientStreamConnection(connection);
                     });
-
                 },
 
                 /**
@@ -282,6 +284,7 @@ angular.module('unchatbar')
                             api._onStreamSingle(this, stream);
                         } else if (this.metadata.type === 'conference') {
                             api._onStreamConference(this, stream);
+                            api._sendOwnUserFromConference(this.peer);
                         }
                     });
                     call.on('close', function () {
@@ -291,6 +294,50 @@ angular.module('unchatbar')
                             api._onStreamConferenceClose(this.peer);
                         }
                     });
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name _sendOwnUserFromConference
+                 * @methodOf unchatbar.Stream
+                 * @param {Object} peerId client peer id
+                 * @private
+                 * @description
+                 *
+                 * send own group user to streaming client
+                 *
+                 */
+                _sendOwnUserFromConference: function (peerId) {
+                    Connection.send(peerId, {
+                        action: 'updateStreamGroup',
+                        users: _.keys(api.getConferenceClientsMap())
+                    });
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name _callToGroupUsersFromClient
+                 * @methodOf unchatbar.Stream
+                 * @param {Object} _peerId client peer id
+                 * @param {Array} users client stream users
+                 * @private
+                 * @description
+                 *
+                 * create stream connection to all conference user from client
+                 *
+                 */
+                _callToGroupUsersFromClient: function (_peerId, users) {
+                    var streamOption,roomId;
+                    if (api.getConferenceClient(_peerId) !== null) {
+                        streamOption = api.getConferenceClient(_peerId).option;
+                        roomId = api.getConferenceClient(_peerId).roomId;
+                        _.forEach(users, function (peerId) {
+                            if (api.getConferenceClient(peerId) === null &&
+                                Broker.getPeerId() !== peerId) {
+                                api.callConference(roomId,peerId, streamOption);
+                            }
+                        });
+                    }
                 },
 
                 /**
@@ -337,7 +384,7 @@ angular.module('unchatbar')
                  * handle single stream close
                  *
                  */
-                _onStreamSingleClose : function(peerId) {
+                _onStreamSingleClose: function (peerId) {
                     if (api._stream.stream.single[peerId]) {
                         delete api._stream.stream.single[peerId];
                         /**
@@ -367,15 +414,10 @@ angular.module('unchatbar')
                  *
                  */
                 _onStreamConference: function (connection, stream) {
-                    var streamOption = connection.metadata.streamOption;
-                    var conferenceUser = connection.metadata.conferenceUser || [];
-                    _.forEach(conferenceUser, function (peerId) {
-                        if (api.getConferenceClient(peerId) === null) {
-                            api.callConference(peerId, streamOption);
-                        }
-                    });
                     api._stream.stream.conference[connection.peer] = {
                         stream: stream,
+                        option: connection.metadata.streamOption,
+                        roomId: connection.metadata.roomId,
                         peerId: connection.peer,
                         call: connection
                     };
@@ -405,7 +447,7 @@ angular.module('unchatbar')
                  * handle conference stream close
                  *
                  */
-                _onStreamConferenceClose : function (peerId) {
+                _onStreamConferenceClose: function (peerId) {
                     if (api._stream.stream.conference[peerId]) {
                         delete api._stream.stream.conference[peerId];
                         /**
