@@ -23,7 +23,7 @@ angular.module('unchatbar').controller('connectionCenter', ['$scope',
         /**
          * @ngdoc methode
          * @name send
-         * @methodOf unchatbar.controller:connection
+         * @methodOf unchatbar.controller:connectionCenter
          * @params {String} viewName name of view
          * @description
          *

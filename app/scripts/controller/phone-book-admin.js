@@ -4,40 +4,54 @@
  * @ngdoc controller
  * @name  unchatbar.controller:phoneBookAdmin
  * @require $scope
- * @require $localStorage
- * @require Broker
+ * @require $stateParams
+ * @require $modal
+ * @require MessageText
+ * @require PhoneBook
+ * @require Stream
  * @description
  *
  * phonebook administration
  *
  */
 
-//TODO add groups config local Storage
-angular.module('unchatbar').controller('phoneBookAdmin', ['$scope', 'MessageText', 'PhoneBook',
-    function ($scope, MessageText, PhoneBook) {
+angular.module('unchatbar').controller('phoneBookAdmin', [
+    '$scope', '$state','$stateParams','$modal','MessageText','PhoneBook','Stream',
+    function ($scope,$state, $stateParams,$modal, MessageText, PhoneBook, Stream) {
+
         /**
          * @ngdoc property
-         * @name clientList
+         * @name selectedUser
+         * @propertyOf unchatbar.controller:phoneBookAdmin
+         * @returns {String} name of selcted user
+         *
+         */
+        $scope.selectedUser = '';
+
+
+        /**
+         * @ngdoc property
+         * @name selectedGroup
+         * @propertyOf unchatbar.controller:phoneBookAdmin
+         * @returns {String} name of group
+         */
+        $scope.selectedGroup = '';
+
+        /**
+         * @ngdoc property
+         * @name clientMap
          * @propertyOf unchatbar.controller:phoneBookAdmin
          * @returns {Object} map of all client
          */
-        $scope.clientList = {};
+        $scope.clientMap = {};
 
         /**
          * @ngdoc property
-         * @name groupList
+         * @name groupMap
          * @propertyOf unchatbar.controller:phoneBookAdmin
          * @returns {Object} map of groups
          */
-        $scope.groupList = {};
-
-        /**
-         * @ngdoc property
-         * @name newGroupName
-         * @propertyOf unchatbar.controller:phoneBookAdmin
-         * @returns {Object} name of new group
-         */
-        $scope.newGroupName = '';
+        $scope.groupMap = {};
 
         /**
          * @ngdoc methode
@@ -51,6 +65,7 @@ angular.module('unchatbar').controller('phoneBookAdmin', ['$scope', 'MessageText
          */
         $scope.removeClient = function (peerId) {
             PhoneBook.removeClient(peerId);
+            $state.go('chat');
         };
 
         /**
@@ -64,24 +79,14 @@ angular.module('unchatbar').controller('phoneBookAdmin', ['$scope', 'MessageText
          *
          */
         $scope.getClientAndGroups = function () {
-            $scope.clientList = PhoneBook.getClientMap();
-            $scope.groupList = PhoneBook.getGroupMap();
+            $scope.clientMap = PhoneBook.getClientMap();
+            $scope.groupMap = PhoneBook.getGroupMap();
+            $scope.selectedUser = $stateParams.peerId || '';
+            $scope.selectedGroup = $stateParams.groupId || '';
         };
 
 
-        /**
-         * @ngdoc methode
-         * @name createGroup
-         * @methodOf unchatbar.controller:phoneBookAdmin
-         * @description
-         *
-         * create new group
-         *
-         */
-        $scope.createGroup = function () {
-            PhoneBook.addGroup($scope.newGroupName, []);
-            $scope.newGroupName = '';
-        };
+
 
         /**
          * @ngdoc methode
@@ -96,6 +101,43 @@ angular.module('unchatbar').controller('phoneBookAdmin', ['$scope', 'MessageText
         $scope.removeGroup = function (roomId) {
             MessageText.sendRemoveGroup(roomId);
             PhoneBook.removeGroup(roomId);
+            $state.go('chat');
+        };
+
+        /**
+         * @ngdoc methode
+         * @name addUserToGroup
+         * @methodOf unchatbar.controller:phoneBookAdmin
+         * @params {String} user id of client
+         * @description
+         *
+         * add new user to group
+         *
+         */
+        $scope.addUserToGroup = function(){
+            if($scope.selectedGroup) {
+                var users = $scope.groupMap[$scope.selectedGroup].users;
+                MessageText.sendGroupUpdateToUsers(users,$scope.groupMap[$scope.selectedGroup]);
+                PhoneBook.updateGroup($scope.selectedGroup,$scope.groupMap[$scope.selectedGroup]);
+            }
+        };
+
+        /**
+         * @ngdoc methode
+         * @name addUserToGroup
+         * @methodOf unchatbar.controller:phoneBookAdmin
+         * @params {String} user id of client
+         * @description
+         *
+         * add new user to group
+         *
+         */
+        $scope.removeUserFromGroup = function(){
+            if($scope.selectedGroup) {
+                var users = PhoneBook.getGroup($scope.selectedGroup).users;
+                MessageText.sendGroupUpdateToUsers(users,$scope.groupMap[$scope.selectedGroup]);
+                PhoneBook.updateGroup($scope.selectedGroup,$scope.groupMap[$scope.selectedGroup]);
+            }
         };
 
         /**
@@ -112,8 +154,61 @@ angular.module('unchatbar').controller('phoneBookAdmin', ['$scope', 'MessageText
             return PhoneBook.getClient(id).label || id;
         };
 
+        /**
+         * @ngdoc methode
+         * @name streamToClient
+         * @methodOf unchatbar.controller:phoneBookAdmin
+         * @params {String} peerId id of client
+         * @description
+         *
+         * stream audio/video to client
+         *
+         */
+        $scope.streamToClient = function (peerId) {
+            $modal.open({
+                templateUrl: 'views/peer/modal/streamOption.html',
+                controller: 'modalStreamOption',
+                size: 'sm'
+            }).result.then(function (streamOption) {
+                    Stream.callUser(peerId,streamOption);
+                });
+        };
+
+
+
+
+        /**
+         * @ngdoc methode
+         * @name streamToConferenceByGroupId
+         * @methodOf unchatbar.controller:phoneBookAdmin
+         * @params {String} peerId id of client
+         * @description
+         *
+         * create conference for group
+         *
+         */
+        $scope.streamToConferenceByGroupId = function (roomId) {
+            $modal.open({
+                templateUrl: 'views/peer/modal/streamOption.html',
+                controller: 'modalStreamOption',
+                size: 'sm'
+            }).result.then(function (streamOption) {
+                    _.forEach($scope.groupMap[roomId].users, function (user) {
+                        Stream.callConference(roomId,user.id, streamOption);
+                    });
+                });
+        };
+
+
         $scope.$on('PhoneBookUpdate', function () {
             $scope.getClientAndGroups();
         });
+
+        $scope.$on('$stateChangeSuccess',function(){
+            $scope.selectedUser = $stateParams.peerId || '';
+            $scope.selectedGroup = $stateParams.groupId || '';
+        });
+
+
     }
 ]);

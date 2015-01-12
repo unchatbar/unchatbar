@@ -4,11 +4,13 @@ describe('Controller: phoneBook', function () {
 
     beforeEach(module('unchatbar'));
 
-    var phoneBookCTRL, StreamService, scope, PhoneBookService, MessageTextService, modal;
+    var phoneBookCTRL, BrokerService, StreamService, stateParams, scope, PhoneBookService, MessageTextService, modal;
 
-    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook, Stream, $modal) {
+    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook, Stream, $modal, Broker) {
         PhoneBookService = PhoneBook;
+        BrokerService = Broker;
         StreamService = Stream;
+        stateParams = {};
         modal = $modal;
         scope = $rootScope.$new();
         MessageTextService = MessageText;
@@ -16,6 +18,7 @@ describe('Controller: phoneBook', function () {
             $controller('phoneBook', {
                 $scope: scope,
                 $modal: modal,
+                $stateParams: stateParams,
                 MessageText: MessageTextService,
                 PhoneBook: PhoneBookService
             });
@@ -24,9 +27,12 @@ describe('Controller: phoneBook', function () {
 
     describe('check init', function () {
         beforeEach(function () {
+            spyOn(BrokerService,'getPeerId').and.returnValue('ownPeerId');
             phoneBookCTRL();
         });
-
+        it('should set `$scope.ownPeerId` to return value from `Broker.getPeerId`', function () {
+            expect(scope.ownPeerId).toBe('ownPeerId');
+        });
         it('should set `$scope.clientMap` to empty object', function () {
             expect(scope.clientMap).toEqual({});
         });
@@ -44,6 +50,59 @@ describe('Controller: phoneBook', function () {
         });
     });
     describe('check methode', function () {
+        describe('init', function () {
+            beforeEach(function () {
+                phoneBookCTRL();
+            });
+            it('should call `$scope.getClientAndGroups`', function () {
+                spyOn(scope, 'getClientAndGroups').and.returnValue(true);
+                scope.init();
+                expect(scope.getClientAndGroups).toHaveBeenCalled();
+            });
+            describe('$stateParams.peerId is set', function () {
+                beforeEach(function () {
+                    spyOn(scope, 'setClient').and.returnValue(true);
+                    stateParams.peerId = 'testPeer';
+                });
+                it('should call `$scope.setClient` with `$stateParams.peerId`', function () {
+                    scope.init();
+
+                    expect(scope.setClient).toHaveBeenCalledWith('testPeer');
+                });
+            });
+            describe('$stateParams.groupId is set', function () {
+                beforeEach(function () {
+                    spyOn(scope, 'setGroup').and.returnValue(true);
+                    stateParams.groupId = 'testGroup';
+                });
+                it('should call `$scope.setGroup` with `$stateParams.groupId`', function () {
+                    scope.init();
+
+                    expect(scope.setGroup).toHaveBeenCalledWith('testGroup');
+                });
+            });
+
+        });
+
+        describe('createGroup', function () {
+            beforeEach(function () {
+                phoneBookCTRL();
+                spyOn(PhoneBookService, 'addGroup').and.returnValue(true);
+            });
+            it('should call `PhoneBook.addGroup` with `$scope.PhoneBook.addGroup and empty array', function () {
+                scope.form.newGroupName = 'newGroup';
+                scope.createGroup();
+
+                expect(PhoneBookService.addGroup).toHaveBeenCalledWith('newGroup');
+            });
+            it('should set `$scope.newGroupName` to empty string', function () {
+                scope.form.newGroupName = 'test';
+                scope.createGroup('peerId');
+
+                expect(scope.form.newGroupName).toBe('');
+            });
+        });
+
         describe('getClientAndGroups', function () {
             beforeEach(function () {
                 phoneBookCTRL();
@@ -142,69 +201,20 @@ describe('Controller: phoneBook', function () {
 
         });
 
-        describe('streamToClient', function () {
-            it('should call `modal.open`' , inject(function($q){
-                spyOn(modal, 'open').and.callFake(function () {
-                    var defer = $q.defer();
-                    return {result: defer.promise};
-                });
 
-                phoneBookCTRL();
-                scope.streamToClient('peerId');
-                expect(modal.open).toHaveBeenCalled();
-            }));
-            describe('after $modal.open', function () {
-                beforeEach(inject(function ($q) {
-                    spyOn(modal, 'open').and.callFake(function () {
-                        var defer = $q.defer();
-                        defer.resolve('streamOption');
-                        return {result: defer.promise};
-                    });
-                }));
-
-                it('should call `Stream.callUser` with peerId', function () {
-                    spyOn(StreamService, 'callUser').and.returnValue(true);
-                    phoneBookCTRL();
-
-                    scope.streamToClient('peerId');
-                    scope.$apply();
-                    expect(StreamService.callUser).toHaveBeenCalledWith('peerId','streamOption');
-                });
-            });
-        });
-
-        describe('streamToConference', function () {
-            it('should call `modal.open`' , inject(function($q){
-                spyOn(modal, 'open').and.callFake(function () {
-                    var defer = $q.defer();
-                    return {result: defer.promise};
-                });
-
-                phoneBookCTRL();
-                scope.streamToConference('peerId');
-                expect(modal.open).toHaveBeenCalled();
-            }));
-            describe('after $modal.open', function () {
-                beforeEach(inject(function ($q) {
-                    spyOn(modal, 'open').and.callFake(function () {
-                        var defer = $q.defer();
-                        defer.resolve('streamOption');
-                        return {result: defer.promise};
-                    });
-                }));
-
-                it('should call `Stream.callUser` with peerId', function () {
-                    spyOn(StreamService, 'callConference').and.returnValue(true);
-                    phoneBookCTRL();
-
-                    scope.streamToConference('peerId');
-                    scope.$apply();
-                    expect(StreamService.callConference).toHaveBeenCalledWith('peerId','streamOption');
-                });
-            });
-        });
     });
     describe('check event', function () {
+        describe('$stateChangeSuccess' , function(){
+           it('should call `$scope.init` ' , function(){
+               phoneBookCTRL();
+               spyOn(scope,'init').and.returnValue();
+
+               scope.$broadcast('$stateChangeSuccess');
+
+               expect(scope.init).toHaveBeenCalled();
+           });
+        });
+
         describe('PhoneBookUpdate', function () {
             beforeEach(function () {
                 phoneBookCTRL();

@@ -128,20 +128,6 @@ describe('Controller: connection', function () {
                     expect(scope.messageList).toEqual(['newList']);
                 });
             });
-            describe('$scope.isOpen is true', function () {
-                beforeEach(function () {
-                    scope.isOpen = false;
-                });
-                it('should not change scope.messageList', function () {
-                    spyOn(MessageTextService, 'getMessageList').and.returnValue(['newList']);
-                    scope.messageList = [];
-
-                    scope.$broadcast('MessageTextGetMessage', {});
-
-                    expect(scope.messageList).toEqual([]);
-                });
-
-            });
 
         });
 
@@ -149,22 +135,6 @@ describe('Controller: connection', function () {
             beforeEach(function(){
                 spyOn(MessageTextService, 'getMessageList').and.returnValue(['newList']);
             });
-            it('should set `$scope.isRoomSelected` to true' , function(){
-                spyOn(MessageTextService,'isRoomOpen').and.returnValue(true);
-
-                scope.$broadcast('MessageTextSetRoom', {});
-
-                expect(scope.isRoomSelected).toBeTruthy();
-            });
-
-            it('should set `$scope.isRoomSelected` to true' , function(){
-                spyOn(MessageTextService,'isRoomOpen').and.returnValue(false);
-
-                scope.$broadcast('MessageTextSetRoom', {});
-
-                expect(scope.isRoomSelected).toBeFalsy();
-            });
-
             it('should set `$scope.messageList` to return value of `MessageText.getMessageList`' , function(){
                 scope.isRoomSelected = false;
 
@@ -174,21 +144,7 @@ describe('Controller: connection', function () {
             });
         });
 
-        describe('setView' , function() {
-            it('should set `$scope.isOpen` to true name when view is chat' , function(){
-                scope.isOpen = false;
-                scope.$broadcast('setView', {name: 'chat'});
 
-                expect(scope.isOpen).toBeTruthy();
-            });
-
-            it('should set `$scope.isOpen` to false name when view is not chat' , function(){
-                scope.isOpen = false;
-                scope.$broadcast('setView', {name: 'other'});
-
-                expect(scope.isOpen).toBeFalsy();
-            });
-        });
     });
 
 });

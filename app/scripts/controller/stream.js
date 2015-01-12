@@ -29,6 +29,21 @@ angular.module('unchatbar').controller('stream', ['$scope', 'Stream',
          */
         $scope.streamConferenceMap = {};
 
+        /**
+         * @ngdoc methode
+         * @name closeOwnStream
+         * @methodOf unchatbar.controller:stream
+         * @description
+         *
+         * close all own media stream if no client stream is active
+         *
+         */
+        $scope.closeOwnStream = function() {
+            if (_.size($scope.streamConferenceMap) === 0 &&
+                _.size($scope.streamMap) === 0){
+                Stream.closeAllOwnMedia();
+            }
+        };
 
         $scope.$on('StreamAddClient' , function(){
             $scope.streamMap = Stream.getClientStreamMap();
@@ -36,6 +51,7 @@ angular.module('unchatbar').controller('stream', ['$scope', 'Stream',
 
         $scope.$on('StreamDeleteClient' , function(){
             $scope.streamMap = Stream.getClientStreamMap();
+            $scope.closeOwnStream();
         });
 
         $scope.$on('StreamAddClientToConference' , function(){
@@ -44,7 +60,9 @@ angular.module('unchatbar').controller('stream', ['$scope', 'Stream',
 
         $scope.$on('StreamDeleteClientToConference' , function(){
             $scope.streamConferenceMap = Stream.getConferenceClientsMap();
+            $scope.closeOwnStream();
         });
+
 
     }
 ]);

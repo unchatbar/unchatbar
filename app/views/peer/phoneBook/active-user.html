@@ -1,0 +1,39 @@
+<div data-ng-init="getClientAndGroups()">
+
+    <div data-ng-show="selectedUser">
+
+        <i data-ng-click="offcanvas=!offcanvas" class="fa fa-user fa-4x"></i>
+        <p>{{clientMap[selectedUser].label}}</p>
+        <hr>
+        <div class="btn btn-success call" data-ng-click="streamToClient(selectedUser)">
+            <i class="fa fa-phone fa-3x"></i>single call
+        </div>
+
+        <div class="btn btn-success call" data-ng-click="removeClient(selectedUser)">
+            <i class=" fa fa-trash fa-3x"></i>
+        </div>
+
+    </div>
+    <div data-ng-show="selectedGroup">
+        <i data-ng-click="offcanvas=!offcanvas" class="fa fa-users fa-4x"></i>
+        <p>{{groupMap[selectedGroup].label}}</p>
+        <hr>
+        <div class="btn btn-success call" data-ng-click="streamToConferenceByGroupId(selectedGroup)">
+            <i class="fa fa-phone fa-3x"></i>
+        </div>
+
+        <div class="btn btn-success call" data-ng-click="removeGroup(selectedGroup)">
+            <i class=" fa fa-trash fa-3x"></i>
+        </div>
+        <div class="btn btn-success call" ng-if="groupMap[selectedGroup].editable === true">
+                        <span  ng-dropdown-multiselect=""
+                               extra-settings="{showCheckAll:false,showUncheckAll : false}"
+                               events="{onItemSelect : addUserToGroup,onItemDeselect : removeUserFromGroup}"
+                               options="clientMap | filter:ownPeerId"
+                               translation-texts="{buttonDefaultText: group.label,dynamicButtonTextSuffix: 'users'}"
+                               selected-model="groupMap[selectedGroup].users"></span>
+        </div>
+
+    </div>
+
+</div>

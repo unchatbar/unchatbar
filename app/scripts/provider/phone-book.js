@@ -82,8 +82,11 @@ angular.module('unchatbar')
                             api.updateClient(data.peerId, data.message.profile.label || '');
                         });
 
+                        $rootScope.$on('ConnectionGetMessageupdateUserGroup', function (event, data) {
+                            api.copyGroupFromPartner(data.message.group.id,data.message.group);
+                        });
                         $rootScope.$on('ConnectionGetMessageremoveGroup', function (event, data) {
-                            api.removeGroup(data.message.id);
+                            api._removeGroupByClient(data.peerId,data.message.roomId);
                         });
                     },
 
@@ -118,12 +121,15 @@ angular.module('unchatbar')
                      *
                      */
                     addClient: function (id, profile) {
-                        if(!this._storagePhoneBook.user[id]) {
+                        var addUser = false;
+                        if(!this._storagePhoneBook.user[id] &&
+                            id !== Broker.getPeerId()) {
                             profile.id = id;
                             this._storagePhoneBook.user[id] = profile;
+                            addUser = true;
                         }
-
                         this._sendUpdateEvent();
+                        return addUser;
 
                     },
 
@@ -203,10 +209,22 @@ angular.module('unchatbar')
                      *
                      */
                     copyGroupFromPartner: function (id, option) {
-
-                        option.editable = false;
-                        this._storagePhoneBook.groups[id] = option;
-                        this._sendUpdateEvent();
+                        if (_.findIndex(option.users,{id: Broker.getPeerId()}) !== -1) {
+                            option.editable = false;
+                            this._storagePhoneBook.groups[id] = option;
+                            _.forEach(this._storagePhoneBook.groups[id].users, function(user){
+                                if(Broker.getPeerId() !== user.id &&
+                                     this.addClient(user.id,{})) {
+                                    Broker.connect(user.id);
+                                }
+                            }.bind(this));
+                            this._sendUpdateEvent();
+                        } else {
+                            if(this._storagePhoneBook.groups[id]) {
+                                delete this._storagePhoneBook.groups[id];
+                                this._sendUpdateEvent();
+                            }
+                        }
                     },
 
                     /**
@@ -214,14 +232,14 @@ angular.module('unchatbar')
                      * @name addGroup
                      * @methodOf unchatbar.PhoneBook
                      * @params {String} name name of group
-                     * @paranm {String} user user on group
                      * @description
                      *
-                     * add new client
+                     * add new group
                      *
                      */
-                    addGroup: function (name, user) {
+                    addGroup: function (name) {
                         var peerId = Broker.getPeerId();
+                        var user = [{id : Broker.getPeerId()}];
                         if (peerId) {
                             var id = this.createNewGroupId();
                             this._storagePhoneBook.groups[id] = {
@@ -232,6 +250,22 @@ angular.module('unchatbar')
                                 id: id
                             };
                         }
+                        this._sendUpdateEvent();
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name updateGroup
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} id id from group
+                     * @paranm {Object} option group options
+                     * @description
+                     *
+                     * update group, only local group update
+                     *
+                     */
+                    updateGroup: function (id, option) {
+                        this._storagePhoneBook.groups[id] = option;
                         this._sendUpdateEvent();
                     },
 
@@ -278,6 +312,29 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
+                     * @name _removeGroupByClient
+                     * @methodOf unchatbar.PhoneBook
+                     * @params {String} clientPeer client peer id
+                     * @params {String} roomId id of room
+                     * @description
+                     *
+                     * remove group from phone book only run by remove event from other clients
+                     *
+                     */
+                    _removeGroupByClient: function (clientPeer,roomId) {
+                        if (this._storagePhoneBook.groups[roomId].owner === clientPeer) {
+                            delete this._storagePhoneBook.groups[roomId];
+                        } else {
+                            var userIndex = _.findIndex(this._storagePhoneBook.groups[roomId].users,{id : clientPeer});
+                            if(userIndex !== -1) {
+                                this._storagePhoneBook.groups[roomId].users.splice(userIndex, 1);
+                            }
+                        }
+                        this._sendUpdateEvent();
+                    },
+
+                    /**
+                     * @ngdoc methode
                      * @name getGroupMap
                      * @methodOf unchatbar.PhoneBook
                      * @return {Object} get a map of all groups from phonebook
@@ -287,7 +344,7 @@ angular.module('unchatbar')
                      *
                      */
                     getGroupMap: function () {
-                        return this._storagePhoneBook.groups;
+                        return _.cloneDeep(this._storagePhoneBook.groups);
                     },
 
                     /**

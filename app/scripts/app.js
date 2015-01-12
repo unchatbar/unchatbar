@@ -8,4 +8,11 @@
  *
  * Main module of the application.
  */
-angular.module('unchatbar', ['constants','cgNotify','ngStorage','ui.bootstrap','angularjs-dropdown-multiselect']);
+angular.module('unchatbar', [
+    'constants',
+    'cgNotify',
+    'ngStorage',
+    'ui.router',
+    'ui.bootstrap',
+    'angularjs-dropdown-multiselect'
+]);

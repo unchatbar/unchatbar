@@ -13,13 +13,16 @@
     "start": "node_modules/.bin/peerjs --port 9000 --key peerjs"
   },
   "dependencies": {
+    "connect-modrewrite": "^0.7.9",
     "express": "^4.10.6",
+    "express-spa-router": "0.0.8",
     "gzippo": "^0.2.0",
     "morgan": "^1.5.0",
     "peer": "^0.2.8"
   },
   "devDependencies": {
     "grunt": "0.4.2",
+    "grunt-angular-templates": "^0.5.7",
     "grunt-autoprefixer": "^0.7.3",
     "grunt-concurrent": "^0.5.0",
     "grunt-contrib-clean": "^0.5.0",

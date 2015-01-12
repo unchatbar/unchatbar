@@ -37,17 +37,8 @@ describe('Controller: profile', function () {
             beforeEach(function(){
                 spyOn(profileService,'get').and.returnValue({name:'test'});
             });
-            it('should set `$scope.showName` to false' , function(){
-                scope.showName = true;
-
-                scope.init();
-
-                expect(scope.showName).toBeFalsy();
-            });
-
-            it('should set return of `Profile.get` to `$scope.profile`' , function(){
-                scope.showName = true;
-
+            it('should set return value from `Profile.get` to `$scope.profile`' , function(){
+                scope.profile = {};
                 scope.init();
 
                 expect(scope.profile).toEqual({name:'test'});
@@ -59,13 +50,7 @@ describe('Controller: profile', function () {
                 spyOn(profileService,'get').and.returnValue({name:'test'});
                 spyOn(profileService,'set').and.returnValue(true);
             });
-            it('should set `$scope.showName` to false' , function(){
-                scope.showName = true;
 
-                scope.update();
-
-                expect(scope.showName).toBeFalsy();
-            });
 
             it('should call `Profile.set` with `$scope.profile`' , function(){
                 scope.showName = true;
@@ -82,6 +67,7 @@ describe('Controller: profile', function () {
 
                 expect(scope.profile).toEqual({name:'test'});
             });
+
         });
 
     });

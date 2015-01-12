@@ -22,7 +22,6 @@ angular.module('unchatbar').directive('clientStream', ['Stream','PhoneBook',
 
             },
             link : function(scope){
-
                 function getClientStream () {
                     if (scope.type === 'conference') {
                         return Stream.getConferenceClient(scope.streamId);

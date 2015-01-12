@@ -5,6 +5,7 @@
  * @ngdoc service
  * @name unchatbar.Connection
  * @require $rootScope
+ * @require Broker
  * @description
  *
  * Wrapper for window.peer lib
@@ -25,6 +26,7 @@ angular.module('unchatbar')
                  *
                  */
                 _connectionMap : {},
+
                 /**
                  * @ngdoc methode
                  * @name init
@@ -85,9 +87,8 @@ angular.module('unchatbar')
                  *
                  */
                 _add: function (connection) {
-                    this._connectionMap[connection.peer] = connection;
-
                     connection.on('open', function () {
+                        api._connectionMap[this.peer] = this;
                         /**
                          * @ngdoc event
                          * @name ConnectionOpen

@@ -96,6 +96,21 @@ angular.module('unchatbar')
                     _storage : {
                       peerId : ''
                     },
+
+                    /**
+                     * @ngdoc methode
+                     * @name init
+                     * @methodOf unchatbar.Broker
+                     * @return {String} own peer id
+                     * @description
+                     *
+                     * init Broker
+                     *
+                     */
+                    init : function() {
+                        this._initStorage();
+                    },
+
                     /**
                      * @ngdoc methode
                      * @name connectServer
@@ -106,7 +121,6 @@ angular.module('unchatbar')
                      *
                      */
                     connectServer: function () {
-                        this._initStorage();
                         peerService.init(this._storage.peerId, {host: host, port: port, path: path});
                         this._peerListener();
                         BrokerHeartbeat.start();
@@ -145,7 +159,20 @@ angular.module('unchatbar')
                         return peerService.get().call(id,stream,{metadata:metaData});
                     },
 
-
+                    /**
+                     * @ngdoc methode
+                     * @name setPeerId
+                     * @methodOf unchatbar.Broker
+                     * @params {String} peerId peerId
+                     * @return {String} own peer id
+                     * @description
+                     *
+                     * set peer id
+                     *
+                     */
+                    setPeerId : function (peerId) {
+                        api._storage.peerId = peerId;
+                    },
                     /**
                      * @ngdoc methode
                      * @name getPeerId
@@ -158,6 +185,20 @@ angular.module('unchatbar')
                      */
                     getPeerId: function () {
                         return peerService.get().id || '';
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name getPeerIdFromStorage
+                     * @methodOf unchatbar.Broker
+                     * @return {String} own peer id
+                     * @description
+                     *
+                     * get peer id from storage
+                     *
+                     */
+                    getPeerIdFromStorage: function () {
+                        return this._storage.peerId;
                     },
 
                     /**
@@ -219,7 +260,7 @@ angular.module('unchatbar')
                      */
                     _onOpen : function (peerId) {
                         $rootScope.$apply(function () {
-                            api._storage.peerId = peerId;
+                            api.setPeerId(peerId);
                             /**
                              * @ngdoc event
                              * @name BrokerPeerOpen
