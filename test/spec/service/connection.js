@@ -35,19 +35,21 @@ describe('Serivce: Connection', function () {
                 ConnectionService._add(connection);
             });
 
-            it('should store connection in _connectionMap' , function(){
-                expect(ConnectionService._connectionMap).toEqual(
-                    {peerId: {
-                        peer : 'peerId',
-                        on : jasmine.any(Function)
-                    }}
-                );
-            });
+
 
             describe('listener `open`', function () {
+
                 it('should call ConnectionService.on with param `open`', function () {
                     expect(connection.on).toHaveBeenCalledWith('open', jasmine.any(Function));
                 });
+
+                it('should store connection in _connectionMap' , function(){
+                    peerCallBack.open('newPeerId');
+                    expect(ConnectionService._connectionMap).toEqual(
+                        {peerId: peerCallBack}
+                    );
+                });
+
                 it('should broadcast connection open', function () {
                     peerCallBack.open('newPeerId');
                     expect(rootScope.$broadcast).toHaveBeenCalledWith('ConnectionOpen', {peerId: 'peerId'});

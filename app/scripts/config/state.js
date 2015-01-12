@@ -39,7 +39,6 @@ angular.module('unchatbar')
                 .state('chat.group', {
                     url: '/group/{groupId}',
                     parent: 'chat'
-
                 })
                 .state('chat.profile', {
                     url: '/profile',

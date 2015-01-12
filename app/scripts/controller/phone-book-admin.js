@@ -54,14 +54,6 @@ angular.module('unchatbar').controller('phoneBookAdmin', [
         $scope.groupMap = {};
 
         /**
-         * @ngdoc property
-         * @name newGroupName
-         * @propertyOf unchatbar.controller:phoneBookAdmin
-         * @returns {Object} name of new group
-         */
-        $scope.newGroupName = '';
-
-        /**
          * @ngdoc methode
          * @name removeClient
          * @methodOf unchatbar.controller:phoneBookAdmin

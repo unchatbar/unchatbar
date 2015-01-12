@@ -121,12 +121,15 @@ angular.module('unchatbar')
                      *
                      */
                     addClient: function (id, profile) {
-                        if(!this._storagePhoneBook.user[id]) {
+                        var addUser = false;
+                        if(!this._storagePhoneBook.user[id] &&
+                            id !== Broker.getPeerId()) {
                             profile.id = id;
                             this._storagePhoneBook.user[id] = profile;
+                            addUser = true;
                         }
-
                         this._sendUpdateEvent();
+                        return addUser;
 
                     },
 
@@ -206,9 +209,15 @@ angular.module('unchatbar')
                      *
                      */
                     copyGroupFromPartner: function (id, option) {
-                        if (_.findIndex(option.users,{id:   Broker.getPeerId()}) !== -1) {
+                        if (_.findIndex(option.users,{id: Broker.getPeerId()}) !== -1) {
                             option.editable = false;
                             this._storagePhoneBook.groups[id] = option;
+                            _.forEach(this._storagePhoneBook.groups[id].users, function(user){
+                                if(Broker.getPeerId() !== user.id &&
+                                     this.addClient(user.id,{})) {
+                                    Broker.connect(user.id);
+                                }
+                            }.bind(this));
                             this._sendUpdateEvent();
                         } else {
                             if(this._storagePhoneBook.groups[id]) {
@@ -223,14 +232,14 @@ angular.module('unchatbar')
                      * @name addGroup
                      * @methodOf unchatbar.PhoneBook
                      * @params {String} name name of group
-                     * @paranm {String} user user on group
                      * @description
                      *
-                     * add new client
+                     * add new group
                      *
                      */
-                    addGroup: function (name, user) {
+                    addGroup: function (name) {
                         var peerId = Broker.getPeerId();
+                        var user = [{id : Broker.getPeerId()}];
                         if (peerId) {
                             var id = this.createNewGroupId();
                             this._storagePhoneBook.groups[id] = {

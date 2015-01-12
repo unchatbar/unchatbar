@@ -87,9 +87,8 @@ angular.module('unchatbar')
                  *
                  */
                 _add: function (connection) {
-                    this._connectionMap[connection.peer] = connection;
-
                     connection.on('open', function () {
+                        api._connectionMap[this.peer] = this;
                         /**
                          * @ngdoc event
                          * @name ConnectionOpen

@@ -4,10 +4,11 @@ describe('Controller: phoneBook', function () {
 
     beforeEach(module('unchatbar'));
 
-    var phoneBookCTRL, StreamService, stateParams, scope, PhoneBookService, MessageTextService, modal;
+    var phoneBookCTRL, BrokerService, StreamService, stateParams, scope, PhoneBookService, MessageTextService, modal;
 
-    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook, Stream, $modal) {
+    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook, Stream, $modal, Broker) {
         PhoneBookService = PhoneBook;
+        BrokerService = Broker;
         StreamService = Stream;
         stateParams = {};
         modal = $modal;
@@ -26,9 +27,12 @@ describe('Controller: phoneBook', function () {
 
     describe('check init', function () {
         beforeEach(function () {
+            spyOn(BrokerService,'getPeerId').and.returnValue('ownPeerId');
             phoneBookCTRL();
         });
-
+        it('should set `$scope.ownPeerId` to return value from `Broker.getPeerId`', function () {
+            expect(scope.ownPeerId).toBe('ownPeerId');
+        });
         it('should set `$scope.clientMap` to empty object', function () {
             expect(scope.clientMap).toEqual({});
         });
@@ -89,7 +93,7 @@ describe('Controller: phoneBook', function () {
                 scope.form.newGroupName = 'newGroup';
                 scope.createGroup();
 
-                expect(PhoneBookService.addGroup).toHaveBeenCalledWith('newGroup', []);
+                expect(PhoneBookService.addGroup).toHaveBeenCalledWith('newGroup');
             });
             it('should set `$scope.newGroupName` to empty string', function () {
                 scope.form.newGroupName = 'test';

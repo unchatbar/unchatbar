@@ -29,8 +29,8 @@
                         <span  ng-dropdown-multiselect=""
                                extra-settings="{showCheckAll:false,showUncheckAll : false}"
                                events="{onItemSelect : addUserToGroup,onItemDeselect : removeUserFromGroup}"
-                               options="clientMap"
-                               translation-texts="{buttonDefaultText: group.label,dynamicButtonTextSuffix: 'users in'+ group.label}"
+                               options="clientMap | filter:ownPeerId"
+                               translation-texts="{buttonDefaultText: group.label,dynamicButtonTextSuffix: 'users'}"
                                selected-model="groupMap[selectedGroup].users"></span>
         </div>
 

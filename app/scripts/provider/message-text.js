@@ -83,7 +83,7 @@ angular.module('unchatbar')
                             this._sendFromQueue(data.peerId);
                         }.bind(this));
                         $rootScope.$on('ConnectionGetMessagetextMessage', function (event, data) {
-                            this._addStoStorage(data.message.group.id || data.peerId, data.peerId, data.message);
+                            this._addStoStorage(data.message.groupId || data.peerId, data.peerId, data.message);
                         }.bind(this));
                     },
 
@@ -211,12 +211,6 @@ angular.module('unchatbar')
                             action: 'removeGroup',
                             roomId: roomId
                         };
-                        if (PhoneBook.getGroup(roomId).owner !== Broker.getPeerId()) {
-                            if (Connection.send(PhoneBook.getGroup(roomId).owner, message) === false) {
-                                this._addToQueue(PhoneBook.getGroup(roomId).owner, message);
-                            }
-
-                        }
                         _.forEach(groupUsers, function (user) {
                             if (Broker.getPeerId() !== user.id) {
                                 if (Connection.send(user.id, message) === false) {
@@ -259,21 +253,15 @@ angular.module('unchatbar')
                      *
                      */
                     _addStoStorage: function (roomId, from, message) {
-
                         if (!this._storageMessages.messages[roomId]) {
                             this._storageMessages.messages[roomId] = [];
                         }
-                        message.group = message.group || {};
                         this._storageMessages.messages[roomId].push({
                             text: message.text,
                             user: from,
-                            group: message.group,
                             own: message.own
                         });
-                        //WTF
-                        if (message.group.owner && message.group.owner === from) {
-                            PhoneBook.copyGroupFromPartner(message.group.id, message.group);
-                        }
+
                         /**
                          * @ngdoc event
                          * @name MessageTextGetMessage
@@ -303,7 +291,6 @@ angular.module('unchatbar')
                         var message = {
                             action: 'textMessage',
                             from: Broker.getPeerId(),
-                            group: '',
                             text: text
                         };
                         if (Connection.send(this._selectedRoom.id, message) === false) {
@@ -329,18 +316,13 @@ angular.module('unchatbar')
                             message = {
                                 action: 'textMessage',
                                 from: Broker.getPeerId(),
-                                group: group || {},
+                                groupId: group.id,
                                 text: text
                             };
-                        if (group.owner !== Broker.getPeerId()) {
-                            if (Connection.send(group.owner, message) === false) {
-                                this._addToQueue(group.owner, message);
-                            }
-
-                        }
                         _.forEach(group.users, function (user) {
-                            if (Connection.send(user.id, message) === false) {
-                                this._addToQueue(user.id, message);
+                            if (user.id !== Broker.getPeerId() &&
+                                Connection.send(user.id, message) === false) {
+                                    this._addToQueue(user.id, message);
                             }
                         }.bind(this));
                         return message;

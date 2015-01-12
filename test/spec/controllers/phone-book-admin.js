@@ -39,9 +39,6 @@ describe('Controller: phoneBook', function () {
             expect(scope.groupMap).toEqual({});
         });
 
-        it('should set `$scope.selectedUser` to empty string', function () {
-            expect(scope.newGroupName).toBe('');
-        });
     });
     describe('check methode', function () {
         describe('getClientAndGroups', function () {

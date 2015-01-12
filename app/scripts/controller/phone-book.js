@@ -7,13 +7,14 @@
  * @require $stateParams
  * @require MessageText
  * @require PhoneBook
+ * @require Broker
  * @description
  *
  * select client/room for connection
  *
  */
-angular.module('unchatbar').controller('phoneBook', ['$scope', '$stateParams','MessageText', 'PhoneBook',
-    function ($scope,$stateParams, MessageText, PhoneBook) {
+angular.module('unchatbar').controller('phoneBook', ['$scope', '$stateParams','MessageText', 'PhoneBook','Broker',
+    function ($scope,$stateParams, MessageText, PhoneBook, Broker) {
         $scope.form = {};
         /**
          * @ngdoc property
@@ -48,6 +49,14 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$stateParams','M
          * @returns {String} name of group
          */
         $scope.selectedGroup = '';
+
+        /**
+         * @ngdoc property
+         * @name ownPeerId
+         * @propertyOf unchatbar.controller:phoneBook
+         * @returns {String} own peer id
+         */
+        $scope.ownPeerId = Broker.getPeerId();
 
         /**
          * @ngdoc methode
@@ -117,7 +126,7 @@ angular.module('unchatbar').controller('phoneBook', ['$scope', '$stateParams','M
          *
          */
         $scope.createGroup = function () {
-            PhoneBook.addGroup($scope.form.newGroupName, []);
+            PhoneBook.addGroup($scope.form.newGroupName);
             $scope.form.newGroupName = '';
         };
 
