@@ -195,6 +195,33 @@ describe('Serivce: Profile', function () {
             });
         });
 
+        describe('closeAllOwnMedia', function () {
+            var stream;
+            beforeEach(function(){
+                stream = {stop: function(){}};
+                StreamService._stream.ownStream = {own: stream};
+                spyOn(stream,'stop').and.returnValue(true);
+                spyOn(rootScope,'$broadcast').and.returnValue(true);
+            });
+            it('should call `stop` for all own stream', function () {
+                StreamService.closeAllOwnMedia();
+
+                expect(stream.stop).toHaveBeenCalled();
+            });
+
+            it('should remove stream from storage', function () {
+                StreamService.closeAllOwnMedia();
+
+                expect(StreamService._stream.ownStream ).toEqual({});
+            });
+
+            it('should broadcast `StreamCloseOwn` on rootscope', function () {
+                StreamService.closeAllOwnMedia();
+
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('StreamCloseOwn',{});
+            });
+        });
+
         describe('getConferenceClientsMap', function () {
             it('should return value from `Stream._stream.stream.conference`', function () {
                 StreamService._stream.stream.conference = 'streamMap';

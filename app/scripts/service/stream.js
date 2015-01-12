@@ -172,6 +172,33 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
+                 * @name closeAllOwnMedia
+                 * @methodOf unchatbar.Stream
+                 * @returns {Object} own stream
+                 * @description
+                 *
+                 * close all won media streams
+                 *
+                 */
+                closeAllOwnMedia :function(){
+                    _.forEach(this._stream.ownStream,function(stream,key){
+                        stream.stop();
+                        delete this._stream.ownStream[key];
+                    }.bind(this));
+                    /**
+                     * @ngdoc event
+                     * @name StreamCloseOwn
+                     * @eventOf unchatbar.Stream
+                     * @eventType broadcast on root scope
+                     * @description
+                     *
+                     * all own streams are closed
+                     *
+                     */
+                    $rootScope.$broadcast('StreamCloseOwn', {});
+                },
+                /**
+                 * @ngdoc methode
                  * @name _onBrokerCall
                  * @methodOf unchatbar.Stream
                  * @params {Object} connection connection
