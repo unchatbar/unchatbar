@@ -19,7 +19,7 @@ describe('Serivce: MessageText', function () {
             beforeEach(function () {
                 spyOn(MessageTextService, '_initStorage').and.returnValue(true);
                 spyOn(MessageTextService, '_sendFromQueue').and.returnValue(true);
-                spyOn(MessageTextService, '_addStoStorage').and.returnValue(true);
+                spyOn(MessageTextService, '_addToInbox').and.returnValue(true);
                 MessageTextService.init();
             });
             it('should call `MessageText._initStorage`', function () {
@@ -46,7 +46,7 @@ describe('Serivce: MessageText', function () {
             });
 
             describe('ConnectionGetMessagetextMessage', function () {
-                it('should call `MessageText._addStoStorage` after event `onnection:getMessage:textMessage` with eventdata `message.group.id`', function () {
+                it('should call `MessageText._addToInbox` after event `onnection:getMessage:textMessage` with eventdata `message.group.id`', function () {
                     rootScope.$broadcast('ConnectionGetMessagetextMessage',
                         {
                             peerId: 'userId',
@@ -56,13 +56,13 @@ describe('Serivce: MessageText', function () {
                             }
                         }
                     );
-                    expect(MessageTextService._addStoStorage).toHaveBeenCalledWith('groupId', 'userId', {
+                    expect(MessageTextService._addToInbox).toHaveBeenCalledWith('groupId', 'userId', {
                         id: 'uuid',
                         groupId: 'groupId'
 
                     });
                 });
-                it('should call `MessageText._addStoStorage` after event `onnection:getMessage:textMessage` with eventdata `peerId`', function () {
+                it('should call `MessageText._addToInbox` after event `onnection:getMessage:textMessage` with eventdata `peerId`', function () {
                     rootScope.$broadcast('ConnectionGetMessagetextMessage',
                         {
                             peerId: 'userId',
@@ -72,7 +72,7 @@ describe('Serivce: MessageText', function () {
                             }
                         }
                     );
-                    expect(MessageTextService._addStoStorage).toHaveBeenCalledWith('userId', 'userId', {
+                    expect(MessageTextService._addToInbox).toHaveBeenCalledWith('userId', 'userId', {
                             id: 'uuid',
                             text: 'groupId'
                         }
@@ -92,6 +92,7 @@ describe('Serivce: MessageText', function () {
                 expect(sessionStorage.$default).toHaveBeenCalledWith({
                     message: {
                         messages: {},
+                        messageInbox : {},
                         queue: {}
                     }
                 });
@@ -141,15 +142,32 @@ describe('Serivce: MessageText', function () {
 
         });
         describe('getMessageList', function () {
+            beforeEach(function(){
+               spyOn(MessageTextService,'_moveFromInboxToMessageStorage').and.returnValue(true);
+            });
+            it('should call `MessageText._moveFromInboxToMessageStorage` with selected room', function () {
+                MessageTextService._selectedRoom = {id: 'roomId'};
+                MessageTextService.getMessageList();
+                expect(MessageTextService._moveFromInboxToMessageStorage).toHaveBeenCalledWith('roomId');
+            });
             it('should return object from `_storageMessages.messages`', function () {
                 MessageTextService._storageMessages.messages = {
                     'Id1': 'testData1',
                     'Id2': 'testData2'
-
                 };
                 MessageTextService._selectedRoom = {id: 'Id2'};
 
                 expect(MessageTextService.getMessageList()).toBe('testData2');
+            });
+        });
+
+        describe('getMessageInbox', function () {
+
+            it('should return object from `_storageMessages.messages`', function () {
+                MessageTextService._storageMessages.messageInbox ={data : 'test'};
+                MessageTextService._selectedRoom = {id: 'Id2'};
+
+                expect(MessageTextService.getMessageInbox()).toEqual({data : 'test'});
             });
         });
 
@@ -346,15 +364,75 @@ describe('Serivce: MessageText', function () {
                     }
                 );
             });
+        });
 
-            it('should broadcast `MessageTextGetMessage`', function () {
-                spyOn(rootScope, '$broadcast').and.returnValue(true);
-                MessageTextService._addStoStorage('roomId', 'fromUser', {
+        describe('_addToInbox', function () {
+            it('should push _storageMessages.messages[roomId] with message', function () {
+                MessageTextService._storageMessages.messageInbox = {};
+                MessageTextService._addToInbox('roomId', 'fromUser', {
                     text: 'testText',
                     own: 'ownMessage'
                 });
 
-                expect(rootScope.$broadcast).toHaveBeenCalledWith('MessageTextGetMessage');
+                expect(MessageTextService._storageMessages.messageInbox).toEqual(
+                    {
+                        roomId: [
+                            {
+                                text: 'testText',
+                                user: 'fromUser',
+                                own: 'ownMessage'
+                            }
+                        ]
+                    }
+                );
+            });
+
+            it('should broadcast `MessageTextGetMessage` with isRoomVisible false', function () {
+                spyOn(rootScope, '$broadcast').and.returnValue(true);
+                MessageTextService._selectedRoom.id = 'otherRoomId';
+                MessageTextService._addToInbox('roomId', 'fromUser', {
+                    text: 'testText',
+                    own: 'ownMessage'
+                });
+
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('MessageTextGetMessage',{isRoomVisible : false});
+            });
+
+            it('should broadcast `MessageTextGetMessage` with isRoomVisible true', function () {
+                spyOn(rootScope, '$broadcast').and.returnValue(true);
+                MessageTextService._selectedRoom.id = 'roomId';
+                MessageTextService._addToInbox('roomId', 'fromUser', {
+                    text: 'testText',
+                    own: 'ownMessage'
+                });
+
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('MessageTextGetMessage',{isRoomVisible : true});
+            });
+        });
+
+        describe('_moveFromInboxToMessageStorage', function () {
+            beforeEach(function(){
+                MessageTextService._storageMessages.messageInbox = {
+                    'roomId': [{user:'userId',text:'message'}]
+                };
+                spyOn(MessageTextService,'_addStoStorage').and.returnValue(true);
+                spyOn(rootScope,'$broadcast').and.returnValue(true);
+                MessageTextService._moveFromInboxToMessageStorage('roomId');
+            });
+           it('should call `MessageText._addStoStorage` with roomId, userId and message '  ,function(){
+              expect(MessageTextService._addStoStorage).toHaveBeenCalledWith(
+                  'roomId',
+                  'userId',
+                  {user:'userId',text:'message'}
+              );
+           });
+
+           it('should removemessageInbox ', function () {
+                expect(MessageTextService._storageMessages.messageInbox).toEqual({});
+           });
+
+            it('should broadcast `MessageTextMoveToStorage` ', function () {
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('MessageTextMoveToStorage',{});
             });
         });
 

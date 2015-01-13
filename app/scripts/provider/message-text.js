@@ -65,6 +65,7 @@ angular.module('unchatbar')
                      */
                     _storageMessages: {
                         messages: {},
+                        messageInbox : {},
                         queue: {}
                     },
 
@@ -83,12 +84,13 @@ angular.module('unchatbar')
                             api._sendFromQueue(data.peerId);
                         });
                         $rootScope.$on('ConnectionGetMessagetextMessage', function (event, data) {
-                            api._addStoStorage(data.message.groupId || data.peerId, data.peerId, data.message);
+                            api._addToInbox(data.message.groupId || data.peerId, data.peerId, data.message);
                         });
                         $rootScope.$on('ConnectionGetMessagereadMessage', function (event, data) {
                             api._removeFromQueue(data.peerId,data.message.id);
                         });
                     },
+
 
                     /**
                      * @ngdoc methode
@@ -146,7 +148,22 @@ angular.module('unchatbar')
                      *
                      */
                     getMessageList: function () {
+                        this._moveFromInboxToMessageStorage(this._selectedRoom.id);
                         return this._storageMessages.messages[this._selectedRoom.id] || [];
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name getMessageInbox
+                     * @methodOf unchatbar.MessageText
+                     * @returns {Array} list of all messages
+                     * @description
+                     *
+                     * get onbox List
+                     *
+                     */
+                    getMessageInbox: function () {
+                        return this._storageMessages.messageInbox;
                     },
 
                     /**
@@ -237,6 +254,7 @@ angular.module('unchatbar')
                         this._storageMessages = storage.$default({
                             message: {
                                 messages: {},
+                                messageInbox : {},
                                 queue: {}
                             }
                         }).message;
@@ -264,7 +282,30 @@ angular.module('unchatbar')
                             user: from,
                             own: message.own
                         });
+                    },
 
+                    /**
+                     * @ngdoc methode
+                     * @name _addToInbox
+                     * @methodOf unchatbar.MessageText
+                     * @private
+                     * @params {String} roomId id of room clientId or userId
+                     * @params {String} from message from
+                     * @params {Object} message message
+                     * @description
+                     *
+                     * store message in storage inbox
+                     *
+                     */
+                    _addToInbox : function(roomId, from, message) {
+                        if (!this._storageMessages.messageInbox[roomId]) {
+                            this._storageMessages.messageInbox[roomId] = [];
+                        }
+                        this._storageMessages.messageInbox[roomId].push({
+                            text: message.text,
+                            user: from,
+                            own: message.own
+                        });
                         /**
                          * @ngdoc event
                          * @name MessageTextGetMessage
@@ -275,7 +316,40 @@ angular.module('unchatbar')
                          * new message added
                          *
                          */
-                        $rootScope.$broadcast('MessageTextGetMessage');
+                        $rootScope.$broadcast('MessageTextGetMessage',{isRoomVisible : roomId === this._selectedRoom.id });
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _moveFromInboxToMessageStorage
+                     * @methodOf unchatbar.MessageText
+                     * @private
+                     * @params {String} roomId to move
+                     * @description
+                     *
+                     * move messages from inbox to messages storage
+                     *
+                     */
+                    _moveFromInboxToMessageStorage : function(roomId) {
+                        if (this._storageMessages.messageInbox[roomId]) {
+                            _.forEach(this._storageMessages.messageInbox[roomId], function(message){
+                                api._addStoStorage(roomId,message.user,message);
+                            }.bind(this));
+                            delete this._storageMessages.messageInbox[roomId];
+                            /**
+                             * @ngdoc event
+                             * @name MessageTextSetRoom
+                             * @eventOf unchatbar.MessageText
+                             * @eventType broadcast on root scope
+                             * @description
+                             *
+                             * Broadcasted after active chatroom set
+                             *
+                             */
+                            $rootScope.$broadcast('MessageTextMoveToStorage', {});
+                        }
+
+
                     },
 
                     /**
