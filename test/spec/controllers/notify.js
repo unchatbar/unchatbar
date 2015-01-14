@@ -4,12 +4,12 @@ describe('Controller: notify', function () {
 
     beforeEach(module('unchatbar'));
 
-    var notifyCTRL, scope, messageTextService;
+    var notifyCTRL, scope, messageTextService, PhoneBookService;
 
-    beforeEach(inject(function ($controller, $rootScope, MessageText) {
+    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook) {
         messageTextService = MessageText;
         scope = $rootScope.$new();
-
+        PhoneBookService = PhoneBook;
         notifyCTRL = function () {
             $controller('notify', {
                 $scope: scope,
@@ -32,6 +32,38 @@ describe('Controller: notify', function () {
     });
 
     describe('check methode', function () {
+        describe('getClient', function () {
+            beforeEach(function(){
+                notifyCTRL();
+                spyOn(PhoneBookService, 'getClient').and.returnValue({label: 'test'});
+            });
+            it('should call `PhoneBook.getClient` with `peerId` ', function () {
+                scope.getClient('peerId');
+
+                expect(PhoneBookService.getClient).toHaveBeenCalledWith('peerId');
+            });
+
+            it('should return object from `PhoneBook.getClient` ', function () {
+                expect(scope.getClient('peerId')).toEqual({label: 'test'});
+            });
+        });
+
+        describe('getGroup', function () {
+            beforeEach(function(){
+                notifyCTRL();
+                spyOn(PhoneBookService, 'getGroup').and.returnValue({label: 'testGroup'});
+            });
+            it('should call `PhoneBook.getClient` with `peerId` ', function () {
+                scope.getGroup('groupId');
+
+                expect(PhoneBookService.getGroup).toHaveBeenCalledWith('groupId');
+            });
+
+            it('should return object from `PhoneBook.getClient` ', function () {
+                expect(scope.getGroup('groupId')).toEqual({label: 'testGroup'});
+            });
+        });
+
         describe('getUnreadMessages', function () {
             beforeEach(function () {
                 notifyCTRL();

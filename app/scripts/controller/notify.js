@@ -4,15 +4,15 @@
  * @ngdoc controller
  * @name  unchatbar.controller:notify
  * @require $scope
- * @require Profile
- * @require Broker
+ * @require MessageText
+ * @require PhoneBook
  * @description
  *
  * login to peer
  *
  */
-angular.module('unchatbar').controller('notify', ['$scope', 'MessageText',
-    function ($scope, MessageText) {
+angular.module('unchatbar').controller('notify', ['$scope', 'MessageText','PhoneBook',
+    function ($scope, MessageText, PhoneBook) {
         /**
          * @ngdoc property
          * @name unreadMessages
@@ -45,6 +45,39 @@ angular.module('unchatbar').controller('notify', ['$scope', 'MessageText',
                 $scope.countUnreadMessages+=parseInt(_.size(room));
             });
         };
+
+        /**
+         * @ngdoc methode
+         * @name getClient
+         * @methodOf unchatbar.controller:notify
+         * @params {String} clientId id of client
+         * @returns {Object} client object
+         * @description
+         *
+         * get cient object
+         *
+         */
+        $scope.getClient = function (clientId) {
+            return PhoneBook.getClient(clientId);
+        };
+
+        /**
+         * @ngdoc methode
+         * @name getGroup
+         * @methodOf unchatbar.controller:notify
+         * @params {String} roomId id of room
+         * @returns {String} room name
+         * @description
+         *
+         * get group name
+         *
+         */
+        $scope.getGroup = function (roomId) {
+            return PhoneBook.getGroup(roomId);
+        };
+
+
+
         $scope.$on('MessageTextGetMessage',function(){
             $scope.getUnreadMessages();
 
