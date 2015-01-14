@@ -72,7 +72,7 @@ angular.module('unchatbar')
                     }
                 },
                 _initDesktopNotification: function () {
-                    if (Notification) {
+                    if ('Notification' in window) {
                         Notification.requestPermission(function () {
                             canDesktopNotify = true;
                         });
