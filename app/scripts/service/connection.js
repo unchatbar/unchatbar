@@ -12,8 +12,8 @@
  *
  */
 angular.module('unchatbar')
-    .service('Connection', ['$rootScope',
-        function ($rootScope) {
+    .service('Connection', ['$rootScope','Broker',
+        function ($rootScope,Broker) {
 
 
             var api =  {
@@ -57,6 +57,8 @@ angular.module('unchatbar')
                 send: function (id, message) {
                     if (this._connectionMap[id]) {
                         this._connectionMap[id].send(message);
+                    } else {
+                        Broker.connect(id);
                     }
                 },
 

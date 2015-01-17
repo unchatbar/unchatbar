@@ -19,3 +19,5 @@ Peer to peer chat application using WebRTC technologies
 * Run `grunt serve` to start application server
 * Invoke application: http://localhost:8080
 * Visit documentation: http://localhost:8080/docs
+
+#config chrome android :chrome://flags/#disable-gesture-requirement-for-media-play

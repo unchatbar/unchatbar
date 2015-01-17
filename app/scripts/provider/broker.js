@@ -76,15 +76,25 @@ angular.module('unchatbar')
          * @require $rootScope
          * @require $sessionStorage
          * @require $localStorage
-         * @require BrokerHeartbeat
          * @require Peer
          * @description
          *
          * peer service
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'BrokerHeartbeat', 'Peer',
-            function ($rootScope, $localStorage, $sessionStorage, BrokerHeartbeat, peerService) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Peer',
+            function ($rootScope, $localStorage, $sessionStorage, peerService) {
+
                 var api =  {
+                    /**
+                     * @ngdoc methode
+                     * @name _brokerWorker
+                     * @propertyOf unchatbar.Broker
+                     * @private
+                     * @returns {Object} broker webworker
+                     *
+                     */
+                    _brokerWorker : null,
+
                     /**
                      * @ngdoc methode
                      * @name _storage
@@ -109,7 +119,10 @@ angular.module('unchatbar')
                      */
                     init : function() {
                         this._initStorage();
+                        this._brokerWorker = new Worker('scripts/worker/broker-worker.js');
                     },
+
+
 
                     /**
                      * @ngdoc methode
@@ -123,7 +136,7 @@ angular.module('unchatbar')
                     connectServer: function () {
                         peerService.init(this._storage.peerId, {host: host, port: port, path: path});
                         this._peerListener();
-                        BrokerHeartbeat.start();
+
                     },
 
                     /**
@@ -138,6 +151,7 @@ angular.module('unchatbar')
                      */
                     connect: function (id) {
                         var connection = peerService.get().connect(id);
+                        api._holdBrokerConnection();
                         $rootScope.$broadcast('BrokerPeerConnection', {
                             connection: connection
                         });
@@ -200,6 +214,43 @@ angular.module('unchatbar')
                     getPeerIdFromStorage: function () {
                         return this._storage.peerId;
                     },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _holdBrokerConnection
+                     * @methodOf unchatbar.Broker
+                     * @description
+                     *
+                     * hold Broker connection
+                     *
+                     */
+                    _holdBrokerConnection : function (){
+                        this._brokerWorker.addEventListener('message', function () {
+                            var isOnline = api._isBrowserOnline();
+                            if (isOnline === true &&
+                                peerService.get().socket._wsOpen()) {
+                                peerService.get().socket.send({type: 'HEARTBEAT'});
+                            } else if(isOnline === true) {
+                                    api.connectServer();
+                            }
+                        }, false);
+                        this._brokerWorker.postMessage('HEARTBEAT');
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _isBrowserOnline
+                     * @methodOf unchatbar.Broker
+                     * @returns {Boolean} navigator.onLine
+                     * @description
+                     *
+                     * helper for is browser online
+                     *
+                     */
+                    _isBrowserOnline : function() {
+                        return navigator.onLine;
+                    },
+
 
                     /**
                      * @ngdoc methode

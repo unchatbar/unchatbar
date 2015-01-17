@@ -40,8 +40,8 @@ angular.module('unchatbar')
          * store send receive text messages
          *
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker', 'PhoneBook', 'Connection',
-            function ($rootScope, $localStorage, $sessionStorage, Broker, PhoneBook, Connection) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker', 'PhoneBook', 'Connection','Notify',
+            function ($rootScope, $localStorage, $sessionStorage, Broker, PhoneBook, Connection, Notify) {
 
 
                 var api =  {
@@ -84,13 +84,13 @@ angular.module('unchatbar')
                             api._sendFromQueue(data.peerId);
                         });
                         $rootScope.$on('ConnectionGetMessagetextMessage', function (event, data) {
+                            Notify.textMessage('you have new messages');
                             api._addToInbox(data.message.groupId || data.peerId, data.peerId, data.message);
                         });
                         $rootScope.$on('ConnectionGetMessagereadMessage', function (event, data) {
                             api._removeFromQueue(data.peerId,data.message.id);
                         });
                     },
-
 
                     /**
                      * @ngdoc methode

@@ -1,13 +1,14 @@
 'use strict';
 
 describe('Serivce: Connection', function () {
-    var ConnectionService, rootScope;
+    var ConnectionService, rootScope, BrokerService;
     beforeEach(module('unchatbar'));
 
 
-    beforeEach(inject(function ($rootScope, Connection) {
+    beforeEach(inject(function ($rootScope, Connection, Broker) {
         ConnectionService = Connection;
         rootScope = $rootScope;
+        BrokerService = Broker;
     }));
 
     describe('check methode', function () {
@@ -125,11 +126,18 @@ describe('Serivce: Connection', function () {
 
             describe('connection id not exists' , function(){
                 beforeEach(function(){
+                    spyOn(BrokerService,'connect').and.returnValue(true);
                     ConnectionService._connectionMap = {};
                 });
 
-                it('should return true' , function(){
+                it('should return false' , function(){
                     expect(ConnectionService.send('peerId','myMessage')).toBeFalsy();
+                });
+
+                it('should call `Broker.connect` with peer ID' , function(){
+                    ConnectionService.send('peerId','myMessage');
+
+                    expect(BrokerService.connect).toHaveBeenCalledWith('peerId');
                 });
             });
         });

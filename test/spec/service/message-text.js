@@ -1,17 +1,18 @@
 'use strict';
 
 describe('Serivce: MessageText', function () {
-    var BrokerService, rootScope, sessionStorage, MessageTextService, PhoneBookService, ConnectionService;
+    var BrokerService, rootScope, sessionStorage,NotifyService, MessageTextService, PhoneBookService, ConnectionService;
     beforeEach(module('unchatbar'));
 
 
-    beforeEach(inject(function ($rootScope, MessageText, Broker, $sessionStorage, PhoneBook, Connection) {
+    beforeEach(inject(function ($rootScope, MessageText, Broker, $sessionStorage, PhoneBook, Connection, Notify) {
         rootScope = $rootScope;
         MessageTextService = MessageText;
         BrokerService = Broker;
         sessionStorage = $sessionStorage;
         PhoneBookService = PhoneBook;
         ConnectionService = Connection;
+        NotifyService = Notify;
     }));
 
     describe('check methode', function () {
@@ -46,7 +47,8 @@ describe('Serivce: MessageText', function () {
             });
 
             describe('ConnectionGetMessagetextMessage', function () {
-                it('should call `MessageText._addToInbox` after event `onnection:getMessage:textMessage` with eventdata `message.group.id`', function () {
+                beforeEach(function(){
+                    spyOn(NotifyService,'textMessage').and.returnValue(true);
                     rootScope.$broadcast('ConnectionGetMessagetextMessage',
                         {
                             peerId: 'userId',
@@ -56,6 +58,13 @@ describe('Serivce: MessageText', function () {
                             }
                         }
                     );
+                });
+                it('should call `Notify.textMessage` with `you have new messages`' , function(){
+                    expect(NotifyService.textMessage).toHaveBeenCalledWith('you have new messages');
+                });
+
+                it('should call `MessageText._addToInbox` after event `onnection:getMessage:textMessage` with eventdata `message.group.id`', function () {
+
                     expect(MessageTextService._addToInbox).toHaveBeenCalledWith('groupId', 'userId', {
                         id: 'uuid',
                         groupId: 'groupId'

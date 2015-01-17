@@ -25,9 +25,9 @@ angular.module('unchatbar')
                  * create instance of peer
                  *
                  */
-               init : function (peerId,options) {
+                init : function (peerId,options) {
                     peerInstance = new $window.Peer(peerId,options);
-               },
+                },
                 /**
                  * @ngdoc methode
                  * @name get
@@ -35,9 +35,9 @@ angular.module('unchatbar')
                  * @return {Object} created instance of peer
                  *
                  */
-               get : function () {
-                   return  peerInstance || {};
-               }
+                get : function () {
+                    return  peerInstance || {};
+                }
             };
         }
     ]

@@ -3,5 +3,6 @@
 .tmp
 app/scripts/constants.js
 app/scripts/template.js
+app/bower_components
 bower_components
 node_modules

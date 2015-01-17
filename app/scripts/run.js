@@ -14,7 +14,7 @@ angular.module('unchatbar').run(['$state','Broker','MessageText','PhoneBook','Pr
         PhoneBook.init();
         Profile.init();
         Connection.init();
-        Broker._initStorage();
+        Broker.init();
         Notify.init();
         if (!Broker.getPeerIdFromStorage()) {
             $state.go('login');

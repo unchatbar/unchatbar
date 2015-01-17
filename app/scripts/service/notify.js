@@ -10,12 +10,28 @@
  *
  */
 angular.module('unchatbar')
-    .service('Notify', ['$rootScope', '$window','MessageText','PhoneBook',
-        function ($rootScope, $window,MessageText, PhoneBook) {
-            var isHidden = false,
-                canDesktopNotify = false,
-                canVibration = false;
+    .service('Notify', ['$window',
+        function ($window) {
             var api = {
+                /**
+                 * @ngdoc methode
+                 * @name _textMessageAudioFile
+                 * @propertyOf unchatbar.Notify
+                 * @private
+                 * @returns {String} path to soundfile for client text message
+                 *
+                 */
+                _textMessageAudioFile: 'sounds/ping.mp3',
+
+                /**
+                 * @ngdoc methode
+                 * @name _textMessageSound
+                 * @propertyOf unchatbar.Notify
+                 * @private
+                 * @returns {Object} sound object for text message
+                 *
+                 */
+                _textMessageSound: null,
 
                 /**
                  * @ngdoc methode
@@ -27,70 +43,110 @@ angular.module('unchatbar')
                  *
                  */
                 init: function () {
-                    api._initDesktopNotification();
-                    document.addEventListener('visibilitychange', api.visibilitychanged);
-                    document.addEventListener('webkitvisibilitychange', api.visibilitychanged);
-                    document.addEventListener('msvisibilitychange', api.visibilitychanged);
-                    $rootScope.$on('MessageTextGetMessage', function (event, data) {
-                         if (data.isRoomVisible === false && isHidden === true) {
-                            api._messageToDesktop();
-                             api._vibrate();
-                         }
-                    });
+                    this._getNotificationPermission();
+                    this._initMessageSound();
                 },
-                _vibrate : function () {
-                    if(canVibration) {
-                        navigator.vibrate(1000);
+
+                /**
+                 * @ngdoc methode
+                 * @name textMessage
+                 * @methodOf unchatbar.Notify
+                 * @params {String} message text message
+                 * @description
+                 *
+                 * notification for textMessage
+                 *
+                 */
+                textMessage: function (message) {
+                    if (this._isPageHidden() === true) {
+                        api._sendNotify('unchatbar - new Text Messages', message, 'newTextMessage');
+                        this._textMessageSound.play();
                     }
                 },
-                _messageToDesktop: function () {
-                    if (canDesktopNotify === true) {
-                        var output = '';
-                        var countMessage = 0;
-                        var MessageinRooms = MessageText.getMessageInbox();
-                        _.forEach(MessageinRooms,function(room){
-                            _.forEach(room,function(mesage){
-                                countMessage++;
-                                output+= PhoneBook.getClient(mesage.user).label + ":\n"
-                                        + mesage.text + "\n";
-                            });
-                        });
-                        if(countMessage > 3) {
-                            output = 'You have more than 3 new messages';
-                        }
-                        new Notification('New Messages',
-                            {
-                                body: output,
-                                tag: 'unreadMessage'
-                            });
-                    }
-                },
-                _initVibration : function () {
-                    navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-                    if (navigator.vibrate) {
-                        canVibration = true;
-                    }
-                },
-                _initDesktopNotification: function () {
-                    if ('Notification' in window) {
-                        Notification.requestPermission(function () {
-                            canDesktopNotify = true;
+
+                /**
+                 * @ngdoc methode
+                 * @name _getNotificationPermission
+                 * @methodOf unchatbar.Notify
+                 * @description
+                 *
+                 * get permission for Notification
+                 *
+                 */
+                _getNotificationPermission: function () {
+                    if ($window.Notification && !this._hasNotificationPermission()) {
+                        $window.Notification.requestPermission(function (status) {
+                            if ($window.Notification.permission !== status) {
+                                $window.Notification.permission = status;
+                            }
                         });
                     }
                 },
 
                 /**
                  * @ngdoc methode
-                 * @name visibilitychanged
+                 * @name _initMessageSound
                  * @methodOf unchatbar.Notify
                  * @description
                  *
-                 * visibility change
+                 * init sound for client message
                  *
                  */
-                visibilitychanged: function () {
+                _initMessageSound: function () {
+                    this._textMessageSound = new $window.Audio(this._textMessageAudioFile);
+                    this._textMessageSound.volume = 1.0;
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name _hasNotificationPermission
+                 * @methodOf unchatbar.Notify
+                 * @returns {Boolean} is notification allowed
+                 * @description
+                 *
+                 * is notification allowed
+                 *
+                 */
+                _hasNotificationPermission: function () {
+                    return $window.Notification && $window.Notification.permission === 'granted';
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name _isPageHidden
+                 * @methodOf unchatbar.Notify
+                 * @returns {Boolean} is page hidden
+                 * @description
+                 *
+                 * is page hidden
+                 *
+                 */
+                _isPageHidden: function () {
                     var hidden = document.hidden || document.webkitHidden || document.mozHidden || document.msHidden;
-                    isHidden = hidden || false;
+                    return hidden || false;
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name _sendNotify
+                 * @methodOf unchatbar.Notify
+                 * @params {String} headline headline of notification
+                 * @params {String} message body of notification
+                 * @params {String} tag tag of notification
+                 * @description
+                 *
+                 * send browser notification
+                 *
+                 */
+                _sendNotify: function (headline, message, tag) {
+                    if (this._hasNotificationPermission()) {
+
+                        new $window.Notification(headline,
+                            {
+                                body: message,
+                                tag: tag
+                            });
+                    }
                 }
             };
             return api;
