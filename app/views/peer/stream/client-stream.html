@@ -8,6 +8,9 @@
             <i class="glyphicon glyphicon-volume-up"></i>
             <audio-stream type="{{type}}" stream-id="{{streamId}}"></audio-stream>
         </div>
+        <div ng-switch-when="isCalling">
+            <i class="fa fa-spinner fa-5x fa-spin"></i>is calling
+        </div>
         <button ng-click="close()" type="button" class="btn btn-danger">hangup</button>
 
     </div>

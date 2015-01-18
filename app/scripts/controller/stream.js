@@ -45,9 +45,11 @@ angular.module('unchatbar').controller('stream', ['$scope', 'Stream',
             }
         };
 
-        $scope.$on('StreamAddClient' , function(){
+        $scope.$on('StreamAddClient' , function() {
             $scope.streamMap = Stream.getClientStreamMap();
         });
+
+
 
         $scope.$on('StreamDeleteClient' , function(){
             $scope.streamMap = Stream.getClientStreamMap();

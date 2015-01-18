@@ -14,8 +14,8 @@
  * manage stream connection's
  */
 angular.module('unchatbar')
-    .service('Stream', ['$rootScope', '$q', 'Broker', 'Profile', 'Connection',
-        function ($rootScope, $q, Broker, Profile, Connection) {
+    .service('Stream', ['$timeout','$rootScope', '$q', 'Broker', 'Profile', 'Connection',
+        function ($timeout,$rootScope, $q, Broker, Profile, Connection) {
 
 
             var api = {
@@ -180,8 +180,8 @@ angular.module('unchatbar')
                  * close all won media streams
                  *
                  */
-                closeAllOwnMedia :function(){
-                    _.forEach(this._stream.ownStream,function(stream,key){
+                closeAllOwnMedia: function () {
+                    _.forEach(this._stream.ownStream, function (stream, key) {
                         stream.stop();
                         delete this._stream.ownStream[key];
                     }.bind(this));
@@ -298,6 +298,28 @@ angular.module('unchatbar')
                     navigator.mozGetUserMedia ||
                     navigator.msGetUserMedia);
                 },
+
+                /**
+                 * @ngdoc methode
+                 * @name _addEmptyStreamCall
+                 * @methodOf unchatbar.Stream
+                 * @param {Object} call connection call
+                 * @private
+                 * @description
+                 *
+                 * add calls to storage without streams
+                 *
+                 */
+                _addEmptyStreamCall: function (call) {
+
+                    if (call.metadata.type === 'single') {
+                        api._addSingleStream(call, null);
+                    } else if (call.metadata.type === 'conference') {
+                        api._addConferenceStream(call, null);
+
+                    }
+                },
+
                 /**
                  * @ngdoc methode
                  * @name _listenOnClientStreamConnection
@@ -310,20 +332,26 @@ angular.module('unchatbar')
                  *
                  */
                 _listenOnClientStreamConnection: function (call) {
+                    api._addEmptyStreamCall(call);
+
                     call.on('stream', function (stream) {
-                        if (this.metadata.type === 'single') {
-                            api._onStreamSingle(this, stream);
-                        } else if (this.metadata.type === 'conference') {
-                            api._onStreamConference(this, stream);
-                            api._sendOwnUserFromConference(this.peer);
-                        }
+                                if (this.metadata.type === 'single') {
+                                    api._addSingleStream(this, stream);
+                                    $rootScope.$apply();
+                                } else if (this.metadata.type === 'conference') {
+                                    api._addConferenceStream(this, stream);
+                                    api._sendOwnUserFromConference(this.peer);
+                                    $rootScope.$apply();
+                                }
+
                     });
                     call.on('close', function () {
-                        if (this.metadata.type === 'single') {
-                            api._onStreamSingleClose(this.peer);
-                        } else if (this.metadata.type === 'conference') {
-                            api._onStreamConferenceClose(this.peer);
-                        }
+                            if (this.metadata.type === 'single') {
+                                api._removeSingleStreamClose(this.peer);
+                            } else if (this.metadata.type === 'conference') {
+                                api._removeConferenceStreamClose(this.peer);
+                            }
+
                     });
                 },
 
@@ -370,7 +398,7 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
-                 * @name _onStreamSingle
+                 * @name _addSingleStream
                  * @methodOf unchatbar.Stream
                  * @param {Object} connection client connection
                  * @param {Object} stream client stream
@@ -380,13 +408,15 @@ angular.module('unchatbar')
                  * handle single stream start
                  *
                  */
-                _onStreamSingle: function (connection, stream) {
-                    api._stream.stream.single[connection.peer] = {
+                _addSingleStream: function (connection, stream) {
+                    api._stream.stream.single[connection.peer ] = {
                         stream: stream,
                         peerId: connection.peer,
                         call: connection
                     };
-                    $rootScope.$apply(function () {
+
+
+
                         /**
                          * @ngdoc event
                          * @name StreamAddClient
@@ -397,13 +427,15 @@ angular.module('unchatbar')
                          * new single stream added
                          *
                          */
-                        $rootScope.$broadcast('StreamAddClient');
-                    });
+                         $rootScope.$broadcast('StreamAddClient');
+
+
                 },
+
 
                 /**
                  * @ngdoc methode
-                 * @name _onStreamSingleClose
+                 * @name _removeSingleStreamClose
                  * @methodOf unchatbar.Stream
                  * @param {String} peerId client peerId
                  * @private
@@ -412,7 +444,7 @@ angular.module('unchatbar')
                  * handle single stream close
                  *
                  */
-                _onStreamSingleClose: function (peerId) {
+                _removeSingleStreamClose: function (peerId) {
                     if (api._stream.stream.single[peerId]) {
                         delete api._stream.stream.single[peerId];
                         /**
@@ -431,7 +463,7 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
-                 * @name _onStreamConference
+                 * @name _addConferenceStream
                  * @methodOf unchatbar.Stream
                  * @param {Object} connection client connection
                  * @param {Object} stream client stream
@@ -441,7 +473,7 @@ angular.module('unchatbar')
                  * handle conference stream start
                  *
                  */
-                _onStreamConference: function (connection, stream) {
+                _addConferenceStream: function (connection, stream) {
                     api._stream.stream.conference[connection.peer] = {
                         stream: stream,
                         option: connection.metadata.streamOption,
@@ -449,24 +481,25 @@ angular.module('unchatbar')
                         peerId: connection.peer,
                         call: connection
                     };
-                    $rootScope.$apply(function () {
-                        /**
-                         * @ngdoc event
-                         * @name StreamAddClientToConference
-                         * @eventOf unchatbar.Stream
-                         * @eventType broadcast on root scope
-                         * @description
-                         *
-                         * new conference stream added
-                         *
-                         */
-                        $rootScope.$broadcast('StreamAddClientToConference');
-                    });
+
+                    /**
+                     * @ngdoc event
+                     * @name StreamAddClientToConference
+                     * @eventOf unchatbar.Stream
+                     * @eventType broadcast on root scope
+                     * @description
+                     *
+                     * new conference stream added
+                     *
+                     */
+                    $rootScope.$broadcast('StreamAddClientToConference');
+
+
                 },
 
                 /**
                  * @ngdoc methode
-                 * @name _onStreamConferenceClose
+                 * @name _removeConferenceStreamClose
                  * @methodOf unchatbar.Stream
                  * @param {String} peerId client peerId
                  * @private
@@ -475,7 +508,7 @@ angular.module('unchatbar')
                  * handle conference stream close
                  *
                  */
-                _onStreamConferenceClose: function (peerId) {
+                _removeConferenceStreamClose: function (peerId) {
                     if (api._stream.stream.conference[peerId]) {
                         delete api._stream.stream.conference[peerId];
                         /**
