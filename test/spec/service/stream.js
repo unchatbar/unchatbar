@@ -297,8 +297,8 @@ describe('Serivce: Profile', function () {
 
             describe('trigger event close', function () {
                 beforeEach(function () {
-                    spyOn(StreamService, '_removeSingleStreamClose').and.returnValue(true);
-                    spyOn(StreamService, '_removeConferenceStreamClose').and.returnValue(true);
+                    spyOn(StreamService, 'removeSingleStreamClose').and.returnValue(true);
+                    spyOn(StreamService, 'removeConferenceStreamClose').and.returnValue(true);
                     StreamService._listenOnClientStreamConnection(call);
                     streamEventTrigger.peerId = 'peerId';
                 });
@@ -309,7 +309,7 @@ describe('Serivce: Profile', function () {
 
                     streamEventTrigger.close();
 
-                    expect(StreamService._removeSingleStreamClose).toHaveBeenCalledWith('peerId');
+                    expect(StreamService.removeSingleStreamClose).toHaveBeenCalledWith('peerId');
                 });
                 it('should call `Stream._addConferenceStream` with peerId', function () {
                     streamEventTrigger.metadata = {
@@ -318,7 +318,7 @@ describe('Serivce: Profile', function () {
 
                     streamEventTrigger.close();
 
-                    expect(StreamService._removeConferenceStreamClose).toHaveBeenCalledWith('peerId');
+                    expect(StreamService.removeConferenceStreamClose).toHaveBeenCalledWith('peerId');
                 });
             });
         });
@@ -372,12 +372,12 @@ describe('Serivce: Profile', function () {
             });
         });
 
-        describe('_removeSingleStreamClose', function () {
+        describe('removeSingleStreamClose', function () {
             it('should remove stream from `Stream._stream.stream`', function () {
                 StreamService._stream.stream.single = {
                     'peerId': 'stream'
                 };
-                StreamService._removeSingleStreamClose('peerId');
+                StreamService.removeSingleStreamClose('peerId');
 
                 expect(StreamService._stream.stream.single).toEqual({});
 
@@ -390,19 +390,19 @@ describe('Serivce: Profile', function () {
 
                 spyOn(rootScope, '$broadcast').and.returnValue(true);
 
-                StreamService._removeSingleStreamClose('peerId');
+                StreamService.removeSingleStreamClose('peerId');
 
 
                 expect(rootScope.$broadcast).toHaveBeenCalledWith('StreamDeleteClient');
             });
         });
 
-        describe('_removeConferenceStreamClose', function () {
+        describe('removeConferenceStreamClose', function () {
             it('should remove stream from `Stream._stream.stream`', function () {
                 StreamService._stream.stream.conference = {
                     'peerId': 'stream'
                 };
-                StreamService._removeConferenceStreamClose('peerId');
+                StreamService.removeConferenceStreamClose('peerId');
 
                 expect(StreamService._stream.stream.conference).toEqual({});
 
@@ -414,7 +414,7 @@ describe('Serivce: Profile', function () {
                 };
                 spyOn(rootScope, '$broadcast').and.returnValue(true);
 
-                StreamService._removeConferenceStreamClose('peerId');
+                StreamService.removeConferenceStreamClose('peerId');
 
                 expect(rootScope.$broadcast).toHaveBeenCalledWith('StreamDeleteClientToConference');
             });

@@ -83,7 +83,7 @@ angular.module('unchatbar')
          */
         this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Peer',
             function ($rootScope, $localStorage, $sessionStorage, peerService) {
-
+                //TODO ON VIEW CHANGE START connectServer
                 var api =  {
                     /**
                      * @ngdoc methode

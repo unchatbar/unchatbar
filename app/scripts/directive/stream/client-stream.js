@@ -27,7 +27,18 @@ angular.module('unchatbar').directive('clientStream', ['Stream','PhoneBook',
 
 
                 $scope.close = function() {
-                    $scope.stream.call.close();
+                    var call = $scope.stream.call;
+                    if( $scope.stream.call.open) {
+                        call.close();
+                    } else {
+                        if(call.metadata.type === 'single' ) {
+                            Stream.removeSingleStreamClose($scope.stream.peerId);
+                        } else if(call.metadata.type === 'conference'){
+                            Stream.removeConferenceStreamClose($scope.stream.peerId);
+                        }
+
+                    }
+                    //Send remove Action to client
 
                 };
 

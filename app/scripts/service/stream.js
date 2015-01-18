@@ -311,7 +311,6 @@ angular.module('unchatbar')
                  *
                  */
                 _addEmptyStreamCall: function (call) {
-
                     if (call.metadata.type === 'single') {
                         api._addSingleStream(call, null);
                     } else if (call.metadata.type === 'conference') {
@@ -333,25 +332,34 @@ angular.module('unchatbar')
                  */
                 _listenOnClientStreamConnection: function (call) {
                     api._addEmptyStreamCall(call);
-
                     call.on('stream', function (stream) {
                                 if (this.metadata.type === 'single') {
-                                    api._addSingleStream(this, stream);
+                                    //TODO TEST
+                                    if (api.getClientStream(this.peer)) {
+                                        api._addSingleStream(this, stream);
+                                    } else {
+                                        this.close();
+                                    }
                                     $rootScope.$apply();
+
                                 } else if (this.metadata.type === 'conference') {
-                                    api._addConferenceStream(this, stream);
-                                    api._sendOwnUserFromConference(this.peer);
+                                    //TODO TEST
+                                    if (api.getConferenceClient(this.peer)) {
+                                        api._addConferenceStream(this, stream);
+                                        api._sendOwnUserFromConference(this.peer);
+                                    } else {
+                                        this.close();
+                                    }
                                     $rootScope.$apply();
                                 }
 
                     });
                     call.on('close', function () {
                             if (this.metadata.type === 'single') {
-                                api._removeSingleStreamClose(this.peer);
+                                api.removeSingleStreamClose(this.peer);
                             } else if (this.metadata.type === 'conference') {
-                                api._removeConferenceStreamClose(this.peer);
+                                api.removeConferenceStreamClose(this.peer);
                             }
-
                     });
                 },
 
@@ -435,7 +443,7 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
-                 * @name _removeSingleStreamClose
+                 * @name removeSingleStreamClose
                  * @methodOf unchatbar.Stream
                  * @param {String} peerId client peerId
                  * @private
@@ -444,7 +452,7 @@ angular.module('unchatbar')
                  * handle single stream close
                  *
                  */
-                _removeSingleStreamClose: function (peerId) {
+                removeSingleStreamClose: function (peerId) {
                     if (api._stream.stream.single[peerId]) {
                         delete api._stream.stream.single[peerId];
                         /**
@@ -481,7 +489,7 @@ angular.module('unchatbar')
                         peerId: connection.peer,
                         call: connection
                     };
-
+                    //TODO SEND  REMOVE ACTION
                     /**
                      * @ngdoc event
                      * @name StreamAddClientToConference
@@ -499,7 +507,7 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
-                 * @name _removeConferenceStreamClose
+                 * @name removeConferenceStreamClose
                  * @methodOf unchatbar.Stream
                  * @param {String} peerId client peerId
                  * @private
@@ -508,9 +516,10 @@ angular.module('unchatbar')
                  * handle conference stream close
                  *
                  */
-                _removeConferenceStreamClose: function (peerId) {
+                removeConferenceStreamClose: function (peerId) {
                     if (api._stream.stream.conference[peerId]) {
                         delete api._stream.stream.conference[peerId];
+                        //TODO SEND  REMOVE ACTION
                         /**
                          * @ngdoc event
                          * @name StreamDeleteClientToConference
