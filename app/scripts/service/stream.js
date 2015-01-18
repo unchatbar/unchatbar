@@ -489,7 +489,6 @@ angular.module('unchatbar')
                         peerId: connection.peer,
                         call: connection
                     };
-                    //TODO SEND  REMOVE ACTION
                     /**
                      * @ngdoc event
                      * @name StreamAddClientToConference
@@ -519,7 +518,6 @@ angular.module('unchatbar')
                 removeConferenceStreamClose: function (peerId) {
                     if (api._stream.stream.conference[peerId]) {
                         delete api._stream.stream.conference[peerId];
-                        //TODO SEND  REMOVE ACTION
                         /**
                          * @ngdoc event
                          * @name StreamDeleteClientToConference
