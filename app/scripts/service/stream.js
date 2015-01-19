@@ -34,6 +34,17 @@ angular.module('unchatbar')
                     },
                     ownStream: {}
                 },
+
+                /**
+                 * @ngdoc methode
+                 * @name _callForWaitingAnswer
+                 * @propertyOf unchatbar.Stream
+                 * @private
+                 * @returns {Array} Called without an answer
+                 *
+                 */
+                _callForWaitingAnswer : [],
+
                 /**
                  * @ngdoc methode
                  * @name init
@@ -197,6 +208,7 @@ angular.module('unchatbar')
                      */
                     $rootScope.$broadcast('StreamCloseOwn', {});
                 },
+
                 /**
                  * @ngdoc methode
                  * @name _onBrokerCall

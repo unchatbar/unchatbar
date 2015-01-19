@@ -119,7 +119,7 @@ angular.module('unchatbar')
                      */
                     init : function() {
                         this._initStorage();
-                        this._brokerWorker = new Worker('scripts/worker/broker-worker.js');
+
                     },
 
 
@@ -135,8 +135,8 @@ angular.module('unchatbar')
                      */
                     connectServer: function () {
                         peerService.init(this._storage.peerId, {host: host, port: port, path: path});
+                        api._holdBrokerConnection();
                         this._peerListener();
-
                     },
 
                     /**
@@ -151,7 +151,6 @@ angular.module('unchatbar')
                      */
                     connect: function (id) {
                         var connection = peerService.get().connect(id);
-                        api._holdBrokerConnection();
                         $rootScope.$broadcast('BrokerPeerConnection', {
                             connection: connection
                         });
@@ -217,6 +216,19 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
+                     * @name _getWebWorker
+                     * @methodOf unchatbar.Broker
+                     * @return {Object} webWorker
+                     * @description
+                     *
+                     * get new Webwroker instance
+                     *
+                     */
+                    _getWebWorker : function() {
+                        return new Worker('scripts/worker/broker-worker.js');
+                    },
+                    /**
+                     * @ngdoc methode
                      * @name _holdBrokerConnection
                      * @methodOf unchatbar.Broker
                      * @description
@@ -225,16 +237,19 @@ angular.module('unchatbar')
                      *
                      */
                     _holdBrokerConnection : function (){
-                        this._brokerWorker.addEventListener('message', function () {
+                        var webWorker = this._getWebWorker();
+                        webWorker.addEventListener('message', function () {
                             var isOnline = api._isBrowserOnline();
+                            var peer = peerService.get();
                             if (isOnline === true &&
-                                peerService.get().socket._wsOpen()) {
-                                peerService.get().socket.send({type: 'HEARTBEAT'});
+                                peer.socket._wsOpen()) {
+                                peer.socket.send({type: 'HEARTBEAT'});
                             } else if(isOnline === true) {
-                                    api.connectServer();
+                                webWorker.terminate();
+                                api.connectServer();
                             }
                         }, false);
-                        this._brokerWorker.postMessage('HEARTBEAT');
+                        webWorker.postMessage('HEARTBEAT');
                     },
 
                     /**
