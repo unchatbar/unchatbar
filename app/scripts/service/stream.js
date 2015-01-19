@@ -40,10 +40,10 @@ angular.module('unchatbar')
                  * @name _callForWaitingAnswer
                  * @propertyOf unchatbar.Stream
                  * @private
-                 * @returns {Array} Called without an answer
+                 * @returns {Object} Called without an answer
                  *
                  */
-                _callForWaitingAnswer : [],
+                _callForWaitingAnswer : {},
 
                 /**
                  * @ngdoc methode
@@ -56,7 +56,7 @@ angular.module('unchatbar')
                  */
                 init: function () {
                     $rootScope.$on('BrokerPeerCall', function (event, data) {
-                        api._onBrokerCall(data.client, data.client.metadata.streamOption);
+                        api.addCallToAnswer(data.client);
                     });
                     $rootScope.$on('ConnectionGetMessageupdateStreamGroup', function (event, data) {
                         api._callToGroupUsersFromClient(data.peerId, data.message.users);
@@ -107,6 +107,7 @@ angular.module('unchatbar')
                         });
                     }
                 },
+
                 /**
                  * @ngdoc methode
                  * @name getOwnStream
@@ -211,6 +212,46 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
+                 * @name getCallsForAnswerList
+                 * @methodOf unchatbar.Stream
+                 * @description
+                 *
+                 * get all calls, waiting for answer
+                 *
+                 */
+                getCallsForAnswerMap : function(){
+                    return this._callForWaitingAnswer;
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name addCallToAnswer
+                 * @methodOf unchatbar.Stream
+                 * @params {Object} connection connection
+                 * @description
+                 *
+                 * add new call connection
+                 *
+                 */
+                addCallToAnswer : function(connection){
+                    this._callForWaitingAnswer[connection.peer] = connection;
+                    /**
+                     * @ngdoc event
+                     * @name addStreamCall
+                     * @eventOf unchatbar.Stream
+                     * @eventType broadcast on root scope
+                     * @description
+                     *
+                     * add connection to waiting calling list
+                     *
+                     */
+                    $rootScope.$broadcast('StreamAddClient');
+                },
+
+
+
+                /**
+                 * @ngdoc methode
                  * @name _onBrokerCall
                  * @methodOf unchatbar.Stream
                  * @params {Object} connection connection
@@ -220,11 +261,29 @@ angular.module('unchatbar')
                  * handle peer call
                  *
                  */
-                _onBrokerCall: function (connection, streamOption) {
+                answerCall: function (connection, streamOption) {
+                    delete this._callForWaitingAnswer[connection.peer];
                     this._createOwnStream(streamOption).then(function (stream) {
                         connection.answer(stream);
                         api._listenOnClientStreamConnection(connection);
                     });
+                },
+
+                /**
+                 * @ngdoc methode
+                 * @name _onBrokerCall
+                 * @methodOf unchatbar.Stream
+                 * @params {Object} connection connection
+                 * @params {Object} streamOption audio/video option
+                 * @description
+                 *
+                 * handle peer call
+                 *
+                 */
+                cancelCall: function (connection) {
+                    delete this._callForWaitingAnswer[connection.peer];
+                    connection.close();
+                    //TODO send close message to client
                 },
 
                 /**
@@ -346,16 +405,14 @@ angular.module('unchatbar')
                     api._addEmptyStreamCall(call);
                     call.on('stream', function (stream) {
                                 if (this.metadata.type === 'single') {
-                                    //TODO TEST
                                     if (api.getClientStream(this.peer)) {
                                         api._addSingleStream(this, stream);
                                     } else {
                                         this.close();
                                     }
                                     $rootScope.$apply();
-
                                 } else if (this.metadata.type === 'conference') {
-                                    //TODO TEST
+
                                     if (api.getConferenceClient(this.peer)) {
                                         api._addConferenceStream(this, stream);
                                         api._sendOwnUserFromConference(this.peer);

@@ -1,0 +1,8 @@
+<div>
+    <div data-ng-repeat="call in waitingCallsForAnswer">
+        {{getClient(call.peer).label}} is calling
+        <button type="button" class="btn btn-success" data-ng-click="answerStreamCall(call)">accept</button>
+        <button type="button" class="btn btn-danger" data-ng-click="closeStreamCall(call)">reject</button>
+    </div>
+
+</div>

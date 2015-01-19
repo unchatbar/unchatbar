@@ -4,12 +4,13 @@ describe('Controller: notify', function () {
 
     beforeEach(module('unchatbar'));
 
-    var notifyCTRL, scope, messageTextService, PhoneBookService;
+    var notifyCTRL, scope, messageTextService, StreamService, PhoneBookService;
 
-    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook) {
+    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook, Stream) {
         messageTextService = MessageText;
         scope = $rootScope.$new();
         PhoneBookService = PhoneBook;
+        StreamService = Stream;
         notifyCTRL = function () {
             $controller('notify', {
                 $scope: scope,
@@ -33,7 +34,7 @@ describe('Controller: notify', function () {
 
     describe('check methode', function () {
         describe('getClient', function () {
-            beforeEach(function(){
+            beforeEach(function () {
                 notifyCTRL();
                 spyOn(PhoneBookService, 'getClient').and.returnValue({label: 'test'});
             });
@@ -49,7 +50,7 @@ describe('Controller: notify', function () {
         });
 
         describe('getGroup', function () {
-            beforeEach(function(){
+            beforeEach(function () {
                 notifyCTRL();
                 spyOn(PhoneBookService, 'getGroup').and.returnValue({label: 'testGroup'});
             });
@@ -98,19 +99,36 @@ describe('Controller: notify', function () {
             notifyCTRL();
             spyOn(scope, 'getUnreadMessages').and.returnValue(true);
         });
-        describe('MessageTextGetMessage', function () {
-            if ('should call `scope.getUnreadMessages`' , function () {
-                    scope.$broadcast('MessageTextGetMessage');
-                    expect(scope.getUnreadMessages).toHaveBeenCalled();
-                });
+        describe('addStreamCall', function () {
+            it('should set return value from `Stream.getCallsForAnswerList` to `$scope.waitingCallsForAnswer`', function () {
+                spyOn(StreamService, 'getCallsForAnswerList').and.returnValue(['call']);
+                scope.$broadcast('StreamAddClient');
 
+                expect(scope.waitingCallsForAnswer).toEqual(['call']);
+            });
+        });
+
+        describe('StreamRemoveClient', function () {
+            it('should set return value from `Stream.getClientStreamMap` to `$scope.streamMap`', function () {
+                spyOn(StreamService, 'getCallsForAnswerList').and.returnValue(['call']);
+                scope.$broadcast('StreamRemoveClient', {});
+
+                expect(scope.waitingCallsForAnswer).toEqual(['call']);
+            });
+        });
+
+        describe('MessageTextGetMessage', function () {
+            it('should call `scope.getUnreadMessages`', function () {
+                scope.$broadcast('MessageTextGetMessage');
+                expect(scope.getUnreadMessages).toHaveBeenCalled();
+            });
         });
 
         describe('MessageTextMoveToStorage', function () {
-            if ('should call `scope.getUnreadMessages`' , function () {
-                    scope.$broadcast('MessageTextMoveToStorage');
-                    expect(scope.getUnreadMessages).toHaveBeenCalled();
-                });
+            it('should call `scope.getUnreadMessages`', function () {
+                scope.$broadcast('MessageTextMoveToStorage');
+                expect(scope.getUnreadMessages).toHaveBeenCalled();
+            });
         });
 
     });

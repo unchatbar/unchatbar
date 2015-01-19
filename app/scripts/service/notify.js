@@ -33,6 +33,10 @@ angular.module('unchatbar')
                  */
                 _textMessageSound: null,
 
+                _streamCallSound : null,
+
+                _streamCallAudioFile: 'sounds/streamSound.mp3',
+
                 /**
                  * @ngdoc methode
                  * @name init
@@ -45,6 +49,7 @@ angular.module('unchatbar')
                 init: function () {
                     this._getNotificationPermission();
                     this._initMessageSound();
+                    this._initStreamSound();
                 },
 
                 /**
@@ -66,6 +71,26 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
+                 * @name streamCall
+                 * @methodOf unchatbar.Notify
+                 * @params {String} message text message
+                 * @description
+                 *
+                 * notification for textMessage
+                 *
+                 */
+                streamCallStart: function () {
+                    this._textMessageSound.play();
+
+                },
+                streamCallStop: function () {
+                    this._textMessageSound.pause();
+
+                },
+
+
+                /**
+                 * @ngdoc methode
                  * @name _getNotificationPermission
                  * @methodOf unchatbar.Notify
                  * @description
@@ -82,7 +107,11 @@ angular.module('unchatbar')
                         });
                     }
                 },
-
+                _initStreamSound : function (){
+                    this._textMessageSound = new $window.Audio(this._streamCallAudioFile);
+                    this._textMessageSound.volume = 1.0;
+                    this._textMessageSound.loop = true;
+                },
                 /**
                  * @ngdoc methode
                  * @name _initMessageSound

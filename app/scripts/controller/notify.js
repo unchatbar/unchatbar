@@ -11,8 +11,8 @@
  * login to peer
  *
  */
-angular.module('unchatbar').controller('notify', ['$scope', 'MessageText','PhoneBook',
-    function ($scope, MessageText, PhoneBook) {
+angular.module('unchatbar').controller('notify', ['$scope', 'MessageText','PhoneBook','Stream','Notify',
+    function ($scope, MessageText, PhoneBook, Stream, Notify) {
         /**
          * @ngdoc property
          * @name unreadMessages
@@ -20,6 +20,14 @@ angular.module('unchatbar').controller('notify', ['$scope', 'MessageText','Phone
          * @returns {Object} unreadMessages new messages for all roomy
          */
         $scope.unreadMessages = {};
+
+        /**
+         * @ngdoc property
+         * @name waitingCallsForAnswer
+         * @propertyOf unchatbar.controller:notify
+         * @returns {Array} list of all open calls, wating for answer
+         */
+        $scope.waitingCallsForAnswer = [];
 
         /**
          * @ngdoc property
@@ -63,6 +71,46 @@ angular.module('unchatbar').controller('notify', ['$scope', 'MessageText','Phone
 
         /**
          * @ngdoc methode
+         * @name answerStreamCall
+         * @methodOf unchatbar.controller:notify
+         * @params {connection} client connection
+         * @description
+         *
+         * answer stream call
+         *
+         */
+        $scope.answerStreamCall = function(connection){
+            Stream.answerCall(connection, connection.metadata.streamOption);
+            $scope.setSoundForStream();
+        };
+
+        /**
+         * @ngdoc methode
+         * @name closeStreamCall
+         * @methodOf unchatbar.controller:notify
+         * @params {connection} client connection
+         * @description
+         *
+         * close stream call
+         *
+         */
+        $scope.closeStreamCall = function(connection){
+            Stream.cancelCall(connection);
+               $scope.setSoundForStream();
+        };
+
+        $scope.setSoundForStream = function(){
+            $scope.waitingCallsForAnswer = Stream.getCallsForAnswerMap();
+            if(_.size($scope.waitingCallsForAnswer) > 0) {
+                Notify.streamCallStart();
+            } else {
+                Notify.streamCallStop();
+            }
+
+        };
+
+        /**
+         * @ngdoc methode
          * @name getGroup
          * @methodOf unchatbar.controller:notify
          * @params {String} roomId id of room
@@ -76,8 +124,6 @@ angular.module('unchatbar').controller('notify', ['$scope', 'MessageText','Phone
             return PhoneBook.getGroup(roomId);
         };
 
-
-
         $scope.$on('MessageTextGetMessage',function(){
             $scope.getUnreadMessages();
 
@@ -86,6 +132,13 @@ angular.module('unchatbar').controller('notify', ['$scope', 'MessageText','Phone
         $scope.$on('MessageTextMoveToStorage',function(){
             $scope.getUnreadMessages();
         });
+
+        $scope.$on('StreamAddClient', function() {
+            $scope.setSoundForStream();
+
+        });
+
+
 
     }
 ]);

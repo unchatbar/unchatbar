@@ -11,6 +11,7 @@ describe('Serivce: Profile', function () {
         ConnectionService = Connection;
         BrokerService = Broker;
         ProfileService = Profile;
+        ProfileService = Profile;
     }));
 
     describe('check methode', function () {
@@ -25,13 +26,13 @@ describe('Serivce: Profile', function () {
                     }
                 };
             });
-            it('should call `Stream._onBrokerCall` with connection and streamOption after broadcast `BrokerPeerCall`', function () {
-                spyOn(StreamService, '_onBrokerCall').and.returnValue(true);
+            it('should call `Stream.answerCall` with connection and streamOption after broadcast `BrokerPeerCall`', function () {
+                spyOn(StreamService, 'addCallToAnswer').and.returnValue(true);
                 rootScope.$broadcast('BrokerPeerCall', {client: callObject});
-                expect(StreamService._onBrokerCall).toHaveBeenCalledWith(callObject, 'streamOption');
+                expect(StreamService.addCallToAnswer).toHaveBeenCalledWith(callObject);
             });
 
-            it('should call `Stream._onBrokerCall` with peerId and users after broadcast `ConnectionGetMessageupdateStreamGroup`', function () {
+            it('should call `Stream.answerCall` with peerId and users after broadcast `ConnectionGetMessageupdateStreamGroup`', function () {
                 spyOn(StreamService, '_callToGroupUsersFromClient').and.returnValue(true);
                 rootScope.$broadcast('ConnectionGetMessageupdateStreamGroup', {
                     peerId: 'peerId',
@@ -42,8 +43,25 @@ describe('Serivce: Profile', function () {
                 expect(StreamService._callToGroupUsersFromClient).toHaveBeenCalledWith('peerId', ['UserA', 'UserB']);
             });
         });
-
-        describe('_onBrokerCall', function () {
+        describe('getCallsForAnswerList', function () {
+            it('should return `Stream._callForWaitingAnswer`' , function(){
+               StreamService._callForWaitingAnswer = ['call'];
+               expect(StreamService.getCallsForAnswerList()).toEqual(['call']);
+            });
+        });
+        describe('addCallToAnswer', function () {
+            it('should push connection to `Stream._callForWaitingAnswer`' , function(){
+                StreamService._callForWaitingAnswer = [];
+                StreamService.addCallToAnswer('connection');
+                expect(StreamService._callForWaitingAnswer).toEqual(['connection']);
+            });
+            it('should broadcast on rootScope `StreamCall`' , function(){
+                spyOn(rootScope,'$broadcast').and.returnValue(true);
+                StreamService.addCallToAnswer('connection');
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('addStreamCall');
+            });
+        });
+        describe('answerCall', function () {
             var connection;
             beforeEach(inject(function ($q) {
                 spyOn(StreamService, '_createOwnStream').and.callFake(function () {
@@ -55,24 +73,31 @@ describe('Serivce: Profile', function () {
                     answer: function () {
                     }
                 };
+                spyOn(rootScope,'$broadcast').and.returnValue(true);
                 spyOn(StreamService, '_listenOnClientStreamConnection').and.returnValue(true);
 
             }));
+            it('should broadcast `StreamRemoveClient` to rootScope', function () {
+                StreamService.answerCall(connection, 'streamOption');
+
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('StreamRemoveClient');
+            });
+
             it('should call Stream._createOwnStream with streamOption', function () {
-                StreamService._onBrokerCall(connection, 'streamOption');
+                StreamService.answerCall(connection, 'streamOption');
 
                 expect(StreamService._createOwnStream).toHaveBeenCalledWith('streamOption');
             });
 
             it('should call connection.answer with stream', function () {
                 spyOn(connection, 'answer').and.returnValue(true);
-                StreamService._onBrokerCall(connection, 'streamOption');
+                StreamService.answerCall(connection, 'streamOption');
                 rootScope.$apply();
                 expect(connection.answer).toHaveBeenCalledWith('stream');
             });
 
             it('should call Stream._listenOnClientStreamConnection with connection', function () {
-                StreamService._onBrokerCall(connection, 'streamOption');
+                StreamService.answerCall(connection, 'streamOption');
                 rootScope.$apply();
                 expect(StreamService._listenOnClientStreamConnection).toHaveBeenCalledWith(connection);
             });
