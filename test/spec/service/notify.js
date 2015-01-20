@@ -112,6 +112,50 @@ describe('Serivce: Notify', function () {
             });
         });
 
+        describe('_initStreamSound', function () {
+            beforeEach(function () {
+                windowService.Audio = function () {
+                };
+                notifyService._streamCallAudioFile = 'myStreamAudioFile.mp3';
+                spyOn(windowService, 'Audio').and.callFake(function () {
+                    return ({'audio': 'test'});
+                });
+                notifyService._initStreamSound();
+            });
+            it('should call window.audio object with audio file', function () {
+                expect(windowService.Audio).toHaveBeenCalledWith('myStreamAudioFile.mp3');
+            });
+            it('should set `notify._textMessageSound` to window.audio object', function () {
+                expect(notifyService._textMessageSound).toEqual({'audio': 'test', volume: 1.0, loop : true});
+            });
+        });
+
+        describe('streamCallStart' , function(){
+            it('should call _textMessageSound.play' ,function(){
+                notifyService._textMessageSound = {
+                    play: function(){}
+                };
+                spyOn(notifyService._textMessageSound,'play').and.returnValue(true);
+
+                notifyService.streamCallStart();
+
+                expect(notifyService._textMessageSound.play).toHaveBeenCalled();
+            });
+        });
+
+        describe('streamCallStop' , function(){
+            it('should call _textMessageSound.play' ,function(){
+                notifyService._textMessageSound = {
+                    pause: function(){}
+                };
+                spyOn(notifyService._textMessageSound,'pause').and.returnValue(true);
+
+                notifyService.streamCallStop();
+
+                expect(notifyService._textMessageSound.pause).toHaveBeenCalled();
+            });
+        });
+
         describe('_hasNotificationPermission', function () {
             it('should return true, when $window.Notification.permission is granted', function () {
                 windowService.Notification = {

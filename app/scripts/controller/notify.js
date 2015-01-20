@@ -27,7 +27,7 @@ angular.module('unchatbar').controller('notify', ['$scope', 'MessageText','Phone
          * @propertyOf unchatbar.controller:notify
          * @returns {Array} list of all open calls, wating for answer
          */
-        $scope.waitingCallsForAnswer = [];
+        $scope.waitingCallsForAnswer = {};
 
         /**
          * @ngdoc property
@@ -80,7 +80,7 @@ angular.module('unchatbar').controller('notify', ['$scope', 'MessageText','Phone
          *
          */
         $scope.answerStreamCall = function(connection){
-            Stream.answerCall(connection, connection.metadata.streamOption);
+            Stream.answerCall(connection);
             $scope.setSoundForStream();
         };
 
@@ -96,7 +96,7 @@ angular.module('unchatbar').controller('notify', ['$scope', 'MessageText','Phone
          */
         $scope.closeStreamCall = function(connection){
             Stream.cancelCall(connection);
-               $scope.setSoundForStream();
+            $scope.setSoundForStream();
         };
 
         $scope.setSoundForStream = function(){

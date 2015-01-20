@@ -255,14 +255,14 @@ angular.module('unchatbar')
                  * @name _onBrokerCall
                  * @methodOf unchatbar.Stream
                  * @params {Object} connection connection
-                 * @params {Object} streamOption audio/video option
                  * @description
                  *
                  * handle peer call
                  *
                  */
-                answerCall: function (connection, streamOption) {
+                answerCall: function (connection) {
                     delete this._callForWaitingAnswer[connection.peer];
+                    var streamOption = connection.metadata.streamOption;
                     this._createOwnStream(streamOption).then(function (stream) {
                         connection.answer(stream);
                         api._listenOnClientStreamConnection(connection);

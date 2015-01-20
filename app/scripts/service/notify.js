@@ -71,21 +71,28 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
-                 * @name streamCall
+                 * @name streamCallStart
                  * @methodOf unchatbar.Notify
-                 * @params {String} message text message
                  * @description
                  *
-                 * notification for textMessage
+                 * stop play sound for stream call
                  *
                  */
                 streamCallStart: function () {
                     this._textMessageSound.play();
 
                 },
+                /**
+                 * @ngdoc methode
+                 * @name streamCallStop
+                 * @methodOf unchatbar.Notify
+                 * @description
+                 *
+                 * stop play sound for stream call
+                 *
+                 */
                 streamCallStop: function () {
                     this._textMessageSound.pause();
-
                 },
 
 

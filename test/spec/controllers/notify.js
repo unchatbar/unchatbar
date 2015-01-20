@@ -4,13 +4,14 @@ describe('Controller: notify', function () {
 
     beforeEach(module('unchatbar'));
 
-    var notifyCTRL, scope, messageTextService, StreamService, PhoneBookService;
+    var notifyCTRL, scope, notifyService,messageTextService, StreamService, PhoneBookService;
 
-    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook, Stream) {
+    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook, Stream, Notify) {
         messageTextService = MessageText;
         scope = $rootScope.$new();
         PhoneBookService = PhoneBook;
         StreamService = Stream;
+        notifyService = Notify;
         notifyCTRL = function () {
             $controller('notify', {
                 $scope: scope,
@@ -29,6 +30,12 @@ describe('Controller: notify', function () {
             notifyCTRL();
 
             expect(scope.countUnreadMessages).toBe(0);
+        });
+
+        it('should set `$scope.countNewMessages` to be 0', function () {
+            notifyCTRL();
+
+            expect(scope.waitingCallsForAnswer).toEqual({});
         });
     });
 
@@ -91,6 +98,75 @@ describe('Controller: notify', function () {
                     }
                 );
             });
+        });
+
+        describe('answerStreamCall' , function(){
+            beforeEach(function(){
+                notifyCTRL();
+                spyOn(StreamService,'answerCall').and.returnValue(true);
+                spyOn(scope,'setSoundForStream').and.returnValue(true);
+            });
+            it('should call `Stream.answerCall`' , function() {
+                scope.answerStreamCall({connection : 'data'});
+                expect(StreamService.answerCall).toHaveBeenCalledWith({connection : 'data'});
+            });
+            it('should call `Stream.answerCall` with connection and metadata.metadata.streamOption' , function() {
+                scope.answerStreamCall({connection : 'data'});
+                expect(scope.setSoundForStream).toHaveBeenCalled();
+            });
+        });
+
+        describe('closeStreamCall' , function(){
+            beforeEach(function(){
+                notifyCTRL();
+                spyOn(StreamService,'cancelCall').and.returnValue(true);
+                spyOn(scope,'setSoundForStream').and.returnValue(true);
+            });
+            it('should call `Stream.cancelCall` with connection' , function() {
+                scope.closeStreamCall({connection : 'data'});
+                expect(StreamService.cancelCall).toHaveBeenCalledWith({connection : 'data'});
+            });
+            it('should call `Stream.answerCall` with connection and metadata.metadata.streamOption' , function() {
+                scope.closeStreamCall({connection : 'data'});
+                expect(scope.setSoundForStream).toHaveBeenCalled();
+            });
+        });
+
+        describe('setSoundForStream' , function(){
+            beforeEach(function(){
+                notifyCTRL();
+                spyOn(notifyService,'streamCallStart').and.returnValue(true);
+                spyOn(notifyService,'streamCallStop').and.returnValue(true);
+            });
+
+            it('should call `Stream.cancelCall` with connection' , function() {
+                spyOn(StreamService,'getCallsForAnswerMap').and.returnValue({connection : 'data'});
+                scope.setSoundForStream();
+                expect(StreamService.getCallsForAnswerMap).toHaveBeenCalled();
+            });
+            describe('call waiting for answer ' , function(){
+                beforeEach(function(){
+                    spyOn(StreamService,'getCallsForAnswerMap').and.returnValue({connection : 'data'});
+                });
+                it('should call `Notify.streamCallStart`' , function(){
+                    scope.setSoundForStream();
+
+                    expect(notifyService.streamCallStart).toHaveBeenCalled();
+                });
+            });
+            describe('no call waiting for answer ' , function(){
+                beforeEach(function(){
+                    spyOn(StreamService,'getCallsForAnswerMap').and.returnValue({});
+                });
+
+                it('should call `Notify.streamCallStart`' , function(){
+                    scope.setSoundForStream();
+
+                    expect(notifyService.streamCallStop).toHaveBeenCalled();
+                });
+
+            });
+
         });
     });
 

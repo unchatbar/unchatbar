@@ -43,24 +43,27 @@ describe('Serivce: Profile', function () {
                 expect(StreamService._callToGroupUsersFromClient).toHaveBeenCalledWith('peerId', ['UserA', 'UserB']);
             });
         });
+
         describe('getCallsForAnswerMap', function () {
-            it('should return `Stream._callForWaitingAnswer`' , function(){
-               StreamService._callForWaitingAnswer = ['call'];
-               expect(StreamService.getCallsForAnswerMap()).toEqual(['call']);
+            it('should return `Stream._callForWaitingAnswer`', function () {
+                StreamService._callForWaitingAnswer = ['call'];
+                expect(StreamService.getCallsForAnswerMap()).toEqual(['call']);
             });
         });
+
         describe('addCallToAnswer', function () {
-            it('should push connection to `Stream._callForWaitingAnswer`' , function(){
+            it('should push connection to `Stream._callForWaitingAnswer`', function () {
                 StreamService._callForWaitingAnswer = {};
-                StreamService.addCallToAnswer({peer: 'peerId',connection : 'data'});
-                expect(StreamService._callForWaitingAnswer).toEqual({peerId : {peer: 'peerId',connection : 'data'}});
+                StreamService.addCallToAnswer({peer: 'peerId', connection: 'data'});
+                expect(StreamService._callForWaitingAnswer).toEqual({peerId: {peer: 'peerId', connection: 'data'}});
             });
-            it('should broadcast on rootScope `StreamCall`' , function(){
-                spyOn(rootScope,'$broadcast').and.returnValue(true);
+            it('should broadcast on rootScope `StreamCall`', function () {
+                spyOn(rootScope, '$broadcast').and.returnValue(true);
                 StreamService.addCallToAnswer('connection');
                 expect(rootScope.$broadcast).toHaveBeenCalledWith('StreamAddClient');
             });
         });
+
         describe('answerCall', function () {
             var connection;
             beforeEach(inject(function ($q) {
@@ -70,23 +73,38 @@ describe('Serivce: Profile', function () {
                     return defer.promise;
                 });
                 connection = {
+                    peer : 'peerId',
                     answer: function () {
+                    },
+                    metadata: {
+                        streamOption: 'streamOption'
                     }
                 };
                 spyOn(StreamService, '_listenOnClientStreamConnection').and.returnValue(true);
 
             }));
 
+            it('should remove connection from  Stream._callForWaitingAnswer', function () {
+                StreamService._callForWaitingAnswer = {
+                    peerId: 'connection',
+                    otherPeerId: 'connection'
+                };
+                StreamService.answerCall(connection);
+
+                expect(StreamService._callForWaitingAnswer).toEqual({
+                    otherPeerId: 'connection'
+                });
+            });
 
             it('should call Stream._createOwnStream with streamOption', function () {
-                StreamService.answerCall(connection, 'streamOption');
+                StreamService.answerCall(connection);
 
                 expect(StreamService._createOwnStream).toHaveBeenCalledWith('streamOption');
             });
 
             it('should call connection.answer with stream', function () {
                 spyOn(connection, 'answer').and.returnValue(true);
-                StreamService.answerCall(connection, 'streamOption');
+                StreamService.answerCall(connection);
                 rootScope.$apply();
                 expect(connection.answer).toHaveBeenCalledWith('stream');
             });
@@ -96,6 +114,39 @@ describe('Serivce: Profile', function () {
                 rootScope.$apply();
                 expect(StreamService._listenOnClientStreamConnection).toHaveBeenCalledWith(connection);
             });
+        });
+
+        describe('cancelCall', function () {
+            var connection;
+            beforeEach(function () {
+                connection = {
+                    peer : 'peerId',
+                    close: function () {
+                    }
+                };
+                spyOn(connection, 'close').and.returnValue(true);
+            });
+            it('should remove connection from  Stream._callForWaitingAnswer', function () {
+                StreamService._callForWaitingAnswer = {
+                    peerId: 'connection',
+                    otherPeerId: 'connection'
+                };
+                StreamService.cancelCall(connection);
+
+                expect(StreamService._callForWaitingAnswer).toEqual({
+                    otherPeerId: 'connection'
+                });
+            });
+
+            it('should call connection.close', function () {
+                StreamService._callForWaitingAnswer = {
+                    peerId: 'connection'
+                };
+                StreamService.cancelCall(connection);
+
+                expect(connection.close).toHaveBeenCalled();
+            });
+
         });
 
         describe('callUser', function () {
@@ -249,6 +300,55 @@ describe('Serivce: Profile', function () {
             it('should return value from `Stream._stream.stream.conference`', function () {
                 StreamService._stream.stream.conference = 'streamMap';
                 expect(StreamService.getConferenceClientsMap()).toBe('streamMap');
+            });
+        });
+
+
+        describe('removeSingleStreamClose', function () {
+            it('should remove stream from `Stream._stream.stream`', function () {
+                StreamService._stream.stream.single = {
+                    'peerId': 'stream'
+                };
+                StreamService.removeSingleStreamClose('peerId');
+
+                expect(StreamService._stream.stream.single).toEqual({});
+
+            });
+
+            it('should broadcast `StreamDeleteClient`', function () {
+                StreamService._stream.stream.single = {
+                    'peerId': 'stream'
+                };
+
+                spyOn(rootScope, '$broadcast').and.returnValue(true);
+
+                StreamService.removeSingleStreamClose('peerId');
+
+
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('StreamDeleteClient');
+            });
+        });
+
+        describe('removeConferenceStreamClose', function () {
+            it('should remove stream from `Stream._stream.stream`', function () {
+                StreamService._stream.stream.conference = {
+                    'peerId': 'stream'
+                };
+                StreamService.removeConferenceStreamClose('peerId');
+
+                expect(StreamService._stream.stream.conference).toEqual({});
+
+            });
+
+            it('should broadcast `StreamDeleteClientToConference`', function () {
+                StreamService._stream.stream.conference = {
+                    'peerId': 'stream'
+                };
+                spyOn(rootScope, '$broadcast').and.returnValue(true);
+
+                StreamService.removeConferenceStreamClose('peerId');
+
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('StreamDeleteClientToConference');
             });
         });
 
@@ -424,54 +524,6 @@ describe('Serivce: Profile', function () {
                 });
 
 
-            });
-        });
-
-        describe('removeSingleStreamClose', function () {
-            it('should remove stream from `Stream._stream.stream`', function () {
-                StreamService._stream.stream.single = {
-                    'peerId': 'stream'
-                };
-                StreamService.removeSingleStreamClose('peerId');
-
-                expect(StreamService._stream.stream.single).toEqual({});
-
-            });
-
-            it('should broadcast `StreamDeleteClient`', function () {
-                StreamService._stream.stream.single = {
-                    'peerId': 'stream'
-                };
-
-                spyOn(rootScope, '$broadcast').and.returnValue(true);
-
-                StreamService.removeSingleStreamClose('peerId');
-
-
-                expect(rootScope.$broadcast).toHaveBeenCalledWith('StreamDeleteClient');
-            });
-        });
-
-        describe('removeConferenceStreamClose', function () {
-            it('should remove stream from `Stream._stream.stream`', function () {
-                StreamService._stream.stream.conference = {
-                    'peerId': 'stream'
-                };
-                StreamService.removeConferenceStreamClose('peerId');
-
-                expect(StreamService._stream.stream.conference).toEqual({});
-
-            });
-
-            it('should broadcast `StreamDeleteClientToConference`', function () {
-                StreamService._stream.stream.conference = {
-                    'peerId': 'stream'
-                };
-                spyOn(rootScope, '$broadcast').and.returnValue(true);
-
-                StreamService.removeConferenceStreamClose('peerId');
-
-                expect(rootScope.$broadcast).toHaveBeenCalledWith('StreamDeleteClientToConference');
             });
         });
 
