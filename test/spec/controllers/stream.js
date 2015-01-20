@@ -56,14 +56,6 @@ describe('Controller: profile', function () {
             spyOn(scope,'closeOwnStream').and.returnValue(true);
         });
 
-        describe('StreamAddClient' , function(){
-            it('should set return value from `Stream.getClientStreamMap` to `$scope.streamMap`' , function(){
-                spyOn(StreamService,'getClientStreamMap').and.returnValue({test:'data'});
-                scope.$broadcast('StreamAddClient', {});
-
-                expect(scope.streamMap).toEqual({test:'data'});
-            });
-        });
         describe('StreamDeleteClient' , function(){
             it('should set return value from `Stream.getClientStreamMap` to `$scope.streamMap`' , function(){
                 spyOn(StreamService,'getClientStreamMap').and.returnValue({test:'data'});

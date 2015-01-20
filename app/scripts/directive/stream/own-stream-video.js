@@ -20,7 +20,11 @@ angular.module('unchatbar').directive('ownStreamVideo', ['Stream',
                 scope.isVisible = false;
                 scope.$on('StreamAddOwn' , function(event,data) {
                     scope.isVisible = true;
-                    element.prop('src', URL.createObjectURL(Stream.getOwnStream(data.streamOption)));//myURL.createObjectURL(scope.stream));
+                    var stream = Stream.getOwnStream(data.streamOption);
+                    if(stream && stream.getVideoTracks()[0]) {
+                        element.prop('src', URL.createObjectURL(stream));
+                        element.prop('muted', 'muted');
+                    }
                 });
                 scope.$on('StreamCloseOwn' , function() {
                     scope.isVisible = false;

@@ -69,7 +69,7 @@ module.exports = function (grunt) {
             options: {
                 port: 8080,
                 // Change this to '0.0.0.0' to access the server from outside.
-                hostname: 'localhost',
+                hostname: '0.0.0.0',
                 livereload: 35729
             },
             livereload: {
@@ -182,6 +182,7 @@ module.exports = function (grunt) {
             dist: {
                 src: [
                     '<%= yeoman.dist %>/scripts/{,*/}*.js',
+                    '!<%= yeoman.dist %>/scripts/worker/*.js',
                     '<%= yeoman.dist %>/styles/{,*/}*.css',
                     '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
                     '<%= yeoman.dist %>/styles/fonts/*'
@@ -315,6 +316,8 @@ module.exports = function (grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         '*.html',
+                        'scripts/worker/*.js',
+                        'sounds/**/*.mp3',
                         'views/**/*.html',
                         'images/{,*/}*.{webp}',
                         'fonts/{,*/}*.*'

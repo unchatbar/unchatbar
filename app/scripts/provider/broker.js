@@ -76,15 +76,25 @@ angular.module('unchatbar')
          * @require $rootScope
          * @require $sessionStorage
          * @require $localStorage
-         * @require BrokerHeartbeat
          * @require Peer
          * @description
          *
          * peer service
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'BrokerHeartbeat', 'Peer',
-            function ($rootScope, $localStorage, $sessionStorage, BrokerHeartbeat, peerService) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Peer',
+            function ($rootScope, $localStorage, $sessionStorage, peerService) {
+                //TODO ON VIEW CHANGE START connectServer
                 var api =  {
+                    /**
+                     * @ngdoc methode
+                     * @name _brokerWorker
+                     * @propertyOf unchatbar.Broker
+                     * @private
+                     * @returns {Object} broker webworker
+                     *
+                     */
+                    _brokerWorker : null,
+
                     /**
                      * @ngdoc methode
                      * @name _storage
@@ -109,7 +119,10 @@ angular.module('unchatbar')
                      */
                     init : function() {
                         this._initStorage();
+
                     },
+
+
 
                     /**
                      * @ngdoc methode
@@ -122,8 +135,8 @@ angular.module('unchatbar')
                      */
                     connectServer: function () {
                         peerService.init(this._storage.peerId, {host: host, port: port, path: path});
+                        api._holdBrokerConnection();
                         this._peerListener();
-                        BrokerHeartbeat.start();
                     },
 
                     /**
@@ -156,7 +169,8 @@ angular.module('unchatbar')
                      *
                      */
                     connectStream: function (id,stream,metaData) {
-                        return peerService.get().call(id,stream,{metadata:metaData});
+                        var streamCall = peerService.get().call(id,stream,{metadata:metaData});
+                        return streamCall;
                     },
 
                     /**
@@ -200,6 +214,60 @@ angular.module('unchatbar')
                     getPeerIdFromStorage: function () {
                         return this._storage.peerId;
                     },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _getWebWorker
+                     * @methodOf unchatbar.Broker
+                     * @return {Object} webWorker
+                     * @description
+                     *
+                     * get new Webwroker instance
+                     *
+                     */
+                    _getWebWorker : function() {
+                        return new Worker('scripts/worker/broker-worker.js');
+                    },
+                    /**
+                     * @ngdoc methode
+                     * @name _holdBrokerConnection
+                     * @methodOf unchatbar.Broker
+                     * @description
+                     *
+                     * hold Broker connection
+                     *
+                     */
+                    _holdBrokerConnection : function (){
+                        var webWorker = this._getWebWorker();
+                        webWorker.addEventListener('message', function () {
+                            var isOnline = api._isBrowserOnline();
+                            var peer = peerService.get();
+                            if (isOnline === true &&
+                                peer.socket._wsOpen()) {
+                                peer.socket.send({type: 'HEARTBEAT'});
+                            } else if(isOnline === true) {
+                                webWorker.terminate();
+                                peer.destroy();
+                                api.connectServer();
+                            }
+                        }, false);
+                        webWorker.postMessage('HEARTBEAT');
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _isBrowserOnline
+                     * @methodOf unchatbar.Broker
+                     * @returns {Boolean} navigator.onLine
+                     * @description
+                     *
+                     * helper for is browser online
+                     *
+                     */
+                    _isBrowserOnline : function() {
+                        return navigator.onLine;
+                    },
+
 
                     /**
                      * @ngdoc methode
@@ -341,20 +409,19 @@ angular.module('unchatbar')
                      *
                      */
                     _onError : function (error) {
-                        $rootScope.$apply(function () {
-                            /**
-                             * @ngdoc event
-                             * @name BrokerPeerError
-                             * @eventOf unchatbar.Broker
-                             * @eventType broadcast on root scope
-                             * @description
-                             *
-                             * Broadcasted after error in peer conncetion
-                             *
-                             * @param {Object} error error object
-                             */
-                            $rootScope.$broadcast('BrokerPeerError', {error: error});
-                        });
+                        /**
+                         * @ngdoc event
+                         * @name BrokerPeerError
+                         * @eventOf unchatbar.Broker
+                         * @eventType broadcast on root scope
+                         * @description
+                         *
+                         * Broadcasted after error in peer conncetion
+                         *
+                         * @param {Object} error error object
+                         */
+                        $rootScope.$broadcast('BrokerPeerError', {error: error});
+
                     }
                 };
                 return api;

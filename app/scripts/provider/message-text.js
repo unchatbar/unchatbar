@@ -40,11 +40,11 @@ angular.module('unchatbar')
          * store send receive text messages
          *
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker', 'PhoneBook', 'Connection',
-            function ($rootScope, $localStorage, $sessionStorage, Broker, PhoneBook, Connection) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Broker', 'PhoneBook', 'Connection','Notify',
+            function ($rootScope, $localStorage, $sessionStorage, Broker, PhoneBook, Connection, Notify) {
 
 
-                return {
+                var api =  {
                     /**
                      * @ngdoc methode
                      * @name _selectedRoom
@@ -65,6 +65,7 @@ angular.module('unchatbar')
                      */
                     _storageMessages: {
                         messages: {},
+                        messageInbox : {},
                         queue: {}
                     },
 
@@ -80,11 +81,15 @@ angular.module('unchatbar')
                     init: function () {
                         this._initStorage();
                         $rootScope.$on('ConnectionOpen', function (event, data) {
-                            this._sendFromQueue(data.peerId);
-                        }.bind(this));
+                            api._sendFromQueue(data.peerId);
+                        });
                         $rootScope.$on('ConnectionGetMessagetextMessage', function (event, data) {
-                            this._addStoStorage(data.message.groupId || data.peerId, data.peerId, data.message);
-                        }.bind(this));
+                            Notify.textMessage('you have new messages');
+                            api._addToInbox(data.message.groupId || data.peerId, data.peerId, data.message);
+                        });
+                        $rootScope.$on('ConnectionGetMessagereadMessage', function (event, data) {
+                            api._removeFromQueue(data.peerId,data.message.id);
+                        });
                     },
 
                     /**
@@ -143,7 +148,22 @@ angular.module('unchatbar')
                      *
                      */
                     getMessageList: function () {
+                        this._moveFromInboxToMessageStorage(this._selectedRoom.id);
                         return this._storageMessages.messages[this._selectedRoom.id] || [];
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name getMessageInbox
+                     * @methodOf unchatbar.MessageText
+                     * @returns {Array} list of all messages
+                     * @description
+                     *
+                     * get onbox List
+                     *
+                     */
+                    getMessageInbox: function () {
+                        return this._storageMessages.messageInbox;
                     },
 
                     /**
@@ -180,13 +200,13 @@ angular.module('unchatbar')
                      *
                      */
                     sendGroupUpdateToUsers: function (users, updateGroup) {
-                        var message = {
-                            action: 'updateUserGroup',
+                        var message = this._getMessageObject( 'updateUserGroup',{
                             group: updateGroup
-                        };
+                        });
                         if (updateGroup.owner === Broker.getPeerId()) {
                             _.forEach(users, function (user) {
-                                if (Connection.send(user.id, message) === false) {
+                                if (user.id !== Broker.getPeerId()) {
+                                    Connection.send(user.id, message);
                                     this._addToQueue(user.id, message);
                                 }
                             }.bind(this));
@@ -207,13 +227,13 @@ angular.module('unchatbar')
                     sendRemoveGroup: function (roomId) {
                         var groupUsers = {}, message = {};
                         groupUsers = PhoneBook.getGroup(roomId).users;
-                        message = {
-                            action: 'removeGroup',
+                        message = this._getMessageObject( 'removeGroup',{
                             roomId: roomId
-                        };
+                        });
                         _.forEach(groupUsers, function (user) {
                             if (Broker.getPeerId() !== user.id) {
-                                if (Connection.send(user.id, message) === false) {
+                                if (user.id !== Broker.getPeerId()) {
+                                    Connection.send(user.id, message);
                                     this._addToQueue(user.id, message);
                                 }
                             }
@@ -234,6 +254,7 @@ angular.module('unchatbar')
                         this._storageMessages = storage.$default({
                             message: {
                                 messages: {},
+                                messageInbox : {},
                                 queue: {}
                             }
                         }).message;
@@ -261,7 +282,30 @@ angular.module('unchatbar')
                             user: from,
                             own: message.own
                         });
+                    },
 
+                    /**
+                     * @ngdoc methode
+                     * @name _addToInbox
+                     * @methodOf unchatbar.MessageText
+                     * @private
+                     * @params {String} roomId id of room clientId or userId
+                     * @params {String} from message from
+                     * @params {Object} message message
+                     * @description
+                     *
+                     * store message in storage inbox
+                     *
+                     */
+                    _addToInbox : function(roomId, from, message) {
+                        if (!this._storageMessages.messageInbox[roomId]) {
+                            this._storageMessages.messageInbox[roomId] = [];
+                        }
+                        this._storageMessages.messageInbox[roomId].push({
+                            text: message.text,
+                            user: from,
+                            own: message.own
+                        });
                         /**
                          * @ngdoc event
                          * @name MessageTextGetMessage
@@ -272,7 +316,40 @@ angular.module('unchatbar')
                          * new message added
                          *
                          */
-                        $rootScope.$broadcast('MessageTextGetMessage');
+                        $rootScope.$broadcast('MessageTextGetMessage',{isRoomVisible : roomId === this._selectedRoom.id });
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _moveFromInboxToMessageStorage
+                     * @methodOf unchatbar.MessageText
+                     * @private
+                     * @params {String} roomId to move
+                     * @description
+                     *
+                     * move messages from inbox to messages storage
+                     *
+                     */
+                    _moveFromInboxToMessageStorage : function(roomId) {
+                        if (this._storageMessages.messageInbox[roomId]) {
+                            _.forEach(this._storageMessages.messageInbox[roomId], function(message){
+                                api._addStoStorage(roomId,message.user,message);
+                            }.bind(this));
+                            delete this._storageMessages.messageInbox[roomId];
+                            /**
+                             * @ngdoc event
+                             * @name MessageTextSetRoom
+                             * @eventOf unchatbar.MessageText
+                             * @eventType broadcast on root scope
+                             * @description
+                             *
+                             * Broadcasted after active chatroom set
+                             *
+                             */
+                            $rootScope.$broadcast('MessageTextMoveToStorage', {});
+                        }
+
+
                     },
 
                     /**
@@ -288,14 +365,11 @@ angular.module('unchatbar')
                      *
                      */
                     _sendToUser: function (text) {
-                        var message = {
-                            action: 'textMessage',
-                            from: Broker.getPeerId(),
+                        var message = this._getMessageObject( 'textMessage',{
                             text: text
-                        };
-                        if (Connection.send(this._selectedRoom.id, message) === false) {
-                            this._addToQueue(this._selectedRoom.id, message);
-                        }
+                        });
+                        Connection.send(this._selectedRoom.id, message);
+                        this._addToQueue(this._selectedRoom.id,message);
                         return message;
                     },
 
@@ -313,21 +387,55 @@ angular.module('unchatbar')
                      */
                     _sendToGroup: function (text) {
                         var group = PhoneBook.getGroup(this._selectedRoom.id),
-                            message = {
-                                action: 'textMessage',
-                                from: Broker.getPeerId(),
+                            message = this._getMessageObject( 'textMessage',{
                                 groupId: group.id,
                                 text: text
-                            };
+                            });
                         _.forEach(group.users, function (user) {
-                            if (user.id !== Broker.getPeerId() &&
-                                Connection.send(user.id, message) === false) {
-                                    this._addToQueue(user.id, message);
+                            if (user.id !== Broker.getPeerId()) {
+                                Connection.send(user.id, message);
+                                this._addToQueue(user.id, message);
                             }
                         }.bind(this));
                         return message;
                     },
 
+                    /**
+                     * @ngdoc methode
+                     * @name _getMessageObject
+                     * @methodOf unchatbar.MessageText
+                     * @private
+                     * @params {Object} message message
+                     * @returns {Object} message object
+                     * @description
+                     *
+                     * get message object
+                     *
+                     */
+                    _getMessageObject : function(action,message) {
+                        message.id =  this._createUUID();
+                        message.action =  action;
+                        return message;
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name _createUUID
+                     * @methodOf unchatbar.MessageText
+                     * @private
+                     * @description
+                     *
+                     * generate a uui id
+                     *
+                     */
+                    _createUUID : function() {
+                        function _p8(s) {
+                            var p = (Math.random().toString(16)+'000000000').substr(2,8);
+                            return s ? '-' + p.substr(0,4) + '-' + p.substr(4,4) : p ;
+                        }
+                        return _p8() + _p8(true) + _p8(true) + _p8();
+
+                    },
                     /**
                      * @ngdoc methode
                      * @name _addToQueue
@@ -342,10 +450,9 @@ angular.module('unchatbar')
                      */
                     _addToQueue: function (peerId, message) {
                         if (!this._storageMessages.queue[peerId]) {
-                            this._storageMessages.queue[peerId] = [];
+                            this._storageMessages.queue[peerId] = {};
                         }
-                        this._storageMessages.queue[peerId].push(message);
-
+                        this._storageMessages.queue[peerId][message.id] = message;
                     },
 
                     /**
@@ -361,18 +468,35 @@ angular.module('unchatbar')
                      */
                     _sendFromQueue: function (peerId) {
                         if (this._storageMessages.queue[peerId]) {
-                            _.forEach(this._storageMessages.queue[peerId], function (message, index) {
-                                if (Connection.send(peerId, message)) {
-                                    this._storageMessages.queue[peerId].splice(index);
-                                }
+                            _.forEach(this._storageMessages.queue[peerId], function (message) {
+                                Connection.send(peerId, message);
                             }.bind(this));
-                            if (this._storageMessages.queue[peerId].length === 0) {
-                                delete this._storageMessages.queue[peerId];
-                            }
                         }
+                    },
 
+                    /**
+                     * @ngdoc methode
+                     * @name _sendFromQueue
+                     * @methodOf unchatbar.MessageText
+                     * @private
+                     * @params {String} peerId id of client
+                     * @description
+                     *
+                     * send message from storage
+                     *
+                     */
+                    _removeFromQueue: function (peerId,messageId) {
+                        if (this._storageMessages.queue[peerId] &&
+                            this._storageMessages.queue[peerId][messageId]
+                        ) {
+                            delete this._storageMessages.queue[peerId][messageId];
+                        }
+                        if (_.size(this._storageMessages.queue[peerId]) === 0) {
+                            delete this._storageMessages.queue[peerId];
+                        }
                     }
                 };
+                return api;
             }
         ];
     }

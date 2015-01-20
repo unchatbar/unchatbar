@@ -1,13 +1,14 @@
 'use strict';
 
 describe('Serivce: Connection', function () {
-    var ConnectionService, rootScope;
+    var ConnectionService, rootScope, BrokerService;
     beforeEach(module('unchatbar'));
 
 
-    beforeEach(inject(function ($rootScope, Connection) {
+    beforeEach(inject(function ($rootScope, Connection, Broker) {
         ConnectionService = Connection;
         rootScope = $rootScope;
+        BrokerService = Broker;
     }));
 
     describe('check methode', function () {
@@ -67,15 +68,37 @@ describe('Serivce: Connection', function () {
             });
 
             describe('listener `data`', function () {
+                beforeEach(function(){
+                   spyOn(ConnectionService,'send').and.returnValue(true);
+                });
                 it('should call ConnectionService.data ', function () {
                     expect(connection.on).toHaveBeenCalledWith('data', jasmine.any(Function));
                 });
+
+                it('should call `Connection.send` with clientPeerId and action `readMessage`and message.id', function () {
+                    peerCallBack.data({
+                        action: 'myAction',
+                        id: 'UUID'
+                    });
+                    expect(ConnectionService.send).toHaveBeenCalledWith('peerId',
+                        {action : 'readMessage' , id: 'UUID'}
+                        );
+                });
+
+                it('should not call `Connection.send`, when action is `readMessage`', function () {
+                    peerCallBack.data({
+                        action: 'readMessage',
+                        id: 'UUID'
+                    });
+                    expect(ConnectionService.send).not.toHaveBeenCalled();
+                });
+
                 it('should broadcast message', function () {
-                    peerCallBack.data({action : 'myAction' , message: 'daten'});
+                    peerCallBack.data({action : 'myAction' , id: 'UUID'});
                     expect(rootScope.$broadcast).toHaveBeenCalledWith(
                         'ConnectionGetMessagemyAction',  {
                             peerId: 'peerId',
-                            message: {action : 'myAction' , message: 'daten'}
+                            message: {action : 'myAction' , id: 'UUID'}
                         });
                 });
             });
@@ -98,18 +121,23 @@ describe('Serivce: Connection', function () {
                     ConnectionService.send('peerId','myMessage');
                     expect(ConnectionService._connectionMap.peerId.send).toHaveBeenCalledWith('myMessage');
                 });
-                it('should return true' , function(){
-                    expect(ConnectionService.send('peerId','myMessage')).toBeTruthy();
-                });
+
             });
 
             describe('connection id not exists' , function(){
                 beforeEach(function(){
+                    spyOn(BrokerService,'connect').and.returnValue(true);
                     ConnectionService._connectionMap = {};
                 });
 
-                it('should return true' , function(){
+                it('should return false' , function(){
                     expect(ConnectionService.send('peerId','myMessage')).toBeFalsy();
+                });
+
+                it('should call `Broker.connect` with peer ID' , function(){
+                    ConnectionService.send('peerId','myMessage');
+
+                    expect(BrokerService.connect).toHaveBeenCalledWith('peerId');
                 });
             });
         });

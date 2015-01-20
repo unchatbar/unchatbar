@@ -12,8 +12,8 @@
  *
  */
 angular.module('unchatbar')
-    .service('Connection', ['$rootScope',
-        function ($rootScope) {
+    .service('Connection', ['$rootScope','Broker',
+        function ($rootScope,Broker) {
 
 
             var api =  {
@@ -57,9 +57,9 @@ angular.module('unchatbar')
                 send: function (id, message) {
                     if (this._connectionMap[id]) {
                         this._connectionMap[id].send(message);
-                        return true;
+                    } else {
+                        Broker.connect(id);
                     }
-                    return false;
                 },
 
                 /**
@@ -75,6 +75,8 @@ angular.module('unchatbar')
                 getMap : function () {
                     return this._connectionMap;
                 },
+
+
                 /**
                  * @ngdoc methode
                  * @name add
@@ -106,8 +108,13 @@ angular.module('unchatbar')
                         delete api._connectionMap[this.peer];
                     });
                     connection.on('data', function (data) {
+
                         var  peerId = this.peer;
+
                         $rootScope.$apply(function () {
+                            if(data.action !== 'readMessage' && data.id) {
+                                api.send(peerId, {action: 'readMessage', id: data.id});
+                            }
                             /**
                              * @ngdoc event
                              * @name ConnectionGetMessage[action]

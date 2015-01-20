@@ -193,8 +193,10 @@ angular.module('unchatbar').controller('phoneBookAdmin', [
                 controller: 'modalStreamOption',
                 size: 'sm'
             }).result.then(function (streamOption) {
-                    _.forEach($scope.groupMap[roomId].users, function (user) {
-                        Stream.callConference(roomId,user.id, streamOption);
+                    Stream.createOwnStream(streamOption).then(function (stream) {
+                        _.forEach($scope.groupMap[roomId].users, function (user) {
+                            Stream.callConference(roomId, user.id, streamOption,stream);
+                        });
                     });
                 });
         };

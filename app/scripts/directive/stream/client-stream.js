@@ -15,38 +15,50 @@ angular.module('unchatbar').directive('clientStream', ['Stream','PhoneBook',
         return {
             restrict: 'E', //E = element, A = attribute, C = class, M = comment
             templateUrl: 'views/peer/stream/client-stream.html',
-            replace : true,
+            //replace : true,
             scope : {
-                streamId : '@',
-                type : '@'
+                stream : '=',
+                type : '='
 
             },
-            link : function(scope){
-                function getClientStream () {
-                    if (scope.type === 'conference') {
-                        return Stream.getConferenceClient(scope.streamId);
-                    } else if (scope.type === 'single') {
-                        return Stream.getClientStream(scope.streamId);
-                    }
-                }
-                var clientPeerId = getClientStream().peerId;
-                scope.streamType = '';
+            controller : function($scope){
+                $scope.streamId =$scope.stream.peerId;
+                    $scope.user = PhoneBook.getClient($scope.stream.peerId);
 
-                scope.user = PhoneBook.getClient(clientPeerId);
-                var stream = getClientStream().stream;
 
-                if(stream.getVideoTracks()[0]) {
-                    scope.streamType = 'video';
-                } else {
-                    scope.streamType = 'audio';
-                }
-                scope.close = function() {
-                    var clientCall = getClientStream();
-                    if (clientCall) {
-                        clientCall.call.close();
+                $scope.close = function() {
+                    var call = $scope.stream.call;
+                    if( $scope.stream.call.open) {
+                        call.close();
+                    } else {
+                        if(call.metadata.type === 'single' ) {
+                            Stream.removeSingleStreamClose($scope.stream.peerId);
+                        } else if(call.metadata.type === 'conference'){
+                            Stream.removeConferenceStreamClose($scope.stream.peerId);
+                        }
+
                     }
+                    //Send remove Action to client
+
                 };
 
+                $scope.buildStream = function() {
+                    var stream = $scope.stream.stream;
+                    if(stream && stream.getVideoTracks()[0]) {
+                        $scope.streamType = 'video';
+                    } else if (stream) {
+                        $scope.streamType = 'audio';
+                    } else {
+                        $scope.streamType = 'isCalling';
+                    }
+                };
+                $scope.buildStream();
+            },
+            link : function (scope) {
+
+                scope.$watch('stream', function(newValue, oldValue) {
+                    scope.buildStream();
+                }, false);
             }
         };
     }
