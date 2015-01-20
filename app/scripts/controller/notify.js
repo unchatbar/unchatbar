@@ -106,7 +106,6 @@ angular.module('unchatbar').controller('notify', ['$scope', 'MessageText','Phone
             } else {
                 Notify.streamCallStop();
             }
-
         };
 
         /**

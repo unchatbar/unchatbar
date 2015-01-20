@@ -270,12 +270,18 @@ describe('Controller: phoneBook', function () {
         });
 
         describe('streamToConferenceByGroupId', function () {
+            beforeEach(inject(function($q){
+                spyOn(StreamService, 'createOwnStream').and.callFake(function () {
+                    var defer = $q.defer();
+                    defer.resolve('ownStream');
+                    return defer.promise;
+                });
+            }));
             it('should call `modal.open`', inject(function ($q) {
                 spyOn(modal, 'open').and.callFake(function () {
                     var defer = $q.defer();
                     return {result: defer.promise};
                 });
-
                 phoneBookCTRL();
                 scope.streamToConferenceByGroupId('roomId');
                 expect(modal.open).toHaveBeenCalled();
@@ -287,9 +293,6 @@ describe('Controller: phoneBook', function () {
                         defer.resolve('streamOption');
                         return {result: defer.promise};
                     });
-                }));
-
-                it('should call `Stream.callUser` with userA', function () {
                     spyOn(StreamService, 'callConference').and.returnValue(true);
                     phoneBookCTRL();
                     scope.groupMap = {
@@ -299,9 +302,21 @@ describe('Controller: phoneBook', function () {
                             ]
                         }
                     };
+                }));
+
+                it('should call `Stream.createOwnStream` with streamOption', function () {
                     scope.streamToConferenceByGroupId('roomId');
+
                     scope.$digest();
-                    expect(StreamService.callConference).toHaveBeenCalledWith('roomId', 'userA', 'streamOption');
+
+                    expect(StreamService.createOwnStream).toHaveBeenCalledWith('streamOption');
+                });
+                it('should call `Stream.callUser` with userA', function () {
+                    scope.streamToConferenceByGroupId('roomId');
+
+                    scope.$digest();
+
+                    expect(StreamService.callConference).toHaveBeenCalledWith('roomId', 'userA', 'streamOption','ownStream');
                 });
             });
         });

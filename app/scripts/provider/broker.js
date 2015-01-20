@@ -169,7 +169,8 @@ angular.module('unchatbar')
                      *
                      */
                     connectStream: function (id,stream,metaData) {
-                        return peerService.get().call(id,stream,{metadata:metaData});
+                        var streamCall = peerService.get().call(id,stream,{metadata:metaData});
+                        return streamCall;
                     },
 
                     /**
@@ -246,6 +247,7 @@ angular.module('unchatbar')
                                 peer.socket.send({type: 'HEARTBEAT'});
                             } else if(isOnline === true) {
                                 webWorker.terminate();
+                                peer.destroy();
                                 api.connectServer();
                             }
                         }, false);
@@ -407,20 +409,19 @@ angular.module('unchatbar')
                      *
                      */
                     _onError : function (error) {
-                        $rootScope.$apply(function () {
-                            /**
-                             * @ngdoc event
-                             * @name BrokerPeerError
-                             * @eventOf unchatbar.Broker
-                             * @eventType broadcast on root scope
-                             * @description
-                             *
-                             * Broadcasted after error in peer conncetion
-                             *
-                             * @param {Object} error error object
-                             */
-                            $rootScope.$broadcast('BrokerPeerError', {error: error});
-                        });
+                        /**
+                         * @ngdoc event
+                         * @name BrokerPeerError
+                         * @eventOf unchatbar.Broker
+                         * @eventType broadcast on root scope
+                         * @description
+                         *
+                         * Broadcasted after error in peer conncetion
+                         *
+                         * @param {Object} error error object
+                         */
+                        $rootScope.$broadcast('BrokerPeerError', {error: error});
+
                     }
                 };
                 return api;

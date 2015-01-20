@@ -123,12 +123,18 @@ describe('Serivce: Broker', function () {
                                 _wsOpen: function () {
                                 },
                                 send: function () {
-                                }
+                                },
+
+                            },
+                            destroy : function(){
+
                             }
                         };
                         spyOn(brokerService, 'connectServer').and.returnValue(false);
                         spyOn(peerService, 'get').and.returnValue(peerSocket);
                         spyOn(peerSocket.socket, 'send').and.returnValue(true);
+                        spyOn(peerSocket, 'destroy').and.returnValue(true);
+
 
                     });
                     describe('browser is offline', function () {
@@ -170,7 +176,9 @@ describe('Serivce: Broker', function () {
                                 spyOn(peerSocket.socket, '_wsOpen').and.returnValue(false);
                                 addEventListenerCallback();
                             });
-
+                            it('should not call `peerService.get().socket.send` with type `HEARTBEAT`', function () {
+                                expect(peerSocket.destroy).toHaveBeenCalled();
+                            });
                             it('should not call `peerService.get().socket.send` with type `HEARTBEAT`', function () {
                                 expect(peerSocket.socket.send).not.toHaveBeenCalled();
                             });
