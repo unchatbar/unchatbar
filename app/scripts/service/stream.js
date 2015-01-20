@@ -212,7 +212,7 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
-                 * @name getCallsForAnswerList
+                 * @name getCallsForAnswerMap
                  * @methodOf unchatbar.Stream
                  * @description
                  *

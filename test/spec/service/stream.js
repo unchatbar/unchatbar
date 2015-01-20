@@ -43,22 +43,22 @@ describe('Serivce: Profile', function () {
                 expect(StreamService._callToGroupUsersFromClient).toHaveBeenCalledWith('peerId', ['UserA', 'UserB']);
             });
         });
-        describe('getCallsForAnswerList', function () {
+        describe('getCallsForAnswerMap', function () {
             it('should return `Stream._callForWaitingAnswer`' , function(){
                StreamService._callForWaitingAnswer = ['call'];
-               expect(StreamService.getCallsForAnswerList()).toEqual(['call']);
+               expect(StreamService.getCallsForAnswerMap()).toEqual(['call']);
             });
         });
         describe('addCallToAnswer', function () {
             it('should push connection to `Stream._callForWaitingAnswer`' , function(){
-                StreamService._callForWaitingAnswer = [];
-                StreamService.addCallToAnswer('connection');
-                expect(StreamService._callForWaitingAnswer).toEqual(['connection']);
+                StreamService._callForWaitingAnswer = {};
+                StreamService.addCallToAnswer({peer: 'peerId',connection : 'data'});
+                expect(StreamService._callForWaitingAnswer).toEqual({peerId : {peer: 'peerId',connection : 'data'}});
             });
             it('should broadcast on rootScope `StreamCall`' , function(){
                 spyOn(rootScope,'$broadcast').and.returnValue(true);
                 StreamService.addCallToAnswer('connection');
-                expect(rootScope.$broadcast).toHaveBeenCalledWith('addStreamCall');
+                expect(rootScope.$broadcast).toHaveBeenCalledWith('StreamAddClient');
             });
         });
         describe('answerCall', function () {
@@ -73,15 +73,10 @@ describe('Serivce: Profile', function () {
                     answer: function () {
                     }
                 };
-                spyOn(rootScope,'$broadcast').and.returnValue(true);
                 spyOn(StreamService, '_listenOnClientStreamConnection').and.returnValue(true);
 
             }));
-            it('should broadcast `StreamRemoveClient` to rootScope', function () {
-                StreamService.answerCall(connection, 'streamOption');
 
-                expect(rootScope.$broadcast).toHaveBeenCalledWith('StreamRemoveClient');
-            });
 
             it('should call Stream._createOwnStream with streamOption', function () {
                 StreamService.answerCall(connection, 'streamOption');

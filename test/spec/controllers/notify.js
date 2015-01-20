@@ -99,21 +99,12 @@ describe('Controller: notify', function () {
             notifyCTRL();
             spyOn(scope, 'getUnreadMessages').and.returnValue(true);
         });
-        describe('addStreamCall', function () {
+        describe('StreamAddClient', function () {
             it('should set return value from `Stream.getCallsForAnswerList` to `$scope.waitingCallsForAnswer`', function () {
-                spyOn(StreamService, 'getCallsForAnswerList').and.returnValue(['call']);
+                spyOn(scope, 'setSoundForStream').and.returnValue(['call']);
                 scope.$broadcast('StreamAddClient');
 
-                expect(scope.waitingCallsForAnswer).toEqual(['call']);
-            });
-        });
-
-        describe('StreamRemoveClient', function () {
-            it('should set return value from `Stream.getClientStreamMap` to `$scope.streamMap`', function () {
-                spyOn(StreamService, 'getCallsForAnswerList').and.returnValue(['call']);
-                scope.$broadcast('StreamRemoveClient', {});
-
-                expect(scope.waitingCallsForAnswer).toEqual(['call']);
+                expect(scope.setSoundForStream).toHaveBeenCalled();
             });
         });
 

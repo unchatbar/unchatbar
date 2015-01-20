@@ -17,6 +17,7 @@ describe('Serivce: Notify', function () {
             beforeEach(function () {
                 spyOn(notifyService, '_getNotificationPermission').and.returnValue(true);
                 spyOn(notifyService, '_initMessageSound').and.returnValue(true);
+                spyOn(notifyService, '_initStreamSound').and.returnValue(true);
                 notifyService.init();
             });
             it('should call `notify._getNotificationPermission`', function () {
@@ -24,6 +25,9 @@ describe('Serivce: Notify', function () {
             });
             it('should call `notify._initMessageSound`', function () {
                 expect(notifyService._initMessageSound).toHaveBeenCalled();
+            });
+            it('should call `notify._initStreamSound`', function () {
+                expect(notifyService._initStreamSound).toHaveBeenCalled();
             });
         });
 
