@@ -33,8 +33,24 @@ angular.module('unchatbar')
                  */
                 _textMessageSound: null,
 
+                /**
+                 * @ngdoc methode
+                 * @name _streamCallSound
+                 * @propertyOf unchatbar.Notify
+                 * @private
+                 * @returns {Object} sound object for stream call
+                 *
+                 */
                 _streamCallSound : null,
 
+                /**
+                 * @ngdoc methode
+                 * @name _streamCallAudioFile
+                 * @propertyOf unchatbar.Notify
+                 * @private
+                 * @returns {String} path to soundfile for stream call
+                 *
+                 */
                 _streamCallAudioFile: 'sounds/streamSound.mp3',
 
                 /**
@@ -79,7 +95,7 @@ angular.module('unchatbar')
                  *
                  */
                 streamCallStart: function () {
-                    this._textMessageSound.play();
+                    this._streamCallSound.play();
 
                 },
                 /**
@@ -92,7 +108,7 @@ angular.module('unchatbar')
                  *
                  */
                 streamCallStop: function () {
-                    this._textMessageSound.pause();
+                    this._streamCallSound.pause();
                 },
 
 
@@ -114,10 +130,20 @@ angular.module('unchatbar')
                         });
                     }
                 },
+
+                /**
+                 * @ngdoc methode
+                 * @name _initStreamSound
+                 * @methodOf unchatbar.Notify
+                 * @description
+                 *
+                 * init sound for stream call
+                 *
+                 */
                 _initStreamSound : function (){
-                    this._textMessageSound = new $window.Audio(this._streamCallAudioFile);
-                    this._textMessageSound.volume = 1.0;
-                    this._textMessageSound.loop = true;
+                    this._streamCallSound = new $window.Audio(this._streamCallAudioFile);
+                    this._streamCallSound.volume = 1.0;
+                    this._streamCallSound.loop = true;
                 },
                 /**
                  * @ngdoc methode

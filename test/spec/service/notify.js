@@ -126,33 +126,33 @@ describe('Serivce: Notify', function () {
                 expect(windowService.Audio).toHaveBeenCalledWith('myStreamAudioFile.mp3');
             });
             it('should set `notify._textMessageSound` to window.audio object', function () {
-                expect(notifyService._textMessageSound).toEqual({'audio': 'test', volume: 1.0, loop : true});
+                expect(notifyService._streamCallSound).toEqual({'audio': 'test', volume: 1.0, loop : true});
             });
         });
 
         describe('streamCallStart' , function(){
             it('should call _textMessageSound.play' ,function(){
-                notifyService._textMessageSound = {
+                notifyService._streamCallSound = {
                     play: function(){}
                 };
-                spyOn(notifyService._textMessageSound,'play').and.returnValue(true);
+                spyOn(notifyService._streamCallSound,'play').and.returnValue(true);
 
                 notifyService.streamCallStart();
 
-                expect(notifyService._textMessageSound.play).toHaveBeenCalled();
+                expect(notifyService._streamCallSound.play).toHaveBeenCalled();
             });
         });
 
         describe('streamCallStop' , function(){
             it('should call _textMessageSound.play' ,function(){
-                notifyService._textMessageSound = {
+                notifyService._streamCallSound = {
                     pause: function(){}
                 };
-                spyOn(notifyService._textMessageSound,'pause').and.returnValue(true);
+                spyOn(notifyService._streamCallSound,'pause').and.returnValue(true);
 
                 notifyService.streamCallStop();
 
-                expect(notifyService._textMessageSound.pause).toHaveBeenCalled();
+                expect(notifyService._streamCallSound.pause).toHaveBeenCalled();
             });
         });
 
