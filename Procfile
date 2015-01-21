@@ -1,1 +1,1 @@
-web: grunt serve:dist
+web: node web.js
