@@ -209,6 +209,7 @@ describe('Serivce: Broker', function () {
 
                 expect(peerService.init).toHaveBeenCalledWith('peerTest', {
                     host: 'host.de',
+                    secure:true,
                     port: 12345,
                     path: 'test/'
                 });

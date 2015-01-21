@@ -13,5 +13,5 @@ angular.module('unchatbar')
 
         }
         BrokerProvider.setHost('unchatbar-server.herokuapp.com');
-        BrokerProvider.setPort(8181);
+        //BrokerProvider.setPort(8181);
     }]);

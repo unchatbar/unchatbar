@@ -148,7 +148,6 @@ angular.module('unchatbar')
                      *
                      */
                     connect: function (id) {
-
                         var connection = peerService.get().connect(id);
                         $rootScope.$broadcast('BrokerPeerConnection', {
                             connection: connection
@@ -239,7 +238,6 @@ angular.module('unchatbar')
                     _holdBrokerConnection : function (){
                         var webWorker = this._getWebWorker();
                         webWorker.addEventListener('message', function () {
-                            api.connectServer();
                             var isOnline = api._isBrowserOnline();
                             var peer = peerService.get();
                             if (isOnline === true &&
@@ -301,12 +299,12 @@ angular.module('unchatbar')
                         var peer = peerService.get();
 
                         peer.on('open', function (peerId) {
+
                             if(!peerId) {
                                 peer.destroy();
                                 api.webWorker.terminate();
                                 api.connectServer();
                             }
-                            peer.destroy();
                             api._onOpen(peerId);
                         });
 
