@@ -106,7 +106,7 @@ angular.module('unchatbar')
                     _storage : {
                       peerId : ''
                     },
-
+                    webWorker : null,
                     /**
                      * @ngdoc methode
                      * @name init
@@ -236,20 +236,20 @@ angular.module('unchatbar')
                      *
                      */
                     _holdBrokerConnection : function (){
-                        var webWorker = this._getWebWorker();
-                        webWorker.addEventListener('message', function () {
+                        api.webWorker = this._getWebWorker();
+                        api.webWorker.addEventListener('message', function () {
                             var isOnline = api._isBrowserOnline();
                             var peer = peerService.get();
                             if (isOnline === true &&
                                 peer.socket._wsOpen()) {
                                 peer.socket.send({type: 'HEARTBEAT'});
                             } else if(isOnline === true) {
-                                webWorker.terminate();
+                                api.webWorker.terminate();
                                 peer.destroy();
                                 api.connectServer();
                             }
                         }, false);
-                        webWorker.postMessage('HEARTBEAT');
+                        api.webWorker.postMessage('HEARTBEAT');
                     },
 
                     /**
@@ -301,8 +301,8 @@ angular.module('unchatbar')
                         peer.on('open', function (peerId) {
 
                             if(!peerId) {
-                                peer.destroy();
                                 api.webWorker.terminate();
+                                peer.destroy();
                                 api.connectServer();
                             }
                             api._onOpen(peerId);

@@ -305,9 +305,7 @@ describe('Serivce: Broker', function () {
                 spyOn(brokerService, 'setPeerId').and.returnValue(true);
                 brokerService._onOpen('newPeerId');
             });
-            it('should set peerid from callback storage peerId', function () {
-                expect(brokerService.setPeerId).toHaveBeenCalledWith('newPeerId');
-            });
+
             it('should broadcast on $rootscope new peerid', function () {
                 expect(rootScope.$broadcast).toHaveBeenCalledWith('BrokerPeerOpen', {id: 'newPeerId'});
             });
