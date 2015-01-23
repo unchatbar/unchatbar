@@ -1,6 +1,105 @@
-<!doctype html> <html class="no-js" ng-app="unchatbar"> <head> <meta charset="utf-8"> <base href="/"> <title></title> <meta name="description" content=""> <meta name="viewport" content="width=device-width"> <link rel="stylesheet" href="styles/vendor.9bc6a74f.css"> <link rel="stylesheet" href="styles/main.4d93ba05.css">  <body> <div ui-view></div> <!--[if lt IE 7]>
+<!doctype html>
+<html class="no-js" ng-app="unchatbar">
+<head>
+    <meta charset="utf-8">
+    <base href="/">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/angular-notify/dist/angular-notify.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/offcanvas.css">
+    <link rel="stylesheet" href="styles/custom.css">
+    <!-- endbuild -->
+</head>
+<body >
+<div ui-view></div>
+<!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
-<![endif]--> <!--[if lt IE 9]>
-<script src="scripts/oldieshim.76f279db.js"></script>
-<![endif]--> <script src="scripts/vendor.9c1a0e1f.js"></script> <script src="scripts/scripts.7e378336.js"></script>  
+<![endif]-->
+
+
+
+<!-- build:js(.) scripts/oldieshim.js -->
+<!--[if lt IE 9]>
+<script src="bower_components/es5-shim/es5-shim.js"></script>
+<script src="bower_components/json3/lib/json3.js"></script>
+<![endif]-->
+<!-- endbuild -->
+
+
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-notify/dist/angular-notify.js"></script>
+<script src="bower_components/peerjs/peer.js"></script>
+<script src="bower_components/ngstorage/ngStorage.js"></script>
+<script src="bower_components/lodash/dist/lodash.compat.js"></script>
+<script src="bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<script src="scripts/constants.js"></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/template.js"></script>
+
+<script src="scripts/provider/broker.js"></script>
+<script src="scripts/provider/profile.js"></script>
+<script src="scripts/provider/phone-book.js"></script>
+<script src="scripts/provider/message-text.js"></script>
+
+
+<script src="scripts/config/server.js"></script>
+<script src="scripts/config/state.js"></script>
+
+<script src="scripts/service/stream.js"></script>
+
+<script src="scripts/controller/broker.js"></script>
+<script src="scripts/controller/phone-book.js"></script>
+<script src="scripts/controller/phone-book-admin.js"></script>
+<script src="scripts/controller/dialer.js"></script>
+<script src="scripts/controller/text-message-list.js"></script>
+<script src="scripts/controller/connection-center.js"></script>
+<script src="scripts/controller/profile.js"></script>
+<script src="scripts/controller/stream.js"></script>
+<script src="scripts/controller/modal-stream-option.js"></script>
+<script src="scripts/controller/notify.js"></script>
+
+<script src="scripts/service/peer.js"></script>
+<script src="scripts/service/connection.js"></script>
+<script src="scripts/service/stream.js"></script>
+<script src="scripts/service/notify.js"></script>
+
+<script src="scripts/directive/notification/stream-call.js"></script>
+<script src="scripts/directive/notification/text-message.js"></script>
+<script src="scripts/directive/stream/own-stream-video.js"></script>
+<script src="scripts/directive/stream/client-stream.js"></script>
+<script src="scripts/directive/stream/stream.js"></script>
+<script src="scripts/directive/stream/audio-stream.js"></script>
+<script src="scripts/directive/stream/video-stream.js"></script>
+<script src="scripts/directive/phoneBook/book-stream.js"></script>
+<script src="scripts/directive/phoneBook/new-group.js"></script>
+<script src="scripts/directive/phoneBook/book.js"></script>
+<script src="scripts/directive/phoneBook/book-admin.js"></script>
+<script src="scripts/directive/phoneBook/active-user.js"></script>
+
+
+
+<script src="scripts/directive/dialer.js"></script>
+<script src="scripts/directive/connection-center.js"></script>
+<script src="scripts/directive/text-message-list.js"></script>
+<script src="scripts/directive/profile.js"></script>
+<script src="scripts/run.js"></script>
+<!-- endbuild -->
+</body>
+</html>

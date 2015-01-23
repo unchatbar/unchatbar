@@ -299,12 +299,6 @@ angular.module('unchatbar')
                         var peer = peerService.get();
 
                         peer.on('open', function (peerId) {
-
-                            if(!peerId) {
-                                api.webWorker.terminate();
-                                peer.destroy();
-                                api.connectServer();
-                            }
                             api._onOpen(peerId);
                         });
 

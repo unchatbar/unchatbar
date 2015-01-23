@@ -1,1 +1,68 @@
-<div class="panel-group" role="tablist" aria-multiselectable="true" data-ng-init="setView('dashboard')"> <div class="panel panel-default"> <div class="panel-heading" role="tab"> <h4 class="panel-title"> <span data-ng-click="setView('dashboard')"> Dashboard {{panelInfo.dashboard || ''}} </span> </h4> </div> <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'dashboard'}" role="tabpanel" aria-labelledby="headingOne"> <div class="panel-body"> TODO DASHBOARD </div> </div> </div> <div class="panel panel-default"> <div class="panel-heading" role="tab"> <h4 class="panel-title"> <span data-ng-click="setView('phoneBook')"> Phone book {{panelInfo.phoneBook || ''}} </span> </h4> </div> <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'phoneBook'}" role="tabpanel" aria-labelledby="headingOne"> <div class="panel-body"> <phone-book-admin></phone-book-admin> </div> </div> </div> <div class="panel panel-default"> <div class="panel-heading" role="tab"> <div class="row"> <div class="col-md-3" data-ng-click="setView('chat')"> <h4 class="panel-title">Text chat</h4> </div> <div class="col-md-9"> <phone-book></phone-book> </div> </div> </div> <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'chat'}" role="tabpanel" aria-labelledby="headingOne"> <div class="panel-body"> <text-message-list></text-message-list> </div> </div> </div> <div class="panel panel-default"> <div class="panel-heading" role="tab"> <div class="row"> <div class="col-md-3" data-ng-click="setView('stream')"> <h4 class="panel-title">Audio/Video</h4> </div> <div class="col-md-9"> <phone-book-stream></phone-book-stream> </div> </div> </div> <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'stream'}" role="tabpanel" aria-labelledby="headingOne"> <div class="panel-body"> <stream></stream> </div> </div> </div> </div>
+<div class="panel-group" role="tablist" aria-multiselectable="true" data-ng-init="setView('dashboard')">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" >
+            <h4 class="panel-title">
+                <span data-ng-click="setView('dashboard')">
+                    Dashboard {{panelInfo.dashboard || ''}}
+                </span>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'dashboard'}"  role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                TODO DASHBOARD
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" >
+            <h4 class="panel-title">
+                <span data-ng-click="setView('phoneBook')">
+                   Phone book {{panelInfo.phoneBook || ''}}
+                </span>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'phoneBook'}" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <phone-book-admin></phone-book-admin>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" >
+
+                <div class="row">
+                <div class="col-md-3" data-ng-click="setView('chat')">
+                    <h4 class="panel-title">Text chat</h4>
+                </div>
+                <div class="col-md-9">
+                    <phone-book></phone-book>
+                </div>
+                </div>
+
+        </div>
+        <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'chat'}" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <text-message-list></text-message-list>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" >
+            <div class="row">
+                <div class="col-md-3" data-ng-click="setView('stream')">
+                    <h4 class="panel-title">Audio/Video</h4>
+                </div>
+                <div class="col-md-9">
+                    <phone-book-stream></phone-book-stream>
+                </div>
+            </div>
+        </div>
+        <div class="panel-collapse collapse" data-ng-class="{in: showPanel === 'stream'}" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <stream></stream>
+            </div>
+        </div>
+    </div>
+</div>
+
+
