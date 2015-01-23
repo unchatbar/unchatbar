@@ -1,5 +1,3 @@
 {
-  "directory": "bower_components",
-  "proxy": "http://proxy.evolver.de:3128",
-  "https-proxy": "http://proxy.evolver.de:3128"
+  "directory": "bower_components"
 }
