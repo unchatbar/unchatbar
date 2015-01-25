@@ -1,6 +1,7 @@
 .idea/workspace.xml
 .sass-cache
 .tmp
+dist
 app/scripts/constants.js
 app/scripts/template.js
 app/bower_components
