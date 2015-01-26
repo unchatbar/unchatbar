@@ -81,8 +81,8 @@ angular.module('unchatbar')
          *
          * peer service
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Peer',
-            function ($rootScope, $localStorage, $sessionStorage, peerService) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Peer','notify',
+            function ($rootScope, $localStorage, $sessionStorage, peerService, notify) {
                 //TODO ON VIEW CHANGE START connectServer
                 var api =  {
                     /**
@@ -299,7 +299,12 @@ angular.module('unchatbar')
                         var peer = peerService.get();
 
                         peer.on('open', function (peerId) {
+                            notify('open peerid:' + peerId);
                             api._onOpen(peerId);
+                        });
+
+                        peer.on('close', function (connection) {
+                            notify('peer close:');
                         });
 
                         peer.on('call', function (call) {
@@ -307,10 +312,12 @@ angular.module('unchatbar')
                         });
 
                         peer.on('connection', function (connection) {
+                            notify('peer connection');
                             api._onConnection(connection);
                         });
 
                         peer.on('error', function (error) {
+                            notify('error' + error);
                             api._onError(error);
                         });
 
