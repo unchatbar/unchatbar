@@ -313,7 +313,7 @@ angular.module('unchatbar')
                         });
 
                         peer.on('connection', function (connection) {
-                            notify('peer connection');
+                            notify('peer connection' + connection.peer);
                             api._onConnection(connection);
                         });
 
