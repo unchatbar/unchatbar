@@ -132,7 +132,28 @@ angular.module('unchatbar')
                      *
                      */
                     connectServer: function () {
-                        peerService.init(this._storage.peerId, {host: host, secure:true , port: port, path: path});
+                        peerService.init(this._storage.peerId, 
+                        {host: host, secure:true , port: port, 
+                        path: path,
+                        config: {
+                            'iceServers': [
+                                {url:'stun:stun01.sipphone.com'},
+                                {url:'stun:stun.ekiga.net'},
+                                {url:'stun:stun.fwdnet.net'},
+                                {url:'stun:stun.ideasip.com'},
+                                {url:'stun:stun.iptel.org'},
+                                {url:'stun:stun.rixtelecom.se'},
+                                {url:'stun:stun.schlund.de'},
+                                {url:'stun:stun.l.google.com:19302'},
+                                {url:'stun:stun1.l.google.com:19302'},
+                                {url:'stun:stun2.l.google.com:19302'},
+                                {url:'stun:stun3.l.google.com:19302'},
+                                {url:'stun:stun4.l.google.com:19302'},
+                                {url:'stun:stunserver.org'}
+                            ]
+                        },
+                        debug: 3
+                        });
                         api._holdBrokerConnection();
                         this._peerListener();
                     },
