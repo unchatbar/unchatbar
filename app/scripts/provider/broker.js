@@ -174,7 +174,7 @@ angular.module('unchatbar')
                         },
                         debug: 3
                         });
-                        api._holdBrokerConnection();
+                        //api._holdBrokerConnection();
                         this._peerListener();
                     },
 
