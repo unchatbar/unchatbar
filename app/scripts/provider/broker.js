@@ -149,6 +149,7 @@ angular.module('unchatbar')
                      */
                     connect: function (id) {
                         var connection = peerService.get().connect(id);
+                        notify('broker connect' + id);
                         $rootScope.$broadcast('BrokerPeerConnection', {
                             connection: connection
                         });
