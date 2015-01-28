@@ -135,6 +135,7 @@ angular.module('unchatbar')
                         peerService.init(this._storage.peerId, 
                         {host: host,  port: port, 
                         path: path,
+                        secure:true,
                         debug: 3
                         });
                         //api._holdBrokerConnection();
