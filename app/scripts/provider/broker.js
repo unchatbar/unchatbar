@@ -135,6 +135,11 @@ angular.module('unchatbar')
                         peerService.init(this._storage.peerId, 
                         {host: host,  port: port, 
                         path: path,
+                        config: {'iceServers': [
+                             {url: "stun:23.21.150.121"},
+                            {url: "stun:stun.l.google.com:19302"},
+                            {url: "turn:numb.viagenie.ca", credential: "webrtcdemo", username: "louis%40mozilla.com"}
+                        ]},
                         secure:true,
                         debug: 3
                         });
