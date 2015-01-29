@@ -138,6 +138,17 @@ angular.module('unchatbar')
                         config: {'iceServers': [
                              {url: "stun:23.21.150.121"},
                             {url: "stun:stun.l.google.com:19302"},
+                            {url: 'stun:stun.anyfirewall.com:3478'},
+                            {
+                               url: 'turn:turn.bistri.com:80',
+                                credential: 'homeo',
+                                username: 'homeo'
+                            },
+                            {
+                                url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                                credential: 'webrtc',
+                                username: 'webrtc'
+                            },
                             {url: "turn:numb.viagenie.ca", credential: "webrtcdemo", username: "louis%40mozilla.com"}
                         ]},
                         secure:true,
