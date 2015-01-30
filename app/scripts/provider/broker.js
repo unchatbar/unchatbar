@@ -175,12 +175,13 @@ angular.module('unchatbar')
                      *
                      */
                     connectServer: function () {
-                        peerService.init(this._storage.peerId, 
-                        {host: host,  port: port, 
-                        path: path,
-                        config: {'iceServers':iceServer},
-                        secure:useSecureConnection,
-                        debug: brokerDebugLevel
+                        peerService.init(this._storage.peerId,{
+                            host: host,  
+                            port: port, 
+                            path: path,
+                            config: {'iceServers':iceServer},
+                            secure:useSecureConnection,
+                            debug: brokerDebugLevel
                         });
                         this._peerListener();
                     },
