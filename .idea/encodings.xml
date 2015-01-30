@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$/../unchatbar-server/.editorconfig" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-server/.gitignore" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-server/Readme.md" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-server/package.json" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/.editorconfig" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/.gitignore" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/License" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Readme.md" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/styles/custom.css" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/connection-center.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/dialer.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/layout/chat/content.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/layout/chat/footer.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/layout/chat/header.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/layout/chat/index.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/layout/chat/sidebar.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/layout/login.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/modal/streamOption.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/notification/stream-call.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/notification/text-message.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/phoneBook/active-user.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/phoneBook/book.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/profile-admin.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/profile.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/stream/client-stream.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/stream/stream-video.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/stream/stream.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/stream/type/audio.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/stream/type/video.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/text-message-list.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/package.json" charset="UTF-8" />
   </component>
 </project>
