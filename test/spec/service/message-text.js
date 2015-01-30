@@ -16,86 +16,13 @@ describe('Serivce: MessageText', function () {
     }));
 
     describe('check methode', function () {
-        describe('init', function () {
-            beforeEach(function () {
-                spyOn(MessageTextService, '_initStorage').and.returnValue(true);
-                spyOn(MessageTextService, '_sendFromQueue').and.returnValue(true);
-                spyOn(MessageTextService, '_addToInbox').and.returnValue(true);
-                MessageTextService.init();
-            });
-            it('should call `MessageText._initStorage`', function () {
-                expect(MessageTextService._initStorage).toHaveBeenCalled();
-            });
 
-            it('should call `MessageText._sendFromQueue` after event `ConnectionOpen` with eventdata `peerId`', function () {
-                rootScope.$broadcast('ConnectionOpen', {peerId: 'userPeerId'});
-                expect(MessageTextService._sendFromQueue).toHaveBeenCalledWith('userPeerId');
-            });
-            describe('ConnectionGetMessagereadMessage', function () {
-                beforeEach(function () {
-                    spyOn(MessageTextService, '_removeFromQueue').and.returnValue(true);
-                });
-                it('should call `MessageText._removeFromQueue` with client peerId and `message.id`', function () {
-                    rootScope.$broadcast('ConnectionGetMessagereadMessage', {
-                        peerId: 'userPeerId',
-                        message: {
-                            id: 'UUID'
-                        }
-                    });
-                    expect(MessageTextService._removeFromQueue).toHaveBeenCalledWith('userPeerId', 'UUID');
-                });
-            });
-
-            describe('ConnectionGetMessagetextMessage', function () {
-                beforeEach(function(){
-                    spyOn(NotifyService,'textMessage').and.returnValue(true);
-                    rootScope.$broadcast('ConnectionGetMessagetextMessage',
-                        {
-                            peerId: 'userId',
-                            message: {
-                                id: 'uuid',
-                                groupId: 'groupId'
-                            }
-                        }
-                    );
-                });
-                it('should call `Notify.textMessage` with `you have new messages`' , function(){
-                    expect(NotifyService.textMessage).toHaveBeenCalledWith('you have new messages');
-                });
-
-                it('should call `MessageText._addToInbox` after event `onnection:getMessage:textMessage` with eventdata `message.group.id`', function () {
-
-                    expect(MessageTextService._addToInbox).toHaveBeenCalledWith('groupId', 'userId', {
-                        id: 'uuid',
-                        groupId: 'groupId'
-
-                    });
-                });
-                it('should call `MessageText._addToInbox` after event `onnection:getMessage:textMessage` with eventdata `peerId`', function () {
-                    rootScope.$broadcast('ConnectionGetMessagetextMessage',
-                        {
-                            peerId: 'userId',
-                            message: {
-                                id: 'uuid',
-                                text: 'groupId'
-                            }
-                        }
-                    );
-                    expect(MessageTextService._addToInbox).toHaveBeenCalledWith('userId', 'userId', {
-                            id: 'uuid',
-                            text: 'groupId'
-                        }
-                    );
-                });
-            });
-        });
-
-        describe('_initStorage', function () {
+        describe('initStorage', function () {
             var sessionStorage = {};
             beforeEach(inject(function ($sessionStorage) {
                 sessionStorage = $sessionStorage;
                 spyOn(sessionStorage, '$default').and.returnValue({message: {test: 'data'}});
-                MessageTextService._initStorage();
+                MessageTextService.initStorage();
             }));
             it('should call `$sessionStorage.$default` with object', function () {
                 expect(sessionStorage.$default).toHaveBeenCalledWith({
@@ -375,10 +302,10 @@ describe('Serivce: MessageText', function () {
             });
         });
 
-        describe('_addToInbox', function () {
+        describe('addToInbox', function () {
             it('should push _storageMessages.messages[roomId] with message', function () {
                 MessageTextService._storageMessages.messageInbox = {};
-                MessageTextService._addToInbox('roomId', 'fromUser', {
+                MessageTextService.addToInbox('roomId', 'fromUser', {
                     text: 'testText',
                     own: 'ownMessage'
                 });
@@ -399,7 +326,7 @@ describe('Serivce: MessageText', function () {
             it('should broadcast `MessageTextGetMessage` with isRoomVisible false', function () {
                 spyOn(rootScope, '$broadcast').and.returnValue(true);
                 MessageTextService._selectedRoom.id = 'otherRoomId';
-                MessageTextService._addToInbox('roomId', 'fromUser', {
+                MessageTextService.addToInbox('roomId', 'fromUser', {
                     text: 'testText',
                     own: 'ownMessage'
                 });
@@ -410,7 +337,7 @@ describe('Serivce: MessageText', function () {
             it('should broadcast `MessageTextGetMessage` with isRoomVisible true', function () {
                 spyOn(rootScope, '$broadcast').and.returnValue(true);
                 MessageTextService._selectedRoom.id = 'roomId';
-                MessageTextService._addToInbox('roomId', 'fromUser', {
+                MessageTextService.addToInbox('roomId', 'fromUser', {
                     text: 'testText',
                     own: 'ownMessage'
                 });
@@ -549,7 +476,7 @@ describe('Serivce: MessageText', function () {
             });
         });
 
-        describe('_sendFromQueue', function () {
+        describe('sendFromQueue', function () {
             describe('peerId has no items in queue ', function () {
                 beforeEach(function () {
                     MessageTextService._storageMessages.queue = {};
@@ -558,7 +485,7 @@ describe('Serivce: MessageText', function () {
                 });
                 it('should not call `Connection.send` for message in storage queue', function () {
 
-                    MessageTextService._sendFromQueue('peerId');
+                    MessageTextService.sendFromQueue('peerId');
 
                     expect(ConnectionService.send).not.toHaveBeenCalled();
                 });
@@ -569,13 +496,13 @@ describe('Serivce: MessageText', function () {
                 });
                 it('should not call `Connection.send` for message in storage queue', function () {
                     spyOn(ConnectionService, 'send').and.returnValue(true);
-                    MessageTextService._sendFromQueue('peerId');
+                    MessageTextService.sendFromQueue('peerId');
                     expect(ConnectionService.send).toHaveBeenCalledWith('peerId', 'message');
                 });
             });
         });
 
-        describe('_removeFromQueue', function () {
+        describe('removeFromQueue', function () {
             it('should remove mesage from client', function () {
                 MessageTextService._storageMessages.queue = {
                     peerId: {
@@ -583,7 +510,7 @@ describe('Serivce: MessageText', function () {
                         messageIdB: 'data'
                     }
                 };
-                MessageTextService._removeFromQueue('peerId', 'messageIdA');
+                MessageTextService.removeFromQueue('peerId', 'messageIdA');
 
                 expect(MessageTextService._storageMessages.queue).toEqual({
                     peerId: {
@@ -598,7 +525,7 @@ describe('Serivce: MessageText', function () {
                         messageIdA: 'data'
                     }
                 };
-                MessageTextService._removeFromQueue('peerId', 'messageIdA');
+                MessageTextService.removeFromQueue('peerId', 'messageIdA');
 
                 expect(MessageTextService._storageMessages.queue).toEqual({});
             });

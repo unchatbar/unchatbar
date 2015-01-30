@@ -29,21 +29,6 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
-                 * @name init
-                 * @methodOf unchatbar.Connection
-                 * @description
-                 *
-                 * init listener
-                 *
-                 */
-                init: function () {
-                    $rootScope.$on('BrokerPeerConnection', function (event, data) {
-                        this._add(data.connection);
-                    }.bind(this));
-                },
-
-                /**
-                 * @ngdoc methode
                  * @name send
                  * @methodOf unchatbar.Connection
                  * @params {String} id client peerId
@@ -88,7 +73,7 @@ angular.module('unchatbar')
                  * add a new client connection
                  *
                  */
-                _add: function (connection) {
+                add: function (connection) {
                     connection.on('open', function () {
                         api._connectionMap[this.peer] = this;
                         /**
@@ -108,7 +93,6 @@ angular.module('unchatbar')
                         delete api._connectionMap[this.peer];
                     });
                     connection.on('data', function (data) {
-
                         var  peerId = this.peer;
 
                         $rootScope.$apply(function () {

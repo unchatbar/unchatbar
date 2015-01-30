@@ -33,23 +33,13 @@ describe('Serivce: Broker', function () {
                 expect(brokerService.getPeerIdFromStorage()).toBe('testPeerId');
             });
         });
-        describe('init', function () {
-            it('should call `Broker._initStorage`', function () {
-                spyOn(brokerService, '_initStorage').and.returnValue(true);
 
-                brokerService.init();
-
-                expect(brokerService._initStorage).toHaveBeenCalled();
-            });
-
-
-        });
-        describe('_initStorage', function () {
+        describe('initStorage', function () {
             var sessionStorage = {};
             beforeEach(inject(function ($sessionStorage) {
                 sessionStorage = $sessionStorage;
                 spyOn(sessionStorage, '$default').and.returnValue({broker: {test: 'data'}});
-                brokerService._initStorage();
+                brokerService.initStorage();
             }));
             it('should call `$sessionStorage.$default` with object', function () {
                 expect(sessionStorage.$default).toHaveBeenCalledWith({
@@ -62,145 +52,13 @@ describe('Serivce: Broker', function () {
                 expect(brokerService._storage).toEqual({test: 'data'});
             });
         });
-        describe('_getWebWorker' , function(){
-            beforeEach(function () {
-                spyOn(window, 'Worker').and.callFake(function () {
-                    return {'Worker': 'test'};
-                });
-            });
-            it('should call `window.Worker` with broker-worker.js', function () {
-                brokerService._getWebWorker();
 
-                expect(window.Worker).toHaveBeenCalledWith('scripts/worker/broker-worker.js');
-            });
-            it('should set return of `window.Worker` to `Broker._brokerWorker`', function () {
-                expect(brokerService._getWebWorker()).toEqual({'Worker': 'test'});
-            });
-
-        });
-        describe('_holdBrokerConnection', function () {
-            var addEventListenerCallback = function () {
-                },
-                postMessageCallback = function () {
-                },
-                webWorker;
-
-            describe('check worker', function () {
-                beforeEach(function () {
-                    webWorker = {
-                        addEventListener: function () {
-                        },
-                        postMessage: function () {
-                        },
-                        terminate : function(){}
-                    };
-                    spyOn(brokerService,'_getWebWorker').and.returnValue(webWorker);
-
-                    spyOn(webWorker, 'addEventListener').and.callFake(function (eventName, callback) {
-                        addEventListenerCallback = callback;
-                    });
-                    spyOn(webWorker, 'postMessage').and.callFake(function (eventName, callback) {
-                        postMessageCallback = callback;
-                    });
-                    spyOn(webWorker, 'terminate').and.returnValue(true);
-
-                    brokerService._holdBrokerConnection();
-                });
-
-
-                it('should call `this._brokerWorker.addEventListener` with `message`', function () {
-                    expect(webWorker.addEventListener)
-                        .toHaveBeenCalledWith('message', addEventListenerCallback, false);
-                });
-                it('should call `this._brokerWorker.postMessage` with `HEARTBEAT`', function () {
-                    expect(webWorker.postMessage).toHaveBeenCalledWith('HEARTBEAT');
-                });
-                describe('trigger addEventListener', function () {
-                    var peerSocket = {};
-                    beforeEach(function () {
-                        peerSocket = {
-                            socket: {
-                                _wsOpen: function () {
-                                },
-                                send: function () {
-                                },
-
-                            },
-                            destroy : function(){
-
-                            }
-                        };
-                        spyOn(brokerService, 'connectServer').and.returnValue(false);
-                        spyOn(peerService, 'get').and.returnValue(peerSocket);
-                        spyOn(peerSocket.socket, 'send').and.returnValue(true);
-                        spyOn(peerSocket, 'destroy').and.returnValue(true);
-
-
-                    });
-                    describe('browser is offline', function () {
-                        beforeEach(function () {
-                            spyOn(brokerService, '_isBrowserOnline').and.returnValue(false);
-                            addEventListenerCallback();
-                        });
-                        it('should not call `peerService.get().socket.send` with type `HEARTBEAT`', function () {
-                            expect(peerSocket.socket.send).not.toHaveBeenCalled();
-                        });
-                        it('should not call `webWorker.terminate()', function () {
-                            expect(webWorker.terminate).not.toHaveBeenCalled();
-                        });
-
-                        it('should not call `Broker.connectServer', function () {
-                            expect(brokerService.connectServer).not.toHaveBeenCalled();
-                        });
-                    });
-                    describe('browser is online', function () {
-                        beforeEach(function () {
-                            spyOn(brokerService, '_isBrowserOnline').and.returnValue(true);
-                        });
-
-                        describe('socket is open', function () {
-                            beforeEach(function () {
-                                spyOn(peerSocket.socket, '_wsOpen').and.returnValue(true);
-                                addEventListenerCallback();
-                            });
-                            it('should call `peerService.get().socket.send` with type `HEARTBEAT`', function () {
-                                expect(peerSocket.socket.send).toHaveBeenCalledWith({type: 'HEARTBEAT'});
-                            });
-
-                            it('should not call `Broker.connectServer', function () {
-                                expect(brokerService.connectServer).not.toHaveBeenCalled();
-                            });
-                        });
-                        describe('socket is closed', function () {
-                            beforeEach(function () {
-                                spyOn(peerSocket.socket, '_wsOpen').and.returnValue(false);
-                                addEventListenerCallback();
-                            });
-                            it('should not call `peerService.get().socket.send` with type `HEARTBEAT`', function () {
-                                expect(peerSocket.destroy).toHaveBeenCalled();
-                            });
-                            it('should not call `peerService.get().socket.send` with type `HEARTBEAT`', function () {
-                                expect(peerSocket.socket.send).not.toHaveBeenCalled();
-                            });
-                            it('should not call `webWorker.terminate()', function () {
-                                expect(webWorker.terminate).toHaveBeenCalled();
-                            });
-                            it('should call `Broker.connectServer', function () {
-                                expect(brokerService.connectServer).toHaveBeenCalled();
-                            });
-                        });
-                    });
-                });
-            });
-
-        });
 
         describe('connectServer', function () {
             beforeEach(function () {
 
                 spyOn(peerService, 'init').and.returnValue('peer');
                 spyOn(brokerService, '_peerListener').and.returnValue(true);
-                spyOn(brokerService, '_holdBrokerConnection').and.returnValue(true);
             });
 
             it('should call Peer.init with peerId and provider options', function () {
@@ -209,9 +67,11 @@ describe('Serivce: Broker', function () {
 
                 expect(peerService.init).toHaveBeenCalledWith('peerTest', {
                     host: 'host.de',
-                    secure:true,
                     port: 12345,
-                    path: 'test/'
+                    path: 'test/',
+                    config: { iceServers: [  ] },
+                    secure:false,
+                    debug : 0,
                 });
             });
             it('should call _peerListener', function () {
@@ -221,11 +81,7 @@ describe('Serivce: Broker', function () {
             });
 
 
-            it('should call `Broker._holdBrokerConnection` ', function () {
-                brokerService.connectServer();
 
-                expect(brokerService._holdBrokerConnection).toHaveBeenCalled();
-            });
         });
 
         describe('_peerListener', function () {
@@ -352,7 +208,7 @@ describe('Serivce: Broker', function () {
             it('should call `peer.connect` with connect id', function () {
                 brokerService.connect('clientId');
 
-                expect(peer.connect).toHaveBeenCalledWith('clientId');
+                expect(peer.connect).toHaveBeenCalledWith('clientId',{ reliable: true });
             });
 
 

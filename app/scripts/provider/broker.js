@@ -11,7 +11,13 @@
 angular.module('unchatbar')
     .provider('Broker', function () {
 
-        var host = '', port = '', path = '', useLocalStorage = false;
+        var host = '',
+            port = '',
+            path = '',
+            useLocalStorage = false,
+            useSecureConnection=false,
+            brokerDebugLevel = 0,
+            iceServer = [];
 
         /**
          * @ngdoc methode
@@ -26,6 +32,49 @@ angular.module('unchatbar')
         this.setHost = function (_host) {
             host = _host;
         };
+
+        /**
+         * @ngdoc methode
+         * @name addIceServer
+         * @methodOf unchatbar.BrokerProvider
+         * @params {Object} server ice server
+         * @description
+         *
+         * add ice server
+         *
+         */
+        this.addIceServer = function (server) {
+            iceServer.push(server);
+        };
+
+        /**
+         * @ngdoc methode
+         * @name setSecureConnection
+         * @methodOf unchatbar.BrokerProvider
+         * @params {Boolean} _useSecureConnection set use secure connection
+         * @description
+         *
+         * set secure connection for broker server
+         *
+         */
+        this.setSecureConnection = function (_useSecureConnection) {
+            useSecureConnection = _useSecureConnection ? true : false;
+        };
+
+        /**
+         * @ngdoc methode
+         * @name setSecureConnection
+         * @methodOf unchatbar.BrokerProvider
+         * @params {Number} _brokerDebug debug level
+         * @description
+         *
+         * set broker debug level
+         *
+         */
+        this.setSecureConnection = function (_brokerDebugLevel) {
+            brokerDebugLevel = _brokerDebugLevel;
+        };
+
 
         /**
          * @ngdoc methode
@@ -85,15 +134,6 @@ angular.module('unchatbar')
             function ($rootScope, $localStorage, $sessionStorage, peerService) {
                 //TODO ON VIEW CHANGE START connectServer
                 var api =  {
-                    /**
-                     * @ngdoc methode
-                     * @name _brokerWorker
-                     * @propertyOf unchatbar.Broker
-                     * @private
-                     * @returns {Object} broker webworker
-                     *
-                     */
-                    _brokerWorker : null,
 
                     /**
                      * @ngdoc methode
@@ -106,20 +146,23 @@ angular.module('unchatbar')
                     _storage : {
                       peerId : ''
                     },
-                    webWorker : null,
+
                     /**
                      * @ngdoc methode
-                     * @name init
+                     * @name initStorage
                      * @methodOf unchatbar.Broker
-                     * @return {String} own peer id
                      * @description
                      *
-                     * init Broker
+                     * init storage
                      *
                      */
-                    init : function() {
-                        this._initStorage();
-
+                    initStorage : function() {
+                        var storage = useLocalStorage ? $localStorage : $sessionStorage;
+                        this._storage = storage.$default({
+                            broker: {
+                                peerId: ''
+                            }
+                        }).broker;
                     },
 
                     /**
@@ -132,8 +175,13 @@ angular.module('unchatbar')
                      *
                      */
                     connectServer: function () {
-                        peerService.init(this._storage.peerId, {host: host, secure:true , port: port, path: path});
-                        api._holdBrokerConnection();
+                        peerService.init(this._storage.peerId, 
+                        {host: host,  port: port, 
+                        path: path,
+                        config: {'iceServers':iceServer},
+                        secure:useSecureConnection,
+                        debug: brokerDebugLevel
+                        });
                         this._peerListener();
                     },
 
@@ -148,7 +196,7 @@ angular.module('unchatbar')
                      *
                      */
                     connect: function (id) {
-                        var connection = peerService.get().connect(id);
+                        var connection = peerService.get().connect(id,{reliable:true});
                         $rootScope.$broadcast('BrokerPeerConnection', {
                             connection: connection
                         });
@@ -215,45 +263,6 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
-                     * @name _getWebWorker
-                     * @methodOf unchatbar.Broker
-                     * @return {Object} webWorker
-                     * @description
-                     *
-                     * get new Webwroker instance
-                     *
-                     */
-                    _getWebWorker : function() {
-                        return new Worker('scripts/worker/broker-worker.js');
-                    },
-                    /**
-                     * @ngdoc methode
-                     * @name _holdBrokerConnection
-                     * @methodOf unchatbar.Broker
-                     * @description
-                     *
-                     * hold Broker connection
-                     *
-                     */
-                    _holdBrokerConnection : function (){
-                        api.webWorker = this._getWebWorker();
-                        api.webWorker.addEventListener('message', function () {
-                            var isOnline = api._isBrowserOnline();
-                            var peer = peerService.get();
-                            if (isOnline === true &&
-                                peer.socket._wsOpen()) {
-                                peer.socket.send({type: 'HEARTBEAT'});
-                            } else if(isOnline === true) {
-                                api.webWorker.terminate();
-                                peer.destroy();
-                                api.connectServer();
-                            }
-                        }, false);
-                        api.webWorker.postMessage('HEARTBEAT');
-                    },
-
-                    /**
-                     * @ngdoc methode
                      * @name _isBrowserOnline
                      * @methodOf unchatbar.Broker
                      * @returns {Boolean} navigator.onLine
@@ -264,25 +273,6 @@ angular.module('unchatbar')
                      */
                     _isBrowserOnline : function() {
                         return navigator.onLine;
-                    },
-
-
-                    /**
-                     * @ngdoc methode
-                     * @name _initStorage
-                     * @methodOf unchatbar.Broker
-                     * @description
-                     *
-                     * init storage
-                     *
-                     */
-                    _initStorage : function() {
-                        var storage = useLocalStorage ? $localStorage : $sessionStorage;
-                        this._storage = storage.$default({
-                            broker: {
-                                peerId: ''
-                            }
-                        }).broker;
                     },
 
                     /**
@@ -423,6 +413,7 @@ angular.module('unchatbar')
 
                     }
                 };
+
                 return api;
             }
         ];

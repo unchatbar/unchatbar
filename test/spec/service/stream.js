@@ -16,34 +16,6 @@ describe('Serivce: Profile', function () {
 
     describe('check methode', function () {
 
-        describe('init', function () {
-            var callObject;
-            beforeEach(function () {
-                StreamService.init();
-                callObject = {
-                    metadata: {streamOption: 'streamOption'},
-                    answer: function () {
-                    }
-                };
-            });
-            it('should call `Stream.answerCall` with connection and streamOption after broadcast `BrokerPeerCall`', function () {
-                spyOn(StreamService, 'addCallToAnswer').and.returnValue(true);
-                rootScope.$broadcast('BrokerPeerCall', {client: callObject});
-                expect(StreamService.addCallToAnswer).toHaveBeenCalledWith(callObject);
-            });
-
-            it('should call `Stream.answerCall` with peerId and users after broadcast `ConnectionGetMessageupdateStreamGroup`', function () {
-                spyOn(StreamService, '_callToGroupUsersFromClient').and.returnValue(true);
-                rootScope.$broadcast('ConnectionGetMessageupdateStreamGroup', {
-                    peerId: 'peerId',
-                    message: {
-                        users: ['UserA', 'UserB']
-                    }
-                });
-                expect(StreamService._callToGroupUsersFromClient).toHaveBeenCalledWith('peerId', ['UserA', 'UserB']);
-            });
-        });
-
         describe('getCallsForAnswerMap', function () {
             it('should return `Stream._callForWaitingAnswer`', function () {
                 StreamService._callForWaitingAnswer = ['call'];
@@ -482,7 +454,7 @@ describe('Serivce: Profile', function () {
             });
         });
 
-        describe('_callToGroupUsersFromClient', function () {
+        describe('callToGroupUsersFromClient', function () {
             var users;
             beforeEach(inject(function($q){
                 spyOn(StreamService, 'createOwnStream').and.callFake(function () {
@@ -498,7 +470,7 @@ describe('Serivce: Profile', function () {
             describe('user is not in conference List', function () {
                 it('should not call `Stream.callConference`', function () {
                     users = {};
-                    StreamService._callToGroupUsersFromClient('peerId', ['userA', 'UserB']);
+                    StreamService.callToGroupUsersFromClient('peerId', ['userA', 'UserB']);
                     rootScope.$digest();
                     expect(StreamService.callConference).not.toHaveBeenCalled();
                 });
@@ -511,7 +483,7 @@ describe('Serivce: Profile', function () {
                         'peerId': {roomId: 'roomId', option: 'Streamoption'},
                         'userA': {option: 'streamOptionA'}
                     };
-                    StreamService._callToGroupUsersFromClient('peerId', ['userA', 'UserB']);
+                    StreamService.callToGroupUsersFromClient('peerId', ['userA', 'UserB']);
                 });
                 it('should call `Stream.createOwnStream` with streamOption', function () {
                     rootScope.$digest();

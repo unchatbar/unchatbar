@@ -12,17 +12,8 @@ describe('Serivce: Connection', function () {
     }));
 
     describe('check methode', function () {
-        describe('init' , function(){
-           it('should call Connection.add with connection' , function(){
-               spyOn(ConnectionService,'_add').and.returnValue(true);
-               ConnectionService.init();
-               rootScope.$broadcast('BrokerPeerConnection',{connection: 'connection'});
 
-               expect(ConnectionService._add).toHaveBeenCalledWith('connection');
-           });
-        });
-
-        describe('_add', function () {
+        describe('add', function () {
             var connection = {}, peerCallBack = {};
             beforeEach(function () {
                 connection.peer = 'peerId';
@@ -33,7 +24,7 @@ describe('Serivce: Connection', function () {
                     peerCallBack[eventName] = callBack;
                 });
                 spyOn(rootScope,'$broadcast').and.returnValue(true);
-                ConnectionService._add(connection);
+                ConnectionService.add(connection);
             });
 
 

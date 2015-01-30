@@ -54,51 +54,16 @@ angular.module('unchatbar')
                         user: {},
                         groups: {}
                     },
-                    /**
-                     * @ngdoc methode
-                     * @name init
-                     * @methodOf unchatbar.PhoneBook
-                     * @description
-                     *
-                     * init listener
-                     *
-                     */
-                    init: function () {
-                        this._initStorage();
-                        $rootScope.$on('BrokerPeerConnection', function (event, data) {
-                            api.addClient(data.connection.peer, {label : data.connection.peer });
-                        });
-                        $rootScope.$on('BrokerPeerCall', function (event, data) {
-                            api.addClient(data.client.peer, data.client.metadata.profile);
-                        });
-                        $rootScope.$on('BrokerPeerOpen', function () {
-                            _.forEach(api.getClientMap(), function (item) {
-                                if (item.id) {
-                                    Broker.connect(item.id);
-                                }
-                            });
-                        });
-                        $rootScope.$on('ConnectionGetMessageprofile', function (event, data) {
-                            api.updateClient(data.peerId, data.message.profile.label || '');
-                        });
-
-                        $rootScope.$on('ConnectionGetMessageupdateUserGroup', function (event, data) {
-                            api.copyGroupFromPartner(data.message.group.id,data.message.group);
-                        });
-                        $rootScope.$on('ConnectionGetMessageremoveGroup', function (event, data) {
-                            api._removeGroupByClient(data.peerId,data.message.roomId);
-                        });
-                    },
 
                     /**
                      * @ngdoc methode
-                     * @name _initStorage
+                     * @name initStorage
                      * @methodOf unchatbar.PhoneBook
                      * @description
                      *
                      * init storage
                      */
-                    _initStorage : function(){
+                    initStorage : function(){
                         var storage = useLocalStorage ? $localStorage : $sessionStorage;
                         this._storagePhoneBook = storage.$default({
                             phoneBook: {
@@ -312,7 +277,7 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
-                     * @name _removeGroupByClient
+                     * @name removeGroupByClient
                      * @methodOf unchatbar.PhoneBook
                      * @params {String} clientPeer client peer id
                      * @params {String} roomId id of room
@@ -321,7 +286,7 @@ angular.module('unchatbar')
                      * remove group from phone book only run by remove event from other clients
                      *
                      */
-                    _removeGroupByClient: function (clientPeer,roomId) {
+                    removeGroupByClient: function (clientPeer,roomId) {
                         if (this._storagePhoneBook.groups[roomId].owner === clientPeer) {
                             delete this._storagePhoneBook.groups[roomId];
                         } else {
@@ -332,6 +297,7 @@ angular.module('unchatbar')
                         }
                         this._sendUpdateEvent();
                     },
+
 
                     /**
                      * @ngdoc methode
@@ -370,6 +336,7 @@ angular.module('unchatbar')
                         $rootScope.$broadcast('PhoneBookUpdate', {});
                     }
                 };
+
                 return api;
             }
         ];

@@ -14,32 +14,12 @@ describe('Serivce: Profile', function () {
 
     describe('check methode', function () {
 
-        describe('init', function () {
-            beforeEach(function () {
-                spyOn(ProfileService, '_initStorage').and.returnValue(true);
-                ProfileService.init();
-            });
-            it('should call PhoneBook._initStorage', function () {
-                expect(ProfileService._initStorage).toHaveBeenCalled();
-            });
-            describe('check listener `ConnectionOpen`' , function(){
-               it('should call `Connection.send` with peerId ,action `profile` and userprofile' , function(){
-                 spyOn(ProfileService,'get').and.returnValue('profile');
-                 spyOn(ConnectionService,'send').and.returnValue(true);
-                 rootScope.$broadcast('ConnectionOpen',{peerId: 'peerId'});
-
-                 expect(ConnectionService.send).toHaveBeenCalledWith('peerId',{action:'profile' ,profile :'profile'});
-
-               });
-            });
-        });
-
-        describe('_initStorage', function () {
+        describe('initStorage', function () {
             var sessionStorage = {};
             beforeEach(inject(function ($sessionStorage) {
                 sessionStorage = $sessionStorage;
                 spyOn(sessionStorage, '$default').and.returnValue({test: 'data'});
-                ProfileService._initStorage();
+                ProfileService.initStorage();
             }));
             it('should call `$sessionStorage.$default` with object', function () {
                 expect(sessionStorage.$default).toHaveBeenCalledWith({
