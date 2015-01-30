@@ -55,13 +55,13 @@ angular.module('unchatbar')
                     },
                     /**
                      * @ngdoc methode
-                     * @name _initStorage
+                     * @name initStorage
                      * @methodOf unchatbar.Profile
                      * @description
                      *
                      * init storage
                      */
-                    _initStorage : function(){
+                    initStorage : function(){
                         var storage = useLocalStorage ? $localStorage : $sessionStorage;
                         this._storageProfile = storage.$default({
                             profile: {}
@@ -124,7 +124,7 @@ angular.module('unchatbar')
                         }.bind(this));
                     }
                 };
-                api._initStorage();
+
                 return api;
             }
         ];

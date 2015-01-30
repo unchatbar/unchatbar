@@ -149,6 +149,24 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
+                     * @name initStorage
+                     * @methodOf unchatbar.Broker
+                     * @description
+                     *
+                     * init storage
+                     *
+                     */
+                    initStorage : function() {
+                        var storage = useLocalStorage ? $localStorage : $sessionStorage;
+                        this._storage = storage.$default({
+                            broker: {
+                                peerId: ''
+                            }
+                        }).broker;
+                    },
+
+                    /**
+                     * @ngdoc methode
                      * @name connectServer
                      * @methodOf unchatbar.Broker
                      * @description
@@ -255,25 +273,6 @@ angular.module('unchatbar')
                      */
                     _isBrowserOnline : function() {
                         return navigator.onLine;
-                    },
-
-
-                    /**
-                     * @ngdoc methode
-                     * @name _initStorage
-                     * @methodOf unchatbar.Broker
-                     * @description
-                     *
-                     * init storage
-                     *
-                     */
-                    _initStorage : function() {
-                        var storage = useLocalStorage ? $localStorage : $sessionStorage;
-                        this._storage = storage.$default({
-                            broker: {
-                                peerId: ''
-                            }
-                        }).broker;
                     },
 
                     /**
@@ -414,7 +413,7 @@ angular.module('unchatbar')
 
                     }
                 };
-                api._initStorage();
+
                 return api;
             }
         ];

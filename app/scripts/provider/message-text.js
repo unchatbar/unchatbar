@@ -71,6 +71,25 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
+                     * @name initStorage
+                     * @methodOf unchatbar.MessageText
+                     * @description
+                     *
+                     * init storage
+                     */
+                    initStorage: function () {
+                        var storage = useLocalStorage ? $localStorage : $sessionStorage;
+                        this._storageMessages = storage.$default({
+                            message: {
+                                messages: {},
+                                messageInbox : {},
+                                queue: {}
+                            }
+                        }).message;
+                    },
+
+                    /**
+                     * @ngdoc methode
                      * @name setRoom
                      * @methodOf unchatbar.MessageText
                      * @params {String} type type of room `user` or group
@@ -190,7 +209,6 @@ angular.module('unchatbar')
                         }
                     },
 
-
                     /**
                      * @ngdoc methode
                      * @name sendRemoveGroup
@@ -215,26 +233,83 @@ angular.module('unchatbar')
                                 }
                             }
                         }.bind(this));
-
                     },
 
                     /**
                      * @ngdoc methode
-                     * @name _initStorage
+                     * @name addToInbox
                      * @methodOf unchatbar.MessageText
+                     * @private
+                     * @params {String} roomId id of room clientId or userId
+                     * @params {String} from message from
+                     * @params {Object} message message
                      * @description
                      *
-                     * init storage
+                     * store message in storage inbox
+                     *
                      */
-                    _initStorage: function () {
-                        var storage = useLocalStorage ? $localStorage : $sessionStorage;
-                        this._storageMessages = storage.$default({
-                            message: {
-                                messages: {},
-                                messageInbox : {},
-                                queue: {}
-                            }
-                        }).message;
+                    addToInbox : function(roomId, from, message) {
+                        if (!this._storageMessages.messageInbox[roomId]) {
+                            this._storageMessages.messageInbox[roomId] = [];
+                        }
+                        this._storageMessages.messageInbox[roomId].push({
+                            text: message.text,
+                            user: from,
+                            own: message.own
+                        });
+                        /**
+                         * @ngdoc event
+                         * @name MessageTextGetMessage
+                         * @eventOf unchatbar.MessageText
+                         * @eventType broadcast on root scope
+                         * @description
+                         *
+                         * new message added
+                         *
+                         */
+                        $rootScope.$broadcast('MessageTextGetMessage',{isRoomVisible : roomId === this._selectedRoom.id });
+                    },
+
+                    /**
+                     * @ngdoc methode
+                     * @name sendFromQueue
+                     * @methodOf unchatbar.MessageText
+                     * @private
+                     * @params {String} peerId id of client
+                     * @description
+                     *
+                     * send message from storage
+                     *
+                     */
+                    sendFromQueue: function (peerId) {
+                        if (this._storageMessages.queue[peerId]) {
+                            _.forEach(this._storageMessages.queue[peerId], function (message) {
+                                Connection.send(peerId, message);
+                            }.bind(this));
+                        }
+                    },
+
+
+                    /**
+                     * @ngdoc methode
+                     * @name sendFromQueue
+                     * @methodOf unchatbar.MessageText
+                     * @private
+                     * @params {String} peerId id of client
+                     * @description
+                     *
+                     * send message from storage
+                     *
+                     */
+                    removeFromQueue: function (peerId,messageId) {
+                        if (this._storageMessages.queue[peerId] &&
+                            this._storageMessages.queue[peerId][messageId]
+                        ) {
+                            delete this._storageMessages.queue[peerId][messageId];
+                        }
+                        if (_.size(this._storageMessages.queue[peerId]) === 0) {
+                            delete this._storageMessages.queue[peerId];
+                        }
                     },
 
                     /**
@@ -259,41 +334,6 @@ angular.module('unchatbar')
                             user: from,
                             own: message.own
                         });
-                    },
-
-                    /**
-                     * @ngdoc methode
-                     * @name _addToInbox
-                     * @methodOf unchatbar.MessageText
-                     * @private
-                     * @params {String} roomId id of room clientId or userId
-                     * @params {String} from message from
-                     * @params {Object} message message
-                     * @description
-                     *
-                     * store message in storage inbox
-                     *
-                     */
-                    _addToInbox : function(roomId, from, message) {
-                        if (!this._storageMessages.messageInbox[roomId]) {
-                            this._storageMessages.messageInbox[roomId] = [];
-                        }
-                        this._storageMessages.messageInbox[roomId].push({
-                            text: message.text,
-                            user: from,
-                            own: message.own
-                        });
-                        /**
-                         * @ngdoc event
-                         * @name MessageTextGetMessage
-                         * @eventOf unchatbar.MessageText
-                         * @eventType broadcast on root scope
-                         * @description
-                         *
-                         * new message added
-                         *
-                         */
-                        $rootScope.$broadcast('MessageTextGetMessage',{isRoomVisible : roomId === this._selectedRoom.id });
                     },
 
                     /**
@@ -430,50 +470,10 @@ angular.module('unchatbar')
                             this._storageMessages.queue[peerId] = {};
                         }
                         this._storageMessages.queue[peerId][message.id] = message;
-                    },
-
-                    /**
-                     * @ngdoc methode
-                     * @name _sendFromQueue
-                     * @methodOf unchatbar.MessageText
-                     * @private
-                     * @params {String} peerId id of client
-                     * @description
-                     *
-                     * send message from storage
-                     *
-                     */
-                    _sendFromQueue: function (peerId) {
-                        if (this._storageMessages.queue[peerId]) {
-                            _.forEach(this._storageMessages.queue[peerId], function (message) {
-                                Connection.send(peerId, message);
-                            }.bind(this));
-                        }
-                    },
-
-                    /**
-                     * @ngdoc methode
-                     * @name _sendFromQueue
-                     * @methodOf unchatbar.MessageText
-                     * @private
-                     * @params {String} peerId id of client
-                     * @description
-                     *
-                     * send message from storage
-                     *
-                     */
-                    _removeFromQueue: function (peerId,messageId) {
-                        if (this._storageMessages.queue[peerId] &&
-                            this._storageMessages.queue[peerId][messageId]
-                        ) {
-                            delete this._storageMessages.queue[peerId][messageId];
-                        }
-                        if (_.size(this._storageMessages.queue[peerId]) === 0) {
-                            delete this._storageMessages.queue[peerId];
-                        }
                     }
+
                 };
-                api._initStorage();
+
                 return api;
             }
         ];

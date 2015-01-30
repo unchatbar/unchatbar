@@ -13,24 +13,6 @@ describe('Serivce: Notify', function () {
 
     describe('check methode', function () {
 
-        describe('init', function () {
-            beforeEach(function () {
-                spyOn(notifyService, '_getNotificationPermission').and.returnValue(true);
-                spyOn(notifyService, '_initMessageSound').and.returnValue(true);
-                spyOn(notifyService, '_initStreamSound').and.returnValue(true);
-                notifyService.init();
-            });
-            it('should call `notify._getNotificationPermission`', function () {
-                expect(notifyService._getNotificationPermission).toHaveBeenCalled();
-            });
-            it('should call `notify._initMessageSound`', function () {
-                expect(notifyService._initMessageSound).toHaveBeenCalled();
-            });
-            it('should call `notify._initStreamSound`', function () {
-                expect(notifyService._initStreamSound).toHaveBeenCalled();
-            });
-        });
-
         describe('textMessage', function () {
             beforeEach(function () {
                 notifyService._textMessageSound = {

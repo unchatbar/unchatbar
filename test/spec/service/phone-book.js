@@ -14,109 +14,12 @@ describe('Serivce: phoneBook', function () {
 
     describe('check methode', function () {
 
-        describe('init', function () {
-            beforeEach(function () {
-                spyOn(PhoneBookService, '_initStorage').and.returnValue(true);
-                PhoneBookService.init();
-            });
-            it('should call PhoneBook._initStorage', function () {
-                expect(PhoneBookService._initStorage).toHaveBeenCalled();
-            });
-            describe('check listener `BrokerPeerConnection`', function () {
-                beforeEach(function () {
-                    spyOn(PhoneBookService, 'addClient').and.returnValue(true);
-                });
-
-
-                it('should call `PhoneBook.addClient`', function () {
-                    rootScope.$broadcast('BrokerPeerConnection', {connection: {peer: 'newPeerId'}});
-                    expect(PhoneBookService.addClient).toHaveBeenCalledWith('newPeerId', {label: 'newPeerId'});
-                });
-
-            });
-
-            describe('check listener `BrokerPeerCall`', function () {
-                beforeEach(function () {
-                    spyOn(PhoneBookService, 'addClient').and.returnValue(true);
-                });
-
-
-                it('should call `PhoneBook.addClient`', function () {
-                    rootScope.$broadcast('BrokerPeerCall', {
-                        client: {
-                            peer: 'newPeerId',
-                            metadata: {
-                                profile: 'profile'
-                            }
-                        }
-                    });
-                    expect(PhoneBookService.addClient).toHaveBeenCalledWith('newPeerId', 'profile');
-                });
-
-            });
-
-            describe('check listener `BrokerPeerOpen`', function () {
-                beforeEach(function () {
-                    spyOn(PhoneBookService, 'getClientMap').and.returnValue([{id: 'userId'}]);
-                    spyOn(BrokerService, 'connect').and.returnValue(true);
-                });
-                it('should call `PhoneBook.getClientMap`', function () {
-                    rootScope.$broadcast('BrokerPeerOpen');
-                    expect(PhoneBookService.getClientMap).toHaveBeenCalled();
-                });
-                it('should call `Broker.connect` with user id', function () {
-                    rootScope.$broadcast('BrokerPeerOpen');
-                    expect(BrokerService.connect).toHaveBeenCalledWith('userId');
-                });
-            });
-
-            describe('check listener `ConnectionGetMessageprofile`', function () {
-                it('should call `PhoneBook.updateClient` with peerId and label from profile', function () {
-                    spyOn(PhoneBookService, 'updateClient').and.returnValue(true);
-                    rootScope.$broadcast('ConnectionGetMessageprofile',
-                        {
-                            peerId: 'peerId',
-                            message: {
-                                profile: {
-                                    label: 'testLabel'
-                                }
-                            }
-                        });
-                    expect(PhoneBookService.updateClient).toHaveBeenCalledWith('peerId', 'testLabel');
-                });
-            });
-            describe('check listener `ConnectionGetMessageupdateUserGroup`', function () {
-                it('should call `PhoneBook.copyGroupFromPartner` with peerId and label from profile', function () {
-                    spyOn(PhoneBookService, 'copyGroupFromPartner').and.returnValue(true);
-                    rootScope.$broadcast('ConnectionGetMessageupdateUserGroup',
-                        {
-                            message: {
-                                group: {id: 'peerId'}
-                            }
-                        });
-                    expect(PhoneBookService.copyGroupFromPartner).toHaveBeenCalledWith('peerId', {id: 'peerId'});
-                });
-            });
-            describe('check listener `ConnectionGetMessageremoveGroup`', function () {
-                it('should call `PhoneBook._removeGroupByClient` with peerId and label from profile', function () {
-                    spyOn(PhoneBookService, '_removeGroupByClient').and.returnValue(true);
-                    rootScope.$broadcast('ConnectionGetMessageremoveGroup',
-                        {
-                            peerId: 'peerId',
-                            message: {roomId: 'roomId'}
-                        });
-                    expect(PhoneBookService._removeGroupByClient).toHaveBeenCalledWith('peerId', 'roomId');
-                });
-            });
-
-        });
-
-        describe('_initStorage', function () {
+        describe('initStorage', function () {
             var sessionStorage = {};
             beforeEach(inject(function ($sessionStorage) {
                 sessionStorage = $sessionStorage;
                 spyOn(sessionStorage, '$default').and.returnValue({phoneBook: {test: 'data'}});
-                PhoneBookService._initStorage();
+                PhoneBookService.initStorage();
             }));
             it('should call `$sessionStorage.$default` with object', function () {
                 expect(sessionStorage.$default).toHaveBeenCalledWith({
@@ -387,12 +290,12 @@ describe('Serivce: phoneBook', function () {
         });
 
 
-        describe('_removeGroupByClient', function () {
+        describe('removeGroupByClient', function () {
             describe('client-peer is owner of group', function () {
                 it('should remove group from `_storagePhoneBook.group`', function () {
                     PhoneBookService._storagePhoneBook.groups = {'roomId': {owner: 'theOwner', testIdNoRemove: 'aa'}};
 
-                    PhoneBookService._removeGroupByClient('theOwner', 'roomId');
+                    PhoneBookService.removeGroupByClient('theOwner', 'roomId');
 
                     expect(PhoneBookService._storagePhoneBook.groups).toEqual({});
                 });
@@ -407,7 +310,7 @@ describe('Serivce: phoneBook', function () {
                         }
                     };
 
-                    PhoneBookService._removeGroupByClient('onlyUser', 'roomId');
+                    PhoneBookService.removeGroupByClient('onlyUser', 'roomId');
 
                     expect(PhoneBookService._storagePhoneBook.groups).toEqual({
                         'roomId': {
@@ -423,7 +326,7 @@ describe('Serivce: phoneBook', function () {
                 PhoneBookService._storagePhoneBook.groups = {'roomId': {owner: 'XX', testIdNoRemove: 'aa'}};
                 spyOn(PhoneBookService, '_sendUpdateEvent').and.returnValue(true);
 
-                PhoneBookService._removeGroupByClient('theOwner', 'roomId');
+                PhoneBookService.removeGroupByClient('theOwner', 'roomId');
 
                 expect(PhoneBookService._sendUpdateEvent).toHaveBeenCalled();
             });

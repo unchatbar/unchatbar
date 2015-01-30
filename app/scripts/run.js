@@ -9,23 +9,31 @@
  */
 angular.module('unchatbar').run(['$rootScope', '$state', 'Broker', 'MessageText', 'PhoneBook', 'Profile', 'Connection', 'Stream', 'Notify',
     function ($rootScope, $state, Broker, MessageText, PhoneBook, Profile, Connection, Stream, Notify) {
+        MessageText.initStorage();
+        Broker.initStorage();
+        PhoneBook.initStorage();
+        Profile.initStorage();
+
+        Notify._getNotificationPermission();
+        Notify._initMessageSound();
+        Notify._initStreamSound();
 
         $rootScope.$on('ConnectionOpen', function (event, data) {
             Connection.send(data.peerId, {action: 'profile', profile: Profile.get()});
-            MessageText._sendFromQueue(data.peerId);
+            MessageText.sendFromQueue(data.peerId);
         });
 
         $rootScope.$on('ConnectionGetMessagetextMessage', function (event, data) {
             Notify.textMessage('you have new messages');
-            MessageText._addToInbox(data.message.groupId || data.peerId, data.peerId, data.message);
+            MessageText.addToInbox(data.message.groupId || data.peerId, data.peerId, data.message);
         });
 
         $rootScope.$on('ConnectionGetMessagereadMessage', function (event, data) {
-            MessageText._removeFromQueue(data.peerId, data.message.id);
+            MessageText.removeFromQueue(data.peerId, data.message.id);
         });
 
         $rootScope.$on('ConnectionGetMessageupdateStreamGroup', function (event, data) {
-            Stream._callToGroupUsersFromClient(data.peerId, data.message.users);
+            Stream.callToGroupUsersFromClient(data.peerId, data.message.users);
         });
 
         $rootScope.$on('ConnectionGetMessageprofile', function (event, data) {
@@ -37,11 +45,11 @@ angular.module('unchatbar').run(['$rootScope', '$state', 'Broker', 'MessageText'
         });
 
         $rootScope.$on('ConnectionGetMessageremoveGroup', function (event, data) {
-            PhoneBook._removeGroupByClient(data.peerId, data.message.roomId);
+            PhoneBook.removeGroupByClient(data.peerId, data.message.roomId);
         });
 
         $rootScope.$on('BrokerPeerConnection', function (event, data) {
-            Connection._add(data.connection);
+            Connection.add(data.connection);
             PhoneBook.addClient(data.connection.peer, {label: data.connection.peer});
 
         });

@@ -57,13 +57,13 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
-                     * @name _initStorage
+                     * @name initStorage
                      * @methodOf unchatbar.PhoneBook
                      * @description
                      *
                      * init storage
                      */
-                    _initStorage : function(){
+                    initStorage : function(){
                         var storage = useLocalStorage ? $localStorage : $sessionStorage;
                         this._storagePhoneBook = storage.$default({
                             phoneBook: {
@@ -277,7 +277,7 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
-                     * @name _removeGroupByClient
+                     * @name removeGroupByClient
                      * @methodOf unchatbar.PhoneBook
                      * @params {String} clientPeer client peer id
                      * @params {String} roomId id of room
@@ -286,7 +286,7 @@ angular.module('unchatbar')
                      * remove group from phone book only run by remove event from other clients
                      *
                      */
-                    _removeGroupByClient: function (clientPeer,roomId) {
+                    removeGroupByClient: function (clientPeer,roomId) {
                         if (this._storagePhoneBook.groups[roomId].owner === clientPeer) {
                             delete this._storagePhoneBook.groups[roomId];
                         } else {
@@ -297,6 +297,7 @@ angular.module('unchatbar')
                         }
                         this._sendUpdateEvent();
                     },
+
 
                     /**
                      * @ngdoc methode
@@ -335,7 +336,7 @@ angular.module('unchatbar')
                         $rootScope.$broadcast('PhoneBookUpdate', {});
                     }
                 };
-                api._initStorage();
+
                 return api;
             }
         ];

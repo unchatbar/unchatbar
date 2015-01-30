@@ -272,6 +272,31 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
+                 * @name callToGroupUsersFromClient
+                 * @methodOf unchatbar.Stream
+                 * @param {Object} _peerId client peer id
+                 * @param {Array} users client stream users
+                 * @private
+                 * @description
+                 *
+                 * create stream connection to all conference user from client
+                 *
+                 */
+                callToGroupUsersFromClient: function (_peerId, users) {
+                    var streamOption, roomId;
+                    if (api.getConferenceClient(_peerId) !== null) {
+                        streamOption = api.getConferenceClient(_peerId).option;
+                        roomId = api.getConferenceClient(_peerId).roomId;
+                        this.createOwnStream(streamOption).then(function (stream) {
+                            _.forEach(users, function (peerId) {
+                                api.callConference(roomId, peerId, streamOption, stream);
+                            });
+                        });
+                    }
+                },
+
+                /**
+                 * @ngdoc methode
                  * @name createOwnStream
                  * @methodOf unchatbar.Stream
                  * @params {Object} streamOption audio/video option
@@ -432,31 +457,6 @@ angular.module('unchatbar')
                         action: 'updateStreamGroup',
                         users: _.keys(api.getConferenceClientsMap())
                     });
-                },
-
-                /**
-                 * @ngdoc methode
-                 * @name _callToGroupUsersFromClient
-                 * @methodOf unchatbar.Stream
-                 * @param {Object} _peerId client peer id
-                 * @param {Array} users client stream users
-                 * @private
-                 * @description
-                 *
-                 * create stream connection to all conference user from client
-                 *
-                 */
-                _callToGroupUsersFromClient: function (_peerId, users) {
-                    var streamOption, roomId;
-                    if (api.getConferenceClient(_peerId) !== null) {
-                        streamOption = api.getConferenceClient(_peerId).option;
-                        roomId = api.getConferenceClient(_peerId).roomId;
-                        this.createOwnStream(streamOption).then(function (stream) {
-                            _.forEach(users, function (peerId) {
-                                api.callConference(roomId, peerId, streamOption, stream);
-                            });
-                        });
-                    }
                 },
 
                 /**

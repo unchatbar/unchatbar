@@ -196,9 +196,7 @@ angular.module('unchatbar')
                     }
                 }
             };
-            api._getNotificationPermission();
-            api._initMessageSound();
-            api._initStreamSound();
+
             return api;
         }
     ]
