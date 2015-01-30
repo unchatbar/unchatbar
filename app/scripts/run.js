@@ -73,6 +73,7 @@ angular.module('unchatbar').run(['$rootScope', '$state', 'Broker', 'MessageText'
             return false;
         } else {
             Broker.connectServer();
+            $state.go('chat');
         }
     }
 ]);
