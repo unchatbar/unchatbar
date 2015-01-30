@@ -29,21 +29,6 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
-                 * @name init
-                 * @methodOf unchatbar.Connection
-                 * @description
-                 *
-                 * init listener
-                 *
-                 */
-                init: function () {
-                    $rootScope.$on('BrokerPeerConnection', function (event, data) {
-                        this._add(data.connection);
-                    }.bind(this));
-                },
-
-                /**
-                 * @ngdoc methode
                  * @name send
                  * @methodOf unchatbar.Connection
                  * @params {String} id client peerId

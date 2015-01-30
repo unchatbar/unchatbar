@@ -54,41 +54,6 @@ angular.module('unchatbar')
                         user: {},
                         groups: {}
                     },
-                    /**
-                     * @ngdoc methode
-                     * @name init
-                     * @methodOf unchatbar.PhoneBook
-                     * @description
-                     *
-                     * init listener
-                     *
-                     */
-                    init: function () {
-                        this._initStorage();
-                        $rootScope.$on('BrokerPeerConnection', function (event, data) {
-                            api.addClient(data.connection.peer, {label : data.connection.peer });
-                        });
-                        $rootScope.$on('BrokerPeerCall', function (event, data) {
-                            api.addClient(data.client.peer, data.client.metadata.profile);
-                        });
-                        $rootScope.$on('BrokerPeerOpen', function () {
-                            _.forEach(api.getClientMap(), function (item) {
-                                if (item.id) {
-                                    Broker.connect(item.id);
-                                }
-                            });
-                        });
-                        $rootScope.$on('ConnectionGetMessageprofile', function (event, data) {
-                            api.updateClient(data.peerId, data.message.profile.label || '');
-                        });
-
-                        $rootScope.$on('ConnectionGetMessageupdateUserGroup', function (event, data) {
-                            api.copyGroupFromPartner(data.message.group.id,data.message.group);
-                        });
-                        $rootScope.$on('ConnectionGetMessageremoveGroup', function (event, data) {
-                            api._removeGroupByClient(data.peerId,data.message.roomId);
-                        });
-                    },
 
                     /**
                      * @ngdoc methode
@@ -370,6 +335,7 @@ angular.module('unchatbar')
                         $rootScope.$broadcast('PhoneBookUpdate', {});
                     }
                 };
+                api._initStorage();
                 return api;
             }
         ];

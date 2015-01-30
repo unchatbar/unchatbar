@@ -71,29 +71,6 @@ angular.module('unchatbar')
 
                     /**
                      * @ngdoc methode
-                     * @name init
-                     * @methodOf unchatbar.MessageText
-                     * @description
-                     *
-                     * init listener
-                     *
-                     */
-                    init: function () {
-                        this._initStorage();
-                        $rootScope.$on('ConnectionOpen', function (event, data) {
-                            api._sendFromQueue(data.peerId);
-                        });
-                        $rootScope.$on('ConnectionGetMessagetextMessage', function (event, data) {
-                            Notify.textMessage('you have new messages');
-                            api._addToInbox(data.message.groupId || data.peerId, data.peerId, data.message);
-                        });
-                        $rootScope.$on('ConnectionGetMessagereadMessage', function (event, data) {
-                            api._removeFromQueue(data.peerId,data.message.id);
-                        });
-                    },
-
-                    /**
-                     * @ngdoc methode
                      * @name setRoom
                      * @methodOf unchatbar.MessageText
                      * @params {String} type type of room `user` or group
@@ -496,6 +473,7 @@ angular.module('unchatbar')
                         }
                     }
                 };
+                api._initStorage();
                 return api;
             }
         ];

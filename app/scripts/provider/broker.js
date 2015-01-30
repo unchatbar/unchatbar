@@ -134,15 +134,6 @@ angular.module('unchatbar')
             function ($rootScope, $localStorage, $sessionStorage, peerService) {
                 //TODO ON VIEW CHANGE START connectServer
                 var api =  {
-                    /**
-                     * @ngdoc methode
-                     * @name _brokerWorker
-                     * @propertyOf unchatbar.Broker
-                     * @private
-                     * @returns {Object} broker webworker
-                     *
-                     */
-                    _brokerWorker : null,
 
                     /**
                      * @ngdoc methode
@@ -154,21 +145,6 @@ angular.module('unchatbar')
                      */
                     _storage : {
                       peerId : ''
-                    },
-                    webWorker : null,
-                    /**
-                     * @ngdoc methode
-                     * @name init
-                     * @methodOf unchatbar.Broker
-                     * @return {String} own peer id
-                     * @description
-                     *
-                     * init Broker
-                     *
-                     */
-                    init : function() {
-                        this._initStorage();
-
                     },
 
                     /**
@@ -265,45 +241,6 @@ angular.module('unchatbar')
                      */
                     getPeerIdFromStorage: function () {
                         return this._storage.peerId;
-                    },
-
-                    /**
-                     * @ngdoc methode
-                     * @name _getWebWorker
-                     * @methodOf unchatbar.Broker
-                     * @return {Object} webWorker
-                     * @description
-                     *
-                     * get new Webwroker instance
-                     *
-                     */
-                    _getWebWorker : function() {
-                        return new Worker('scripts/worker/broker-worker.js');
-                    },
-                    /**
-                     * @ngdoc methode
-                     * @name _holdBrokerConnection
-                     * @methodOf unchatbar.Broker
-                     * @description
-                     *
-                     * hold Broker connection
-                     *
-                     */
-                    _holdBrokerConnection : function (){
-                        api.webWorker = this._getWebWorker();
-                        api.webWorker.addEventListener('message', function () {
-                            var isOnline = api._isBrowserOnline();
-                            var peer = peerService.get();
-                            if (isOnline === true &&
-                                peer.socket._wsOpen()) {
-                                peer.socket.send({type: 'HEARTBEAT'});
-                            } else if(isOnline === true) {
-                                api.webWorker.terminate();
-                                peer.destroy();
-                                api.connectServer();
-                            }
-                        }, false);
-                        api.webWorker.postMessage('HEARTBEAT');
                     },
 
                     /**
@@ -477,6 +414,7 @@ angular.module('unchatbar')
 
                     }
                 };
+                api._initStorage();
                 return api;
             }
         ];

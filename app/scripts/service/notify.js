@@ -55,21 +55,6 @@ angular.module('unchatbar')
 
                 /**
                  * @ngdoc methode
-                 * @name init
-                 * @methodOf unchatbar.Notify
-                 * @description
-                 *
-                 * init listener
-                 *
-                 */
-                init: function () {
-                    this._getNotificationPermission();
-                    this._initMessageSound();
-                    this._initStreamSound();
-                },
-
-                /**
-                 * @ngdoc methode
                  * @name textMessage
                  * @methodOf unchatbar.Notify
                  * @params {String} message text message
@@ -211,6 +196,9 @@ angular.module('unchatbar')
                     }
                 }
             };
+            api._getNotificationPermission();
+            api._initMessageSound();
+            api._initStreamSound();
             return api;
         }
     ]

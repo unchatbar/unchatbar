@@ -41,9 +41,7 @@ angular.module('unchatbar')
         this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Connection',
             function ($rootScope, $localStorage, $sessionStorage, Connection) {
 
-
-
-                return {
+                var api = {
                     /**
                      * @ngdoc methode
                      * @name _storageProfile
@@ -54,21 +52,6 @@ angular.module('unchatbar')
                      */
                     _storageProfile:{
                         profile: {}
-                    },
-                    /**
-                     * @ngdoc methode
-                     * @name init
-                     * @methodOf unchatbar.Profile
-                     * @description
-                     *
-                     * init listener
-                     *
-                     */
-                    init: function () {
-                        this._initStorage();
-                        $rootScope.$on('ConnectionOpen', function (event, data) {
-                            Connection.send(data.peerId, {action: 'profile', profile: this.get()});
-                        }.bind(this));
                     },
                     /**
                      * @ngdoc methode
@@ -141,6 +124,8 @@ angular.module('unchatbar')
                         }.bind(this));
                     }
                 };
+                api._initStorage();
+                return api;
             }
         ];
     }

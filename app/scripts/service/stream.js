@@ -45,23 +45,7 @@ angular.module('unchatbar')
                  */
                 _callForWaitingAnswer: {},
 
-                /**
-                 * @ngdoc methode
-                 * @name init
-                 * @methodOf unchatbar.Stream
-                 * @description
-                 *
-                 * init listener
-                 *
-                 */
-                init: function () {
-                    $rootScope.$on('BrokerPeerCall', function (event, data) {
-                        api.addCallToAnswer(data.client);
-                    });
-                    $rootScope.$on('ConnectionGetMessageupdateStreamGroup', function (event, data) {
-                        api._callToGroupUsersFromClient(data.peerId, data.message.users);
-                    });
-                },
+
 
                 /**
                  * @ngdoc methode
