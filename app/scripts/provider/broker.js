@@ -11,7 +11,13 @@
 angular.module('unchatbar')
     .provider('Broker', function () {
 
-        var host = '', port = '', path = '', useLocalStorage = false;
+        var host = '',
+            port = '',
+            path = '',
+            useLocalStorage = false,
+            useSecureConnection=false,
+            brokerDebugLevel = 0,
+            iceServer = [];
 
         /**
          * @ngdoc methode
@@ -26,6 +32,49 @@ angular.module('unchatbar')
         this.setHost = function (_host) {
             host = _host;
         };
+
+        /**
+         * @ngdoc methode
+         * @name addIceServer
+         * @methodOf unchatbar.BrokerProvider
+         * @params {Object} server ice server
+         * @description
+         *
+         * add ice server
+         *
+         */
+        this.addIceServer = function (server) {
+            iceServer.push(server);
+        };
+
+        /**
+         * @ngdoc methode
+         * @name setSecureConnection
+         * @methodOf unchatbar.BrokerProvider
+         * @params {Boolean} _useSecureConnection set use secure connection
+         * @description
+         *
+         * set secure connection for broker server
+         *
+         */
+        this.setSecureConnection = function (_useSecureConnection) {
+            useSecureConnection = _useSecureConnection ? true : false;
+        };
+
+        /**
+         * @ngdoc methode
+         * @name setSecureConnection
+         * @methodOf unchatbar.BrokerProvider
+         * @params {Number} _brokerDebug debug level
+         * @description
+         *
+         * set broker debug level
+         *
+         */
+        this.setSecureConnection = function (_brokerDebugLevel) {
+            brokerDebugLevel = _brokerDebugLevel;
+        };
+
 
         /**
          * @ngdoc methode
@@ -81,8 +130,8 @@ angular.module('unchatbar')
          *
          * peer service
          */
-        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Peer','notify',
-            function ($rootScope, $localStorage, $sessionStorage, peerService, notify) {
+        this.$get = ['$rootScope', '$localStorage', '$sessionStorage', 'Peer',
+            function ($rootScope, $localStorage, $sessionStorage, peerService) {
                 //TODO ON VIEW CHANGE START connectServer
                 var api =  {
                     /**
@@ -135,26 +184,10 @@ angular.module('unchatbar')
                         peerService.init(this._storage.peerId, 
                         {host: host,  port: port, 
                         path: path,
-                        config: {'iceServers': [
-                             {url: "stun:23.21.150.121"},
-                            {url: "stun:stun.l.google.com:19302"},
-                            {url: 'stun:stun.anyfirewall.com:3478'},
-                            {
-                               url: 'turn:turn.bistri.com:80',
-                                credential: 'homeo',
-                                username: 'homeo'
-                            },
-                            {
-                                url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-                                credential: 'webrtc',
-                                username: 'webrtc'
-                            },
-                            {url: "turn:numb.viagenie.ca", credential: "webrtcdemo", username: "louis%40mozilla.com"}
-                        ]},
-                        secure:true,
-                        debug: 3
+                        config: {'iceServers':iceServer},
+                        secure:useSecureConnection,
+                        debug: brokerDebugLevel
                         });
-                        //api._holdBrokerConnection();
                         this._peerListener();
                     },
 
@@ -170,7 +203,6 @@ angular.module('unchatbar')
                      */
                     connect: function (id) {
                         var connection = peerService.get().connect(id,{reliable:true});
-                        notify('broker connect' + id);
                         $rootScope.$broadcast('BrokerPeerConnection', {
                             connection: connection
                         });
@@ -321,12 +353,7 @@ angular.module('unchatbar')
                         var peer = peerService.get();
 
                         peer.on('open', function (peerId) {
-                            notify('open peerid:' + peerId);
                             api._onOpen(peerId);
-                        });
-
-                        peer.on('close', function (connection) {
-                            notify('peer close:');
                         });
 
                         peer.on('call', function (call) {
@@ -334,12 +361,10 @@ angular.module('unchatbar')
                         });
 
                         peer.on('connection', function (connection) {
-                            notify('peer connection' + connection.peer);
                             api._onConnection(connection);
                         });
 
                         peer.on('error', function (error) {
-                            notify('error' + error);
                             api._onError(error);
                         });
 

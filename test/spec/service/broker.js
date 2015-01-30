@@ -200,7 +200,6 @@ describe('Serivce: Broker', function () {
 
                 spyOn(peerService, 'init').and.returnValue('peer');
                 spyOn(brokerService, '_peerListener').and.returnValue(true);
-                spyOn(brokerService, '_holdBrokerConnection').and.returnValue(true);
             });
 
             it('should call Peer.init with peerId and provider options', function () {
@@ -209,9 +208,11 @@ describe('Serivce: Broker', function () {
 
                 expect(peerService.init).toHaveBeenCalledWith('peerTest', {
                     host: 'host.de',
-                    secure:true,
                     port: 12345,
-                    path: 'test/'
+                    path: 'test/',
+                    config: { iceServers: [  ] },
+                    secure:false,
+                    debug : 0,
                 });
             });
             it('should call _peerListener', function () {
@@ -221,11 +222,7 @@ describe('Serivce: Broker', function () {
             });
 
 
-            it('should call `Broker._holdBrokerConnection` ', function () {
-                brokerService.connectServer();
 
-                expect(brokerService._holdBrokerConnection).toHaveBeenCalled();
-            });
         });
 
         describe('_peerListener', function () {
@@ -352,7 +349,7 @@ describe('Serivce: Broker', function () {
             it('should call `peer.connect` with connect id', function () {
                 brokerService.connect('clientId');
 
-                expect(peer.connect).toHaveBeenCalledWith('clientId');
+                expect(peer.connect).toHaveBeenCalledWith('clientId',{ reliable: true });
             });
 
 

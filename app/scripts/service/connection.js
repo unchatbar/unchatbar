@@ -12,8 +12,8 @@
  *
  */
 angular.module('unchatbar')
-    .service('Connection', ['$rootScope','Broker','notify',
-        function ($rootScope,Broker,notify) {
+    .service('Connection', ['$rootScope','Broker',
+        function ($rootScope,Broker) {
 
 
             var api =  {
@@ -38,7 +38,6 @@ angular.module('unchatbar')
                  */
                 init: function () {
                     $rootScope.$on('BrokerPeerConnection', function (event, data) {
-                        notify('receive connection from Broker' , data.connection.peer);
                         this._add(data.connection);
                     }.bind(this));
                 },
@@ -57,11 +56,8 @@ angular.module('unchatbar')
                  */
                 send: function (id, message) {
                     if (this._connectionMap[id]) {
-                        notify('send data to'  + id +'action'+message.action
-                        +'<br>text' + message.text);
                         this._connectionMap[id].send(message);
                     } else {
-                        notify('no send reconnect to '  + id );
                         Broker.connect(id);
                     }
                 },
@@ -93,10 +89,7 @@ angular.module('unchatbar')
                  *
                  */
                 _add: function (connection) {
-                    console.log(connection);
-                        notify('connection add:' + connection.peer);
                     connection.on('open', function () {
-                        notify('connection open:' + this.peer);
                         api._connectionMap[this.peer] = this;
                         /**
                          * @ngdoc event
@@ -112,16 +105,9 @@ angular.module('unchatbar')
                         $rootScope.$broadcast('ConnectionOpen', {peerId: this.peer});
                     });
                     connection.on('close', function () {
-                        notify('connection close ' + this.peer);
                         delete api._connectionMap[this.peer];
                     });
-                    connection.on('error', function (err) {
-                        notify('connection error ' + this.peer + "-->"+ err);
-                    });
                     connection.on('data', function (data) {
-                        notify('connection get data' +
-                        '<br>peer' + this.peer +
-                        '<br>ACTION' + data.action);
                         var  peerId = this.peer;
 
                         $rootScope.$apply(function () {
