@@ -204,11 +204,12 @@ describe('Controller: phoneBook', function () {
                 spyOn(state, 'go').and.returnValue(true);
                 spyOn(MessageTextService, 'sendRemoveGroup').and.returnValue(true);
                 spyOn(PhoneBookService, 'removeGroup').and.returnValue(true);
+                spyOn(PhoneBookService,'getGroup').and.returnValue({users:[{id:'user'}]});
 
             });
             it('should call `MessageText.sendRemoveGroup` with roomId', function () {
                 scope.removeGroup('roomId');
-                expect(MessageTextService.sendRemoveGroup).toHaveBeenCalledWith('roomId');
+                expect(MessageTextService.sendRemoveGroup).toHaveBeenCalledWith('roomId',[{id:'user'}]);
             });
 
             it('should call `PhoneBook.removeGroup` with roomId', function () {

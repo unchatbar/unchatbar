@@ -7,33 +7,17 @@
  *
  * Main module of the application.
  */
-angular.module('unchatbar').run(['$rootScope', '$state', 'Broker', 'MessageText', 'PhoneBook', 'Profile', 'Connection', 'Stream', 'Notify',
-    function ($rootScope, $state, Broker, MessageText, PhoneBook, Profile, Connection, Stream, Notify) {
-        MessageText.initStorage();
-        Broker.initStorage();
+angular.module('unchatbar').run(['$rootScope', '$state', 'Broker', 'PhoneBook', 'Notify',
+    function ($rootScope, $state, Broker, PhoneBook, Notify) {
         PhoneBook.initStorage();
-        Profile.initStorage();
 
         Notify._getNotificationPermission();
         Notify._initMessageSound();
         Notify._initStreamSound();
 
-        $rootScope.$on('ConnectionOpen', function (event, data) {
-            Connection.send(data.peerId, {action: 'profile', profile: Profile.get()});
-            MessageText.sendFromQueue(data.peerId);
-        });
 
-        $rootScope.$on('ConnectionGetMessagetextMessage', function (event, data) {
+        $rootScope.$on('ConnectionGetMessagetextMessage', function () {
             Notify.textMessage('you have new messages');
-            MessageText.addToInbox(data.message.groupId || data.peerId, data.peerId, data.message);
-        });
-
-        $rootScope.$on('ConnectionGetMessagereadMessage', function (event, data) {
-            MessageText.removeFromQueue(data.peerId, data.message.id);
-        });
-
-        $rootScope.$on('ConnectionGetMessageupdateStreamGroup', function (event, data) {
-            Stream.callToGroupUsersFromClient(data.peerId, data.message.users);
         });
 
         $rootScope.$on('ConnectionGetMessageprofile', function (event, data) {
@@ -49,13 +33,11 @@ angular.module('unchatbar').run(['$rootScope', '$state', 'Broker', 'MessageText'
         });
 
         $rootScope.$on('BrokerPeerConnection', function (event, data) {
-            Connection.add(data.connection);
             PhoneBook.addClient(data.connection.peer, {label: data.connection.peer});
 
         });
 
         $rootScope.$on('BrokerPeerCall', function (event, data) {
-            Stream.addCallToAnswer(data.client);
             PhoneBook.addClient(data.client.peer, data.client.metadata.profile);
         });
 

@@ -1,7 +1,7 @@
 <div data-ng-init="init()">
   <tabset justified="true">
     <tab heading="user" active="selectedUser">
-      <dialer></dialer>
+
 
       <div ng-repeat="(peerId,connection) in clientMap">
         <a ui-sref-active="active" ui-sref='chat.user({peerId: peerId})'

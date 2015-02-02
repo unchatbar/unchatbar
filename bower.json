@@ -13,7 +13,9 @@
     "angularjs-dropdown-multiselect": "~1.5.2",
     "angular-bootstrap": "~0.12.0",
     "angular-ui-router": "~0.2.13",
-    "components-font-awesome": "~4.2.0"
+    "components-font-awesome": "~4.2.0",
+    "unchatbar-connection" : "git@github.com:unchatbar/unchatbar-connection.git",
+    "unchatbar-user" : "git@github.com:unchatbar/unchatbar-user.git"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.0",

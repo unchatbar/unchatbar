@@ -4,19 +4,21 @@ describe('Controller: connection', function () {
 
     beforeEach(module('unchatbar'));
 
-    var connectionCTRL, scope, rootScope, ProfileService, PhoneBookService, MessageTextService;
+    var connectionCTRL, scope, rootScope,stateParams, ProfileService, PhoneBookService, MessageTextService;
 
-    beforeEach(inject(function ($controller, $rootScope, MessageText, PhoneBook, Profile) {
+    beforeEach(inject(function ($controller,$stateParams, $rootScope, MessageText, PhoneBook, Profile) {
         scope = $rootScope.$new();
         rootScope = $rootScope;
         MessageTextService = MessageText;
         PhoneBookService = PhoneBook;
+        stateParams = $stateParams;
         ProfileService = Profile;
         connectionCTRL = function () {
             $controller('textMessageList', {
                 $scope: scope,
                 $rootScope: rootScope,
                 MessageText: MessageTextService,
+                $stateParams : stateParams,
                 PhoneBook: PhoneBookService,
                 Profile: ProfileService
 
@@ -58,19 +60,38 @@ describe('Controller: connection', function () {
         describe('send', function () {
             beforeEach(function () {
                 spyOn(MessageTextService, 'send').and.returnValue(true);
-
             });
-            it('should call `MessageText.send` width `$scope.message`', function () {
-                scope.message = 'test';
+            describe('send to user' , function(){
+                beforeEach(function(){
+                    stateParams.peerId = 'peerId';
+                });
+                it('should call `MessageText.send` width `$scope.message`', function () {
+                    scope.message = 'test';
 
-                scope.send();
+                    scope.send();
 
-                expect(MessageTextService.send).toHaveBeenCalledWith('test');
+                    expect(MessageTextService.send).toHaveBeenCalledWith('test',[]);
+                });
             });
+            describe('send to group' , function(){
+                beforeEach(function(){
+                    stateParams.groupId = 'groupId';
+                    spyOn(PhoneBookService,'getGroup').and.returnValue({users: [{id:'user'}]});
+                });
+
+                it('should call `MessageText.send` width `$scope.message`', function () {
+                    scope.message = 'test';
+
+                    scope.send();
+
+                    expect(MessageTextService.send).toHaveBeenCalledWith('test',[{id:'user'}]);
+                });
+            });
+
             it('should push `$scope.messageList` width `$scope.message` and property `own` true', function () {
                 scope.message = 'test';
                 spyOn(MessageTextService, 'getMessageList').and.returnValue(['newList']);
-
+                stateParams.groupId = '';
                 scope.send();
 
                 expect(scope.messageList).toEqual(['newList']);

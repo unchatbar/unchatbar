@@ -183,6 +183,22 @@ module.exports = function (grunt) {
             app: {
                 src: ['<%= yeoman.app %>/index.html'],
                 ignorePath: /\.\.\//
+            },
+            test: {
+                src: 'test/karma.conf.js',
+                fileTypes: {
+                    js: {
+                        block: /(([\s\t]*)\/\/\s*bower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower)/gi,
+                        detect: {
+                            js: /'(.*\.js)'/gi
+                        },
+                        replace: {
+                            js: function (filePath) {
+                                return '\'' + filePath.replace("../","")  +'\',';
+                            }
+                        }
+                    }
+                }
             }
         },
 
@@ -462,6 +478,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test', [
         'ngtemplates:dev',
         'clean:server',
+        'wiredep:test',
         'ngconstant:dev',
         'concurrent:test',
         'autoprefixer',

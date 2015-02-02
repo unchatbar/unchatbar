@@ -99,7 +99,7 @@ angular.module('unchatbar').controller('phoneBookAdmin', [
          *
          */
         $scope.removeGroup = function (roomId) {
-            MessageText.sendRemoveGroup(roomId);
+            MessageText.sendRemoveGroup(roomId,PhoneBook.getGroup(roomId).users);
             PhoneBook.removeGroup(roomId);
             $state.go('chat');
         };

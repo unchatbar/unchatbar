@@ -10,6 +10,8 @@
  */
 angular.module('unchatbar', [
     'constants',
+    'unchatbar-connection',
+    'unchatbar-user',
     'cgNotify',
     'ngStorage',
     'ui.router',

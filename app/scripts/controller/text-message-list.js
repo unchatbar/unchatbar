@@ -51,7 +51,11 @@ angular.module('unchatbar').controller('textMessageList', ['$scope', '$statePara
          *
          */
         $scope.send = function () {
-            MessageText.send($scope.message);
+            var users = [];
+            if($stateParams.groupId) {
+                users = PhoneBook.getGroup($stateParams.groupId).users;
+            }
+            MessageText.send($scope.message,users);
             $scope.messageList = MessageText.getMessageList();
             $scope.message = '';
         };
