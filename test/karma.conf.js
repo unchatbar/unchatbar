@@ -55,6 +55,7 @@ module.exports = function (config) {
             'bower_components/unchatbar-phone-book/app/scripts/directive/book-stream.js',
             'bower_components/unchatbar-phone-book/app/scripts/directive/book.js',
             'bower_components/unchatbar-phone-book/app/scripts/directive/new-group.js',
+            'bower_components/unchatbar-phone-book/app/scripts/controller/modal-stream-option.js',
             'bower_components/unchatbar-phone-book/app/scripts/controller/phone-book-admin.js',
             'bower_components/unchatbar-phone-book/app/scripts/controller/phone-book.js',
             // endbower
