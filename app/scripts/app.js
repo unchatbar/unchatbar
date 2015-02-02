@@ -10,11 +10,14 @@
  */
 angular.module('unchatbar', [
     'constants',
-    'unchatbar-connection',
-    'unchatbar-user',
     'cgNotify',
     'ngStorage',
     'ui.router',
     'ui.bootstrap',
-    'angularjs-dropdown-multiselect'
+    'angularjs-dropdown-multiselect',
+    'unchatbar-user',
+    'unchatbar-connection',
+    'unchatbar-phone-book',
+
+
 ]);
