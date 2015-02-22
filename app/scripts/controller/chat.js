@@ -68,7 +68,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', 'Bro
             if ($stateParams.groupId) {
                 $scope.clientFromChannelMap = PhoneBook.getGroup($stateParams.groupId).users;
             } else if ($stateParams.clientId) {
-                $scope.clientFromChannelMap = PhoneBook.getClient($stateParams.clientId);
+                $scope.clientFromChannelMap = [PhoneBook.getClient($stateParams.clientId)];
             }
         };
 

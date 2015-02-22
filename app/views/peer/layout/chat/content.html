@@ -1,6 +1,10 @@
 <div class="col-xs-12 col-sm-9">
     <div class="container">
-    <un-contact-group-selected></un-contact-group-selected>
-    <un-contact-client-selected></un-contact-client-selected>
+        <un-contact-group-selected></un-contact-group-selected>
+        <un-contact-client-selected></un-contact-client-selected>
+        <div data-ng-controller="unChat" data-ng-init="init()">
+            <un-data-chat-message-box data-channel="{{channel}}"
+                                      data-user-map="clientFromChannelMap"></un-data-chat-message-box>
+        </div>
     </div>
 </div>

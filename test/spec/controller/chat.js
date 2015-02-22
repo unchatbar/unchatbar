@@ -118,7 +118,7 @@ describe('Controller: unChat', function () {
                 it('should set `$scope.clientFromChannelMap` return users from PhoneBook.getGroup`', function () {
                     scope.getClientsFromChannel();
 
-                    expect(scope.clientFromChannelMap).toEqual({clientA: {id: 'userId'}});
+                    expect(scope.clientFromChannelMap).toEqual([{clientA: {id: 'userId'}}]);
                 });
             });
         });
