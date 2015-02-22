@@ -80,6 +80,7 @@ module.exports = function (config) {
             'bower_components/unchatbar-notification/app/scripts/template.js',
             'bower_components/unchatbar-notification/app/scripts/service/notify.js',
             // endbower
+
             'bower_components/angular-mocks/angular-mocks.js',
             'app/scripts/constants.js',
             'app/scripts/**/*.js',
@@ -91,7 +92,8 @@ module.exports = function (config) {
         // list of files / patterns to exclude
         exclude: [
             'app/scripts/run.js',
-            'app/scripts/config/*.js'
+            'app/scripts/config/*.js',
+            'bower_components/**/*/run.js',   //remove run files
         ],
 
         // web server port
