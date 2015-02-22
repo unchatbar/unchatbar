@@ -40,12 +40,10 @@
 <!-- bower:js -->
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-notify/dist/angular-notify.js"></script>
-<script src="bower_components/peerjs/peer.js"></script>
-<script src="bower_components/ngstorage/ngStorage.js"></script>
 <script src="bower_components/lodash/dist/lodash.compat.js"></script>
-<script src="bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/ngstorage/ngStorage.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/app.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/run.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/template.js"></script>
@@ -53,59 +51,66 @@
 <script src="bower_components/unchatbar-user/app/scripts/controller/profile.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/directive/profile-admin.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/directive/profile.js"></script>
+<script src="bower_components/peerjs/peer.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/app.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/run.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/template.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/provider/broker.js"></script>
-<script src="bower_components/unchatbar-connection/app/scripts/provider/message-text.js"></script>
-<script src="bower_components/unchatbar-connection/app/scripts/service/connection.js"></script>
+<script src="bower_components/unchatbar-connection/app/scripts/provider/data-connection.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/service/peer.js"></script>
-<script src="bower_components/unchatbar-connection/app/scripts/service/stream.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/directive/dialer.js"></script>
+<script src="bower_components/unchatbar-connection/app/scripts/directive/login.js"></script>
+<script src="bower_components/unchatbar-connection/app/scripts/directive/peerId.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/controller/dialer.js"></script>
+<script src="bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js"></script>
 <script src="bower_components/unchatbar-phone-book/app/scripts/app.js"></script>
 <script src="bower_components/unchatbar-phone-book/app/scripts/run.js"></script>
 <script src="bower_components/unchatbar-phone-book/app/scripts/template.js"></script>
 <script src="bower_components/unchatbar-phone-book/app/scripts/provider/phone-book.js"></script>
-<script src="bower_components/unchatbar-phone-book/app/scripts/directive/active-user.js"></script>
-<script src="bower_components/unchatbar-phone-book/app/scripts/directive/book-admin.js"></script>
-<script src="bower_components/unchatbar-phone-book/app/scripts/directive/book-stream.js"></script>
-<script src="bower_components/unchatbar-phone-book/app/scripts/directive/book.js"></script>
-<script src="bower_components/unchatbar-phone-book/app/scripts/directive/new-group.js"></script>
-<script src="bower_components/unchatbar-phone-book/app/scripts/controller/modal-stream-option.js"></script>
-<script src="bower_components/unchatbar-phone-book/app/scripts/controller/phone-book-admin.js"></script>
-<script src="bower_components/unchatbar-phone-book/app/scripts/controller/phone-book.js"></script>
+<script src="bower_components/unchatbar-phone-book/app/scripts/directive/client/list.js"></script>
+<script src="bower_components/unchatbar-phone-book/app/scripts/directive/client/selected.js"></script>
+<script src="bower_components/unchatbar-phone-book/app/scripts/directive/group/add.js"></script>
+<script src="bower_components/unchatbar-phone-book/app/scripts/directive/group/list.js"></script>
+<script src="bower_components/unchatbar-phone-book/app/scripts/directive/group/selected.js"></script>
+<script src="bower_components/unchatbar-phone-book/app/scripts/controller/client.js"></script>
+<script src="bower_components/unchatbar-phone-book/app/scripts/controller/group.js"></script>
+<script src="bower_components/unchatbar-text-message/app/scripts/app.js"></script>
+<script src="bower_components/unchatbar-text-message/app/scripts/constants.js"></script>
+<script src="bower_components/unchatbar-text-message/app/scripts/run.js"></script>
+<script src="bower_components/unchatbar-text-message/app/scripts/template.js"></script>
+<script src="bower_components/unchatbar-text-message/app/scripts/provider/message.js"></script>
+<script src="bower_components/unchatbar-text-message/app/scripts/directive/message-box.js"></script>
+<script src="bower_components/unchatbar-text-message/app/scripts/directive/unread-message.js"></script>
+<script src="bower_components/unchatbar-text-message/app/scripts/controller/text.js"></script>
+<script src="bower_components/unchatbar-stream/app/scripts/app.js"></script>
+<script src="bower_components/unchatbar-stream/app/scripts/run.js"></script>
+<script src="bower_components/unchatbar-stream/app/scripts/template.js"></script>
+<script src="bower_components/unchatbar-stream/app/scripts/service/Connection.js"></script>
+<script src="bower_components/unchatbar-stream/app/scripts/directive/call.js"></script>
+<script src="bower_components/unchatbar-stream/app/scripts/directive/open.js"></script>
+<script src="bower_components/unchatbar-stream/app/scripts/directive/own.js"></script>
+<script src="bower_components/unchatbar-stream/app/scripts/directive/waiting-for-client-answer.js"></script>
+<script src="bower_components/unchatbar-stream/app/scripts/directive/waiting-for-your-answer.js"></script>
+<script src="bower_components/unchatbar-stream/app/scripts/controller/connection.js"></script>
+<script src="bower_components/unchatbar-notification/app/scripts/app.js"></script>
+<script src="bower_components/unchatbar-notification/app/scripts/run.js"></script>
+<script src="bower_components/unchatbar-notification/app/scripts/template.js"></script>
+<script src="bower_components/unchatbar-notification/app/scripts/service/notify.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/constants.js"></script>
 <script src="scripts/app.js"></script>
+
 <script src="scripts/template.js"></script>
 
 
 <script src="scripts/config/server.js"></script>
 <script src="scripts/config/state.js"></script>
 
-<script src="scripts/controller/text-message-list.js"></script>
+<script src="scripts/controller/chat.js"></script>
 
-<script src="scripts/controller/stream.js"></script>
-
-<script src="scripts/controller/notify.js"></script>
-<script src="scripts/controller/broker.js"></script>
-
-<script src="scripts/service/notify.js"></script>
-
-<script src="scripts/directive/notification/stream-call.js"></script>
-<script src="scripts/directive/notification/text-message.js"></script>
-<script src="scripts/directive/stream/own-stream-video.js"></script>
-<script src="scripts/directive/stream/client-stream.js"></script>
-<script src="scripts/directive/stream/stream.js"></script>
-<script src="scripts/directive/stream/audio-stream.js"></script>
-<script src="scripts/directive/stream/video-stream.js"></script>
-
-
-<script src="scripts/directive/text-message-list.js"></script>
 <script src="scripts/run.js"></script>
 <!-- endbuild -->
 </body>

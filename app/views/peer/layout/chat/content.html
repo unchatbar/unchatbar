@@ -1,21 +1,25 @@
 <div class="col-xs-12 col-sm-9">
+    <div data-ng-controller="unChat" data-ng-init="init()">
+        waiting stream
+        <un-stream-waiting-for-your-answer data-user-map="clientMap"></un-stream-waiting-for-your-answer>
+        <un-stream-waiting-for-client-answer data-user-map="clientMap"></un-stream-waiting-for-client-answer>
 
-  <div class="jumbotron">
-    <active-user></active-user>
-  </div>
-
-  <div class="row">
-    <div class="col-xs-12 col-lg-12">
-      <h2>Video/Audio</h2>
-      <stream></stream>
+        <br> active streams
+        <un-stream-open data-channel="{{channel}}"
+                    data-user-map="clientMap"></un-stream-open>
     </div>
-  </div>
+    <div class="container">
+        <un-contact-group-selected></un-contact-group-selected>
+        <un-contact-client-selected></un-contact-client-selected>
+        <div data-ng-controller="unChat" data-ng-init="init()">
+            <un-data-chat-message-box data-channel="{{channel}}"
+                                      data-user-map="clientFromChannelMap"></un-data-chat-message-box>
+            <un-stream-call data-channel="{{channel}}"
+                            data-user-map="clientFromChannelMap"></un-stream-call>
 
-  <div class="row">
-    <div class="col-xs-12 col-lg-12">
-      <h2>Chat</h2>
-      <text-message-list></text-message-list>
+        </div>
+
+
     </div>
-  </div>
-
+    <un-stream-own></un-stream-own>
 </div>
