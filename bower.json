@@ -15,7 +15,7 @@
     "unchatbar-connection" : "https://github.com/unchatbar/unchatbar-connection.git#refaktor",
     "unchatbar-phone-book" : "https://github.com/unchatbar/unchatbar-phone-book.git#refaktor",
     "unchatbar-text-message" : "https://github.com/unchatbar/unchatbar-text-message.git",
-    "unchatbar-unchatbar-stream" : "https://github.com/unchatbar/unchatbar-stream.git",
+    "unchatbar-stream" : "https://github.com/unchatbar/unchatbar-stream.git",
     "unchatbar-notification" : "https://github.com/unchatbar/unchatbar-notification.git"
   },
   "devDependencies": {
