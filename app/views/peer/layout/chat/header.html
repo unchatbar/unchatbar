@@ -1,23 +1,25 @@
 <nav class="navbar navbar-fixed-top navbar-inverse">
-  <div class="container" data-ng-init="isCollapse=false" style="color:white">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed"
-              data-ng-click="isCollapse=!isCollapse"
-              aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <un-connection-peer-id></un-connection-peer-id>
+    <div class="container" data-ng-init="isCollapse=false" style="color:white">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-ng-click="isCollapse=!isCollapse"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <un-connection-peer-id></un-connection-peer-id>
+        </div>
+
+        <div id="navbar" class="collapse navbar-collapse" data-ng-class="{'in' : isCollapse}">
+            <ul class="nav navbar-nav">
+                <li><a ui-sref-active="active" ui-sref='profileAdmin'>Profile</a></li>
+            </ul>
+        </div>
     </div>
-      <div data-ng-controller="unChat" data-ng-init="init()">
-          <un-data-chat-unread-message data-user-map="clientMap"></un-data-chat-unread-message>
-      </div>
-    <div id="navbar" class="collapse navbar-collapse" data-ng-class="{'in' : isCollapse}">
-      <ul class="nav navbar-nav">
-        <li><a ui-sref-active="active" ui-sref='profileAdmin'>Profile</a></li>
-      </ul>
-    </div>
-  </div>
 </nav>
+<div data-ng-controller="unChat" data-ng-init="init()">
+    <un-data-chat-unread-message style="height:10px;overflow: hidden"
+                                 data-user-map="clientMap"></un-data-chat-unread-message>
+</div>
