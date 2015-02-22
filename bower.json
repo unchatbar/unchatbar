@@ -12,7 +12,7 @@
     "angular-ui-router": "~0.2.13",
     "components-font-awesome": "~4.2.0",
     "unchatbar-user" : "https://github.com/unchatbar/unchatbar-user.git",
-    "unchatbar-connection" : "https://github.com/unchatbar/unchatbar-connection.git#refaktor",
+    "unchatbar-connection" : "https://github.com/unchatbar/unchatbar-connection.git",
     "unchatbar-contact" : "https://github.com/unchatbar/unchatbar-contact",
     "unchatbar-text-message" : "https://github.com/unchatbar/unchatbar-data-chat.git",
     "unchatbar-stream" : "https://github.com/unchatbar/unchatbar-stream.git",
