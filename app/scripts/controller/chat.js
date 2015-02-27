@@ -11,8 +11,8 @@
  * client controller
  *
  */
-angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', 'Broker', 'PhoneBook',
-    function ($scope, $stateParams, Broker, PhoneBook) {
+angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams','$state', 'Broker', 'PhoneBook','Profile',
+    function ($scope, $stateParams,$state, Broker, PhoneBook,Profile) {
 
         /**
          * @ngdoc property
@@ -21,6 +21,14 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', 'Bro
          * @returns {String} name of channel
          */
         $scope.channel = '';
+
+        /**
+         * @ngdoc property
+         * @name stateName
+         * @propertyOf unchatbar.controller:unChat
+         * @returns {String} current state name
+         */
+        $scope.stateName = '';
 
         /**
          * @ngdoc property
@@ -51,7 +59,6 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', 'Bro
 
         $scope.getClientAllClients = function () {
             $scope.clientMap = PhoneBook.getClientMap();
-
         };
 
         /**
@@ -66,9 +73,20 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', 'Bro
 
         $scope.getClientsFromChannel = function () {
             if ($stateParams.groupId) {
-                $scope.clientFromChannelMap = PhoneBook.getGroup($stateParams.groupId).users;
+                var users = PhoneBook.getGroup($stateParams.groupId).users;
+                $scope.clientFromChannelMap = {};
+
+                _.forEach(users,function(user){
+                    if(user.id !== Broker.getPeerId()) {
+                        $scope.clientFromChannelMap[user.id] = PhoneBook.getClient(user.id);
+                    } else {
+                        $scope.clientFromChannelMap[user.id] = Profile.get();
+                    }
+                });
             } else if ($stateParams.clientId) {
-                $scope.clientFromChannelMap = [PhoneBook.getClient($stateParams.clientId)];
+                $scope.clientFromChannelMap = {};
+                $scope.clientFromChannelMap[$stateParams.clientId] = PhoneBook.getClient($stateParams.clientId);
+                $scope.clientFromChannelMap[Broker.getPeerId()] = Profile.get();
             }
         };
 
@@ -117,6 +135,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', 'Bro
         });
 
         $scope.$on('$stateChangeSuccess', function () {
+            $scope.stateName = $state.current.name;
             $scope.init();
         });
 

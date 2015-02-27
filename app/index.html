@@ -11,7 +11,11 @@
     <link rel="stylesheet" href="bower_components/angular-notify/dist/angular-notify.css" />
     <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/ng-img-crop/compile/minified/ng-img-crop.css" />
     <link rel="stylesheet" href="bower_components/unchatbar-user/app/styles/custom.css" />
+    <link rel="stylesheet" href="bower_components/unchatbar-contact/app/styles/custom.css" />
+    <link rel="stylesheet" href="bower_components/unchatbar-data-chat/app/styles/custom.css" />
+    <link rel="stylesheet" href="bower_components/unchatbar-stream/app/styles/custom.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -19,7 +23,7 @@
     <link rel="stylesheet" href="styles/custom.css">
     <!-- endbuild -->
 </head>
-<body >
+<body data-ng-controller="unChat" data-ng-init="init()" >
 <div ui-view></div>
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
@@ -44,13 +48,7 @@
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/ngstorage/ngStorage.js"></script>
-<script src="bower_components/unchatbar-user/app/scripts/app.js"></script>
-<script src="bower_components/unchatbar-user/app/scripts/run.js"></script>
-<script src="bower_components/unchatbar-user/app/scripts/template.js"></script>
-<script src="bower_components/unchatbar-user/app/scripts/provider/profile.js"></script>
-<script src="bower_components/unchatbar-user/app/scripts/controller/profile.js"></script>
-<script src="bower_components/unchatbar-user/app/scripts/directive/profile-admin.js"></script>
-<script src="bower_components/unchatbar-user/app/scripts/directive/profile.js"></script>
+<script src="bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>
 <script src="bower_components/peerjs/peer.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/app.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/run.js"></script>
@@ -62,6 +60,15 @@
 <script src="bower_components/unchatbar-connection/app/scripts/directive/login.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/directive/peerId.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/controller/dialer.js"></script>
+<script src="bower_components/blockies/blockies.js"></script>
+<script src="bower_components/unchatbar-user/app/scripts/app.js"></script>
+<script src="bower_components/unchatbar-user/app/scripts/run.js"></script>
+<script src="bower_components/unchatbar-user/app/scripts/template.js"></script>
+<script src="bower_components/unchatbar-user/app/scripts/provider/profile.js"></script>
+<script src="bower_components/unchatbar-user/app/scripts/controller/profile.js"></script>
+<script src="bower_components/unchatbar-user/app/scripts/directive/fileModel.js"></script>
+<script src="bower_components/unchatbar-user/app/scripts/directive/profile-admin.js"></script>
+<script src="bower_components/unchatbar-user/app/scripts/directive/profile.js"></script>
 <script src="bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js"></script>
 <script src="bower_components/unchatbar-contact/app/scripts/app.js"></script>
 <script src="bower_components/unchatbar-contact/app/scripts/run.js"></script>
@@ -74,14 +81,15 @@
 <script src="bower_components/unchatbar-contact/app/scripts/directive/group/selected.js"></script>
 <script src="bower_components/unchatbar-contact/app/scripts/controller/client.js"></script>
 <script src="bower_components/unchatbar-contact/app/scripts/controller/group.js"></script>
-<script src="bower_components/unchatbar-text-message/app/scripts/app.js"></script>
-<script src="bower_components/unchatbar-text-message/app/scripts/constants.js"></script>
-<script src="bower_components/unchatbar-text-message/app/scripts/run.js"></script>
-<script src="bower_components/unchatbar-text-message/app/scripts/template.js"></script>
-<script src="bower_components/unchatbar-text-message/app/scripts/provider/message.js"></script>
-<script src="bower_components/unchatbar-text-message/app/scripts/directive/message-box.js"></script>
-<script src="bower_components/unchatbar-text-message/app/scripts/directive/unread-message.js"></script>
-<script src="bower_components/unchatbar-text-message/app/scripts/controller/text.js"></script>
+<script src="bower_components/angular-scroll-glue/src/scrollglue.js"></script>
+<script src="bower_components/unchatbar-data-chat/app/scripts/app.js"></script>
+<script src="bower_components/unchatbar-data-chat/app/scripts/constants.js"></script>
+<script src="bower_components/unchatbar-data-chat/app/scripts/run.js"></script>
+<script src="bower_components/unchatbar-data-chat/app/scripts/template.js"></script>
+<script src="bower_components/unchatbar-data-chat/app/scripts/provider/message.js"></script>
+<script src="bower_components/unchatbar-data-chat/app/scripts/directive/message-box.js"></script>
+<script src="bower_components/unchatbar-data-chat/app/scripts/directive/unread-message.js"></script>
+<script src="bower_components/unchatbar-data-chat/app/scripts/controller/text.js"></script>
 <script src="bower_components/unchatbar-stream/app/scripts/app.js"></script>
 <script src="bower_components/unchatbar-stream/app/scripts/run.js"></script>
 <script src="bower_components/unchatbar-stream/app/scripts/template.js"></script>

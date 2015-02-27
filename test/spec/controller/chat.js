@@ -4,21 +4,24 @@ describe('Controller: unChat', function () {
 
     beforeEach(module('unchatbar'));
 
-    var chatCTRL, stateParams, scope, PhoneBookService, BrokerService;
+    var chatCTRL, stateParams, scope, PhoneBookService, BrokerService, ProfileService, state;
 
-    beforeEach(inject(function ($controller, $rootScope, Broker, PhoneBook) {
+    beforeEach(inject(function ($controller, $rootScope, Broker, PhoneBook, Profile) {
 
         PhoneBookService = PhoneBook;
+        ProfileService = Profile;
         stateParams = {};
+        state = {};
         BrokerService = Broker;
         scope = $rootScope.$new();
-
         chatCTRL = function () {
             $controller('unChat', {
                 $scope: scope,
                 $stateParams: stateParams,
                 Broker: BrokerService,
-                PhoneBook: PhoneBookService
+                PhoneBook: PhoneBookService,
+                Profile: ProfileService,
+                $state: state
 
             });
         };
@@ -89,10 +92,14 @@ describe('Controller: unChat', function () {
         });
 
         describe('getClientsFromChannel', function () {
+            beforeEach(function () {
+                spyOn(BrokerService, 'getPeerId').and.returnValue('ownPeerId');
+            });
             describe('group channel', function () {
                 beforeEach(function () {
                     stateParams.groupId = 'testGroupId';
-                    spyOn(PhoneBookService, 'getGroup').and.returnValue({users: {id: 'userId'}});
+                    spyOn(PhoneBookService, 'getGroup').and.returnValue({users: [{id: 'userId'}]});
+                    spyOn(PhoneBookService, 'getClient').and.returnValue('otherClient');
                 });
                 it('should call `PhoneBook.getGroup` with groupId', function () {
                     scope.getClientsFromChannel();
@@ -100,15 +107,15 @@ describe('Controller: unChat', function () {
                 });
                 it('should set `$scope.clientFromChannelMap` return users from PhoneBook.getGroup`', function () {
                     scope.getClientsFromChannel();
-
-                    expect(scope.clientFromChannelMap).toEqual({id: 'userId'});
+                    expect(scope.clientFromChannelMap).toEqual({userId: 'otherClient'});
 
                 });
             });
             describe('user channel', function () {
                 beforeEach(function () {
                     stateParams.clientId = 'testClientId';
-                    spyOn(PhoneBookService, 'getClient').and.returnValue({clientA: {id: 'userId'}});
+                    spyOn(PhoneBookService, 'getClient').and.returnValue('otherClient');
+                    spyOn(ProfileService, 'get').and.returnValue('ownProfile');
                 });
                 it('should call `PhoneBook.getClient` with clientId', function () {
                     scope.getClientsFromChannel();
@@ -118,20 +125,24 @@ describe('Controller: unChat', function () {
                 it('should set `$scope.clientFromChannelMap` return users from PhoneBook.getGroup`', function () {
                     scope.getClientsFromChannel();
 
-                    expect(scope.clientFromChannelMap).toEqual([{clientA: {id: 'userId'}}]);
+                    expect(scope.clientFromChannelMap).toEqual({
+                        testClientId: 'otherClient',
+                        ownPeerId: 'ownProfile'
+                    });
                 });
             });
         });
 
     });
 
-    describe('check events' , function(){
+    describe('check events', function () {
         beforeEach(function () {
-            chatCTRL();
+
         });
-        describe('PhoneBookUpdate', function(){
-            it('should call `$scope.init`' , function(){
-               spyOn(scope,'init').and.returnValue(true);
+        describe('PhoneBookUpdate', function () {
+            it('should call `$scope.init`', function () {
+                chatCTRL();
+                spyOn(scope, 'init').and.returnValue(true);
                 scope.$broadcast('PhoneBookUpdate');
                 scope.$apply();
 
@@ -139,13 +150,32 @@ describe('Controller: unChat', function () {
             });
         });
 
-        describe('$stateChangeSuccess', function(){
-            it('should call `$scope.init`' , function(){
-                spyOn(scope,'init').and.returnValue(true);
+        describe('$stateChangeSuccess', function () {
+            beforeEach(function () {
+                state = {
+                    current : {
+                        name : 'testState'
+                    }
+                };
+                chatCTRL();
+            });
+            it('should call `$scope.init`', function () {
+                spyOn(scope, 'init').and.returnValue(true);
+
                 scope.$broadcast('$stateChangeSuccess');
                 scope.$apply();
 
                 expect(scope.init).toHaveBeenCalled();
+            });
+
+            it('should set `$scope.stateName` to `$state.current.name`', function () {
+                spyOn(scope, 'init').and.returnValue(true);
+
+                scope.$broadcast('$stateChangeSuccess');
+
+                scope.$apply();
+
+                expect(scope.stateName).toBe('testState');
             });
         });
     });

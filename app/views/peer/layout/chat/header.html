@@ -1,4 +1,4 @@
-<nav class="navbar navbar-fixed-top navbar-inverse">
+<!--<nav class="navbar navbar-fixed-top navbar-inverse">
     <div class="container" data-ng-init="isCollapse=false" style="color:white">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed"
@@ -22,4 +22,29 @@
 <div data-ng-controller="unChat" data-ng-init="init()">
     <un-data-chat-unread-message style="height:10px;overflow: hidden"
                                  data-user-map="clientMap"></un-data-chat-unread-message>
-</div>
+</div>-->
+<nav class="navbar navbar-fixed-top navbar-inverse">
+
+    <div class="row">
+        <div class="col-xs-3 col-sm-1">
+            <div class="navbar-header visible-xs-block" style="padding-top:10px;">
+                <a ui-sref="contact">
+                    <i class="fa fa-user fa-3x"></i>
+                </a>
+            </div>
+            <!-- /.nav-collapse -->
+        </div>
+        <div class="col-sm-2  hidden-xs">
+            <div class="navbar-brand small">unchatbar</div>
+        </div>
+        <div class="col-xs-6 col-sm-6" style="padding-top:10px;">
+            <un-data-chat-unread-message data-user-map="clientMap"></un-data-chat-unread-message>
+        </div>
+        <div class="col-xs-3 col-sm-3">
+            <a ui-sref-active="active" ui-sref='profileAdmin'>
+                <un-profile-label></un-profile-label>
+            </a>
+        </div>
+    </div>
+
+</nav>

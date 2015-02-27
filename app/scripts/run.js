@@ -15,6 +15,8 @@ angular.module('unchatbar').run(['$rootScope', '$state', 'Broker',
                 $state.go('contact');
             });
             return false;
+        } else {
+            Broker.connectServer();
         }
 
     }

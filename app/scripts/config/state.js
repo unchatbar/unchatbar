@@ -41,7 +41,7 @@ angular.module('unchatbar')
                             templateUrl: 'views/peer/layout/chat/sidebar.html'
                         },
                         content: {
-                            templateUrl: 'views/peer/layout/chat/content.html'
+                            templateUrl: 'views/peer/layout/chat/contact-content.html'
                         },
                         footer: {
                             templateUrl: 'views/peer/layout/chat/footer.html'
@@ -50,11 +50,21 @@ angular.module('unchatbar')
                 })
                 .state('contact.client', {
                     parent: 'contact',
-                    url: '/user/{clientId}'
+                    url: '/user/{clientId}',
+                    views : {
+                        selectedContact : {
+                            templateUrl: 'views/peer/layout/chat/selected-contact.html'
+                        }
+                    }
                 })
                 .state('contact.group', {
                     parent: 'contact',
-                    url: '/group/{groupId}'
+                    url: '/group/{groupId}',
+                    views : {
+                        selectedContact : {
+                            templateUrl: 'views/peer/layout/chat/selected-contact.html'
+                        }
+                    }
                 });
         }
     ]);
