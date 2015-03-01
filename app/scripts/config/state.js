@@ -8,14 +8,14 @@ angular.module('unchatbar')
                     url: '/login',
                     template: '<un-connection-authentication></un-connection-authentication>'
                 })
-
                 .state('layoutChat', {
                     abstract: true,
                     templateUrl: 'views/peer/layout/chat/index.html'
                 })
-                .state('profileAdmin', {
+                .state('index', {
                     parent: 'layoutChat',
-                    url: '/profile',views: {
+                    url: '/',
+                    views: {
                         header: {
                             templateUrl: 'views/peer/layout/chat/header.html'
                         },
@@ -23,7 +23,24 @@ angular.module('unchatbar')
                             templateUrl: 'views/peer/layout/chat/sidebar.html'
                         },
                         content: {
-                            template:  '<un-profile-admin></un-profile-admin>'
+                            templateUrl: 'views/peer/layout/chat/contact-content.html'
+                        },
+                        footer: {
+                            templateUrl: 'views/peer/layout/chat/footer.html'
+                        }
+                    }
+                })
+                .state('profileAdmin', {
+                    parent: 'layoutChat',
+                    url: '/profile', views: {
+                        header: {
+                            templateUrl: 'views/peer/layout/chat/header.html'
+                        },
+                        sidebar: {
+                            templateUrl: 'views/peer/layout/chat/sidebar.html'
+                        },
+                        content: {
+                            template: '<un-profile-admin></un-profile-admin>'
                         },
                         footer: {
                             templateUrl: 'views/peer/layout/chat/footer.html'
@@ -51,8 +68,8 @@ angular.module('unchatbar')
                 .state('contact.client', {
                     parent: 'contact',
                     url: '/user/{clientId}',
-                    views : {
-                        selectedContact : {
+                    views: {
+                        selectedContact: {
                             templateUrl: 'views/peer/layout/chat/selected-contact.html'
                         }
                     }
@@ -60,8 +77,8 @@ angular.module('unchatbar')
                 .state('contact.group', {
                     parent: 'contact',
                     url: '/group/{groupId}',
-                    views : {
-                        selectedContact : {
+                    views: {
+                        selectedContact: {
                             templateUrl: 'views/peer/layout/chat/selected-contact.html'
                         }
                     }
