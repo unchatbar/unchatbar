@@ -5,3 +5,9 @@ body {
 .new-message-box{
     top: 60px;
 }
+@media (max-width: 350px) {
+    .panel-body {
+        overflow-y: scroll;
+        height: 160px;
+    }
+}
