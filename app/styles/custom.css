@@ -12,9 +12,13 @@ textarea:focus { font-size: 16px!important}
 .stream-video {
     background-color:white;
 }
+.navbar {
+    padding:5px 5px;
+}
 .navbar-selectet-client-header {
     background-color: cornsilk;
     padding-top: 10px;
+
 }
 
 .back-to-client-list {
