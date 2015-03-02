@@ -1,46 +1,13 @@
-<!--<nav class="navbar navbar-fixed-top navbar-inverse">
-    <div class="container" data-ng-init="isCollapse=false" style="color:white">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed"
-                    data-ng-click="isCollapse=!isCollapse"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <un-connection-peer-id></un-connection-peer-id>
-        </div>
-
-        <div id="navbar" class="collapse navbar-collapse" data-ng-class="{'in' : isCollapse}">
-            <ul class="nav navbar-nav">
-                <li><a ui-sref-active="active" ui-sref='profileAdmin'>Profile</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<div data-ng-controller="unChat" data-ng-init="init()">
-    <un-data-chat-unread-message style="height:10px;overflow: hidden"
-                                 data-user-map="clientMap"></un-data-chat-unread-message>
-</div>-->
-<nav class="navbar navbar-fixed-top navbar-inverse">
+<nav class="navbar navbar-fixed-top navbar-inverse" data-ng-class="{'hidden-xs' : stateName !== 'contact'}" >
 
     <div class="row">
-        <div class="col-xs-3 col-sm-1">
-            <div class="navbar-header visible-xs-block" style="padding-left:20px;padding-top:10px;">
-                <a ui-sref="contact">
-                    <i class="fa fa-user fa-3x"></i>
-                </a>
-            </div>
-            <!-- /.nav-collapse -->
-        </div>
-        <div class="col-sm-2  hidden-xs">
+        <div class="col-sm-2 col-sm-offset-1 hidden-xs">
             <div class="navbar-brand small">unchatbar</div>
         </div>
-        <div class="col-xs-6 col-sm-6" style="padding-top:10px;">
+        <div class="col-xs-6 col-sm-6 col-xs-offset-1" style="padding-top:10px;">
             <un-data-chat-unread-message data-user-map="clientMap"></un-data-chat-unread-message>
         </div>
-        <div class="col-xs-3 col-sm-3">
+        <div class="col-xs-3 col-sm-3" >
             <a ui-sref-active="active" ui-sref='profileAdmin'>
                 <un-profile-label></un-profile-label>
             </a>

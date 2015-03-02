@@ -1,11 +1,11 @@
 <div data-ui-view="header"></div>
+<div class="placeholder-header" data-ng-class="{'hidden-xs' : stateName !== 'contact'}"></div>
 <div class="row">
     <div class="col-xs-12">
         <un-stream-own></un-stream-own>
     </div>
 </div>
 <div class="row">
-
     <div class="col-xs-9" style="margin-left:20px;">
         <un-stream-waiting-for-your-answer data-user-map="clientMap"></un-stream-waiting-for-your-answer>
         <un-stream-waiting-for-client-answer data-user-map="clientMap"></un-stream-waiting-for-client-answer>

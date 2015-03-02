@@ -1,13 +1,43 @@
 body {
-  background-color: white;
+    background-color: white;
 }
 
-.new-message-box{
+.new-message-box {
     top: 60px;
 }
+
+.placeholder-header {
+    margin-top: 80px;
+}
+.stream-video {
+    background-color:white;
+}
+.navbar-selectet-client-header {
+    background-color: cornsilk;
+    padding-top: 10px;
+}
+
+.back-to-client-list {
+    background-color:white;
+    border-radius: 100px;
+    box-shadow: 0 0 2px #888;
+    color: forestgreen;
+    display: inline-block;
+    margin-left: 10px;
+
+    margin-bottom: 10px;
+    margin-right: 20px;
+    padding: 5px 20px;
+}
+
 @media (max-width: 350px) {
     .panel-body {
         overflow-y: scroll;
-        height: 160px;
+        height: 265px;
     }
+    .selected-client{
+        overflow: inherit;
+        width: 50px;
+    }
+
 }

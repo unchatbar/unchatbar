@@ -13,7 +13,7 @@
     "components-font-awesome": "~4.2.0",
     "unchatbar-user" : "https://github.com/unchatbar/unchatbar-user.git#0.0.x",
     "unchatbar-connection" : "https://github.com/unchatbar/unchatbar-connection.git#0.0.x",
-    "unchatbar-contact" : "https://github.com/unchatbar/unchatbar-contact.git#0.0.x",
+    "unchatbar-contact" : "https://github.com/unchatbar/unchatbar-contact.git#chatUi",
     "unchatbar-data-chat" : "https://github.com/unchatbar/unchatbar-data-chat.git#0.0.x",
     "unchatbar-stream" : "https://github.com/unchatbar/unchatbar-stream.git#0.0.x",
     "unchatbar-notification" : "https://github.com/unchatbar/unchatbar-notification.git"
