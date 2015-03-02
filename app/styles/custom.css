@@ -5,7 +5,7 @@ body {
 .new-message-box {
     top: 60px;
 }
-
+textarea:focus { font-size: 16px!important}
 .placeholder-header {
     margin-top: 80px;
 }
