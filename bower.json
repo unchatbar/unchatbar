@@ -11,12 +11,12 @@
     "angular-bootstrap": "~0.12.0",
     "angular-ui-router": "~0.2.13",
     "components-font-awesome": "~4.2.0",
-    "unchatbar-user" : "https://github.com/unchatbar/unchatbar-user.git#0.0.x",
-    "unchatbar-connection" : "https://github.com/unchatbar/unchatbar-connection.git#0.0.x",
-    "unchatbar-contact" : "https://github.com/unchatbar/unchatbar-contact.git#0.0.x",
-    "unchatbar-data-chat" : "https://github.com/unchatbar/unchatbar-data-chat.git#0.0.x",
-    "unchatbar-stream" : "https://github.com/unchatbar/unchatbar-stream.git#0.0.x",
-    "unchatbar-notification" : "https://github.com/unchatbar/unchatbar-notification.git"
+    "unchatbar-user": "https://github.com/unchatbar/unchatbar-user.git#0.0.x",
+    "unchatbar-connection": "https://github.com/unchatbar/unchatbar-connection.git#0.0.x",
+    "unchatbar-contact": "https://github.com/unchatbar/unchatbar-contact.git#0.0.x",
+    "unchatbar-data-chat": "https://github.com/unchatbar/unchatbar-data-chat.git#0.0.x",
+    "unchatbar-stream": "https://github.com/unchatbar/unchatbar-stream.git#0.0.x",
+    "unchatbar-notification": "https://github.com/unchatbar/unchatbar-notification.git"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.0",
@@ -24,6 +24,7 @@
   },
   "appPath": "app",
   "resolutions": {
-    "angular": "^1.3.0"
+    "angular": "^1.3.0",
+    "peerjs": "b00bdee1d3c1615e73f94f4f2f00b0d118b7cff3"
   }
 }

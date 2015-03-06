@@ -39,6 +39,7 @@ module.exports = function (config) {
             'bower_components/unchatbar-connection/app/scripts/directive/login.js',
             'bower_components/unchatbar-connection/app/scripts/directive/peerId.js',
             'bower_components/unchatbar-connection/app/scripts/controller/dialer.js',
+            'bower_components/unchatbar-connection/app/scripts/controller/model-password.js',
             'bower_components/blockies/blockies.js',
             'bower_components/unchatbar-user/app/scripts/app.js',
             'bower_components/unchatbar-user/app/scripts/run.js',
