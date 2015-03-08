@@ -1,0 +1,122 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node',
+1 verbose cli   '/usr/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'grunt-ng-annotate',
+1 verbose cli   '--save-dev' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.36
+4 verbose node symlink /usr/bin/node
+5 verbose readDependencies using package.json deps
+6 verbose cache add [ 'grunt-ng-annotate', null ]
+7 verbose cache add name=undefined spec="grunt-ng-annotate" args=["grunt-ng-annotate",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'grunt-ng-annotate',
+8 verbose parsed url   path: 'grunt-ng-annotate',
+8 verbose parsed url   href: 'grunt-ng-annotate' }
+9 silly lockFile 2a4ec13f-grunt-ng-annotate grunt-ng-annotate
+10 verbose lock grunt-ng-annotate /home/lars/.npm/2a4ec13f-grunt-ng-annotate.lock
+11 silly lockFile 2a4ec13f-grunt-ng-annotate grunt-ng-annotate
+12 silly lockFile 2a4ec13f-grunt-ng-annotate grunt-ng-annotate
+13 verbose addNamed [ 'grunt-ng-annotate', '' ]
+14 verbose addNamed [ null, '*' ]
+15 silly lockFile c467431a-grunt-ng-annotate grunt-ng-annotate@
+16 verbose lock grunt-ng-annotate@ /home/lars/.npm/c467431a-grunt-ng-annotate.lock
+17 silly addNameRange { name: 'grunt-ng-annotate', range: '*', hasData: false }
+18 verbose request where is /grunt-ng-annotate
+19 verbose request registry https://registry.npmjs.org/
+20 verbose request id 1fe687d524eea0c6
+21 verbose url raw /grunt-ng-annotate
+22 verbose url resolving [ 'https://registry.npmjs.org/', './grunt-ng-annotate' ]
+23 verbose url resolved https://registry.npmjs.org/grunt-ng-annotate
+24 verbose request where is https://registry.npmjs.org/grunt-ng-annotate
+25 info trying registry request attempt 1 at 01:18:35
+26 verbose etag "7IEOO7LFAGOD3JYBUXPFS6UAW"
+27 http GET https://registry.npmjs.org/grunt-ng-annotate
+28 http 304 https://registry.npmjs.org/grunt-ng-annotate
+29 silly registry.get cb [ 304,
+29 silly registry.get   { date: 'Sat, 28 Feb 2015 00:18:34 GMT',
+29 silly registry.get     server: 'Apache',
+29 silly registry.get     via: '1.1 varnish',
+29 silly registry.get     'last-modified': 'Sat, 28 Feb 2015 00:18:35 GMT',
+29 silly registry.get     'cache-control': 'max-age=60',
+29 silly registry.get     etag: '"7IEOO7LFAGOD3JYBUXPFS6UAW"',
+29 silly registry.get     age: '0',
+29 silly registry.get     'x-served-by': 'cache-ams4139-AMS',
+29 silly registry.get     'x-cache': 'HIT',
+29 silly registry.get     'x-cache-hits': '1',
+29 silly registry.get     'x-timer': 'S1425082714.922301,VS0,VE386',
+29 silly registry.get     vary: 'Accept',
+29 silly registry.get     'content-length': '0',
+29 silly registry.get     'keep-alive': 'timeout=10, max=50',
+29 silly registry.get     connection: 'Keep-Alive' } ]
+30 verbose etag https://registry.npmjs.org/grunt-ng-annotate from cache
+31 silly addNameRange number 2 { name: 'grunt-ng-annotate', range: '*', hasData: true }
+32 silly addNameRange versions [ 'grunt-ng-annotate',
+32 silly addNameRange   [ '0.0.1',
+32 silly addNameRange     '0.0.2',
+32 silly addNameRange     '0.0.4',
+32 silly addNameRange     '0.0.5',
+32 silly addNameRange     '0.0.6',
+32 silly addNameRange     '0.0.7',
+32 silly addNameRange     '0.0.8',
+32 silly addNameRange     '0.1.0',
+32 silly addNameRange     '0.2.0',
+32 silly addNameRange     '0.2.1',
+32 silly addNameRange     '0.2.2',
+32 silly addNameRange     '0.2.3',
+32 silly addNameRange     '0.3.0',
+32 silly addNameRange     '0.3.1',
+32 silly addNameRange     '0.3.2',
+32 silly addNameRange     '0.4.0',
+32 silly addNameRange     '0.5.0',
+32 silly addNameRange     '0.6.0',
+32 silly addNameRange     '0.7.0',
+32 silly addNameRange     '0.8.0',
+32 silly addNameRange     '0.9.0',
+32 silly addNameRange     '0.9.1',
+32 silly addNameRange     '0.9.2',
+32 silly addNameRange     '0.10.0' ] ]
+33 verbose addNamed [ 'grunt-ng-annotate', '0.10.0' ]
+34 verbose addNamed [ '0.10.0', '0.10.0' ]
+35 silly lockFile 7a43ce1a-grunt-ng-annotate-0-10-0 grunt-ng-annotate@0.10.0
+36 verbose lock grunt-ng-annotate@0.10.0 /home/lars/.npm/7a43ce1a-grunt-ng-annotate-0-10-0.lock
+37 silly lockFile 195e428c-ate-grunt-ng-annotate-0-10-0-tgz https://registry.npmjs.org/grunt-ng-annotate/-/grunt-ng-annotate-0.10.0.tgz
+38 verbose lock https://registry.npmjs.org/grunt-ng-annotate/-/grunt-ng-annotate-0.10.0.tgz /home/lars/.npm/195e428c-ate-grunt-ng-annotate-0-10-0-tgz.lock
+39 verbose addRemoteTarball [ 'https://registry.npmjs.org/grunt-ng-annotate/-/grunt-ng-annotate-0.10.0.tgz',
+39 verbose addRemoteTarball   'f5dc3b4c33a566582413310b78985566e0a84b6e' ]
+40 info retry fetch attempt 1 at 01:18:36
+41 verbose fetch to= /tmp/npm-21283-bJTk5mCN/registry.npmjs.org/grunt-ng-annotate/-/grunt-ng-annotate-0.10.0.tgz
+42 http GET https://registry.npmjs.org/grunt-ng-annotate/-/grunt-ng-annotate-0.10.0.tgz
+43 http 200 https://registry.npmjs.org/grunt-ng-annotate/-/grunt-ng-annotate-0.10.0.tgz
+44 silly lockFile 195e428c-ate-grunt-ng-annotate-0-10-0-tgz https://registry.npmjs.org/grunt-ng-annotate/-/grunt-ng-annotate-0.10.0.tgz
+45 silly lockFile 195e428c-ate-grunt-ng-annotate-0-10-0-tgz https://registry.npmjs.org/grunt-ng-annotate/-/grunt-ng-annotate-0.10.0.tgz
+46 silly lockFile 7a43ce1a-grunt-ng-annotate-0-10-0 grunt-ng-annotate@0.10.0
+47 silly lockFile 7a43ce1a-grunt-ng-annotate-0-10-0 grunt-ng-annotate@0.10.0
+48 silly lockFile c467431a-grunt-ng-annotate grunt-ng-annotate@
+49 silly lockFile c467431a-grunt-ng-annotate grunt-ng-annotate@
+50 error Error: EACCES, mkdir '/home/lars/.npm/grunt-ng-annotate/0.10.0'
+50 error  { [Error: EACCES, mkdir '/home/lars/.npm/grunt-ng-annotate/0.10.0']
+50 error   errno: 3,
+50 error   code: 'EACCES',
+50 error   path: '/home/lars/.npm/grunt-ng-annotate/0.10.0',
+50 error   parent: 'unchatbar' }
+51 error Please try running this command again as root/Administrator.
+52 error System Linux 3.13.0-37-generic
+53 error command "/usr/bin/node" "/usr/bin/npm" "install" "grunt-ng-annotate" "--save-dev"
+54 error cwd /home/www/client/unchatbar
+55 error node -v v0.10.36
+56 error npm -v 1.4.28
+57 error path /home/lars/.npm/grunt-ng-annotate/0.10.0
+58 error code EACCES
+59 error errno 3
+60 error stack Error: EACCES, mkdir '/home/lars/.npm/grunt-ng-annotate/0.10.0'
+61 verbose exit [ 3, true ]
