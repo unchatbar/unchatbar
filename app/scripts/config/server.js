@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('unchatbar')
-    .config(['BrokerProvider', 'PhoneBookProvider', 'ProfileProvider', 'MessageProvider', 'LOCALSTORAGE',
-        function (BrokerProvider, PhoneBookProvider, ProfileProvider, MessageProvider, LOCALSTORAGE) {
+    .config(['BrokerProvider', 'PhoneBookProvider', 'ProfileProvider', 'MessageProvider', 'LOCALSTORAGE', 'DataConnection',
+        function (BrokerProvider, PhoneBookProvider, ProfileProvider, MessageProvider, LOCALSTORAGE, DataConnection) {
 
             if (LOCALSTORAGE === true) {
                 BrokerProvider.setLocalStorage();
+                DataConnection.setLocalStorage();
                 ProfileProvider.setLocalStorage();
                 PhoneBookProvider.setLocalStorage();
                 MessageProvider.setLocalStorage();
@@ -30,5 +31,5 @@ angular.module('unchatbar')
                 username: 'louis%40mozilla.com'
             });
             BrokerProvider.setSecureConnection(true);
-            
+
         }]);
