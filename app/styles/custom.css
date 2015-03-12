@@ -40,7 +40,20 @@ textarea:focus { font-size: 16px!important}
     margin-right: 20px;
     padding: 5px 20px;
 }
-
+.ne-image img, .ne-image-long img {
+    width: 1;
+    max-width: 100%;
+}
+.ne-video video {
+    width: 1;
+    max-width: 100%;
+}
+.ne-image-wrapper {
+    background-color : white;
+}
+.ne-video-player {
+    background-color : white;
+}
 @media (max-width: 350px) {
     .panel-body {
         overflow-y: scroll;
