@@ -41,11 +41,11 @@ textarea:focus { font-size: 16px!important}
     padding: 5px 20px;
 }
 .ne-image img, .ne-image-long img {
-    width: 1;
+    width: 200px;
     max-width: 100%;
 }
 .ne-video video {
-    width: 1;
+    width: 200px;
     max-width: 100%;
 }
 .ne-image-wrapper {
