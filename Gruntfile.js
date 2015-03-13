@@ -344,7 +344,7 @@ module.exports = function (grunt) {
                         'scripts/worker/*.js',
                         'sounds/**/*.mp3',
                         'views/**/*.html',
-                        'images/{,*/}*.{webp}',
+                        'images/{,*/}*.*',
                         'fonts/{,*/}*.*'
                     ]
                 }, {
