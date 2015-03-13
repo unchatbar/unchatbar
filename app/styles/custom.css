@@ -40,14 +40,6 @@ textarea:focus { font-size: 16px!important}
     margin-right: 20px;
     padding: 5px 20px;
 }
-.ne-image img, .ne-image-long img {
-    width: auto;
-    max-width: 100%;
-}
-.ne-video video {
-    width: auto;
-    max-width: 100%;
-}
 .ne-image-wrapper {
     background-color : white;
 }
