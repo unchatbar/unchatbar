@@ -6,44 +6,44 @@ angular.module('unchatbar')
             $stateProvider
                 .state('login', {
                     url: '/login',
-                    template: '<un-connection-authentication></un-connection-authentication>'
+                    templateUrl: 'views/peer/login.html'
                 })
                 .state('layoutChat', {
                     abstract: true,
-                    templateUrl: 'views/peer/layout/chat/index.html'
+                    templateUrl: 'views/peer/dashboard.html'
                 })
                 .state('index', {
                     parent: 'layoutChat',
                     url: '/',
                     views: {
                         header: {
-                            templateUrl: 'views/peer/layout/chat/header.html'
+                            templateUrl: 'views/peer/dashboard/header.html'
                         },
                         sidebar: {
-                            templateUrl: 'views/peer/layout/chat/sidebar.html'
+                            templateUrl: 'views/peer/dashboard/sidebar.html'
                         },
                         content: {
-                            templateUrl: 'views/peer/layout/chat/contact-content.html'
+                            templateUrl: 'views/peer/dashboard/chat.html'
                         },
                         footer: {
-                            templateUrl: 'views/peer/layout/chat/footer.html'
+                            templateUrl: 'views/peer/dashboard/footer.html'
                         }
                     }
                 })
-                .state('profileAdmin', {
+                .state('profile', {
                     parent: 'layoutChat',
                     url: '/profile', views: {
                         header: {
-                            templateUrl: 'views/peer/layout/chat/header.html'
+                            templateUrl: 'views/peer/dashboard/header.html'
                         },
                         sidebar: {
-                            templateUrl: 'views/peer/layout/chat/sidebar.html'
+                            templateUrl: 'views/peer/dashboard/sidebar.html'
                         },
                         content: {
-                            template: '<un-profile-admin></un-profile-admin>'
+                            templateUrl: 'views/peer/dashboard/profile.html'
                         },
                         footer: {
-                            templateUrl: 'views/peer/layout/chat/footer.html'
+                            templateUrl: 'views/peer/dashboard/footer.html'
                         }
                     }
                 })
@@ -52,35 +52,37 @@ angular.module('unchatbar')
                     parent: 'layoutChat',
                     views: {
                         header: {
-                            templateUrl: 'views/peer/layout/chat/header.html'
+                            templateUrl: 'views/peer/dashboard/header.html'
                         },
                         sidebar: {
-                            templateUrl: 'views/peer/layout/chat/sidebar.html'
+                            templateUrl: 'views/peer/dashboard/sidebar.html'
                         },
                         content: {
-                            templateUrl: 'views/peer/layout/chat/contact-content.html'
+                            templateUrl: 'views/peer/dashboard/chat.html'
                         },
                         footer: {
-                            templateUrl: 'views/peer/layout/chat/footer.html'
+                            templateUrl: 'views/peer/dashboard/footer.html'
                         }
                     }
                 })
                 .state('contact.client', {
                     parent: 'contact',
-                    url: '/user/{clientId}',
-                    views: {
-                        selectedContact: {
-                            templateUrl: 'views/peer/layout/chat/selected-contact.html'
-                        }
-                    }
+                    url: '/user/{clientId}'
+
                 })
                 .state('contact.group', {
                     parent: 'contact',
-                    url: '/group/{groupId}',
-                    views: {
-                        selectedContact: {
-                            templateUrl: 'views/peer/layout/chat/selected-contact.html'
-                        }
+                    url: '/group/{groupId}'
+
+                })
+                .state('contact.channel', {
+                    parent: 'contact',
+                    url: '/{channel}',
+                    resolve:{
+                        getPeerId: ['$stateParams','PhoneBook',function( $stateParams,PhoneBook){
+                            $stateParams.clientId = PhoneBook.getClientByChannel($stateParams.channel).id || null;
+                            $stateParams.groupId = PhoneBook.getGroupByChannel($stateParams.channel).id || null;
+                        }]
                     }
                 });
         }

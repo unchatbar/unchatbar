@@ -45,9 +45,9 @@ module.exports = function (grunt) {
                 files: ['test/spec/{,*/}*.js'],
                 tasks: ['newer:jshint:test', 'karma']
             },
-            styles: {
-                files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
-                tasks: ['newer:copy:styles', 'autoprefixer']
+            compass: {
+                files: ['<%= yeoman.app %>/styles/**/*.{scss,sass}'],
+                tasks: ['compass:server', 'autoprefixer']
             },
             gruntfile: {
                 files: ['Gruntfile.js']
@@ -80,11 +80,11 @@ module.exports = function (grunt) {
                         '.docs',
                         '<%= yeoman.app %>'
                     ],
-                    middleware: function(connect, options) {
+                    middleware: function (connect, options) {
                         var middlewares = [];
 
                         middlewares.push(modRewrite(['^[^\\.]*$ /index.html [L]'])); //Matches everything that does not contain a '.' (period)
-                        options.base.forEach(function(base) {
+                        options.base.forEach(function (base) {
                             middlewares.push(connect.static(base));
                         });
                         middlewares.push(connect().use(
@@ -115,11 +115,11 @@ module.exports = function (grunt) {
                 options: {
                     open: true,
                     base: '<%= yeoman.dist %>',
-                    middleware: function(connect, options) {
+                    middleware: function (connect, options) {
                         var middlewares = [];
 
                         middlewares.push(modRewrite(['^[^\\.]*$ /index.html [L]'])); //Matches everything that does not contain a '.' (period)
-                        options.base.forEach(function(base) {
+                        options.base.forEach(function (base) {
                             middlewares.push(connect.static(base));
                         });
                         return middlewares;
@@ -182,10 +182,18 @@ module.exports = function (grunt) {
         wiredep: {
             app: {
                 src: ['<%= yeoman.app %>/index.html'],
+                exclude: [
+                    'bower_components/bootstrap-sass-official/assets/javascripts',
+                    'bower_components/jquery'
+                ],
                 ignorePath: /\.\.\//
             },
             test: {
                 src: 'test/karma.conf.js',
+                exclude: [
+                    'bower_components/bootstrap-sass-official/assets/javascripts',
+                    'bower_components/jquery'
+                ],
                 fileTypes: {
                     js: {
                         block: /(([\s\t]*)\/\/\s*bower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower)/gi,
@@ -194,10 +202,56 @@ module.exports = function (grunt) {
                         },
                         replace: {
                             js: function (filePath) {
-                                return '\'' + filePath.replace("../","")  +'\',';
+                                return '\'' + filePath.replace("../", "") + '\',';
                             }
                         }
                     }
+                }
+            },
+            sass: {
+                src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+                ignorePath: /(\.\.\/){1,2}bower_components\//
+            }
+        },
+        compass: {
+            options: {
+                sassDir: '<%= yeoman.app %>/styles',
+                cssDir: '.tmp/styles',
+                generatedImagesDir: '.tmp/images/generated',
+                imagesDir: '<%= yeoman.app %>/images',
+                javascriptsDir: '<%= yeoman.app %>/scripts',
+                fontsDir: '<%= yeoman.app %>/styles/fonts',
+                importPath: './bower_components',
+                httpImagesPath: '/images',
+                httpGeneratedImagesPath: '/images/generated',
+                httpFontsPath: '/fonts',
+                relativeAssets: false,
+                assetCacheBuster: false,
+                raw: 'Sass::Script::Number.precision = 10\n'
+            },
+            dist: {
+                options: {
+                    generatedImagesDir: '<%= yeoman.dist %>/images/generated'
+                }
+            },
+            server: {
+                options: {
+                    sourcemap: true
+                }
+            }
+        },
+
+        nggettext_extract: {
+            pot: {
+                files: {
+                    'po/template.pot': ['app/views/**/*.html']
+                }
+            }
+        },
+        nggettext_compile: {
+            all: {
+                files: {
+                    'app/scripts/translations.js': ['po/*.po']
                 }
             }
         },
@@ -389,15 +443,19 @@ module.exports = function (grunt) {
         // Run some tasks in parallel to speed up the build process
         concurrent: {
             server: [
-                'copy:styles'
+                'compass:server'
             ],
             test: [
-                'copy:styles'
+                'compass'
             ],
             dist: [
-                'copy:styles',
-                //'imagemin',
-                //'svgmin'
+                'compass:dist',
+                'imagemin',
+                'svgmin'
+            ],
+            dev: [
+                'watch',
+                'nodemon'
             ]
         },
 
@@ -419,36 +477,60 @@ module.exports = function (grunt) {
                 title: 'API Reference'
             }
         },
-        ngtemplates:  {
-            dist:        {
-                cwd:      'app',
-                src:      'views/**/*.html',
-                dest:     'app/scripts/template.js',
-                options:  {
-                    module : '<%= yeoman.appName %>',
-                    htmlmin:{
-                        collapseBooleanAttributes:      true,
-                        collapseWhitespace:             true,
-                        removeAttributeQuotes:          true,
-                        removeComments:                 true, // Only if you don't use comment directives!
-                        removeEmptyAttributes:          true,
-                        removeRedundantAttributes:      true,
-                        removeScriptTypeAttributes:     true,
-                        removeStyleLinkTypeAttributes:  true
+        ngtemplates: {
+            dist: {
+                cwd: 'app',
+                src: 'views/**/*.html',
+                dest: 'app/scripts/template.js',
+                options: {
+                    module: '<%= yeoman.appName %>',
+                    htmlmin: {
+                        collapseBooleanAttributes: true,
+                        collapseWhitespace: true,
+                        removeAttributeQuotes: true,
+                        removeComments: true, // Only if you don't use comment directives!
+                        removeEmptyAttributes: true,
+                        removeRedundantAttributes: true,
+                        removeScriptTypeAttributes: true,
+                        removeStyleLinkTypeAttributes: true
                     } // <~~ This came from the <!-- build:js --> block
                 }
             },
-            dev:{
-                cwd:      'app',
-                src:      'views/**/*.html',
-                dest:     'app/scripts/template.js',
+            dev: {
+                cwd: 'app',
+                src: 'views/**/*.html',
+                dest: 'app/scripts/template.js',
                 options:  {
                     bootstrap:  function() {
                         return '//no templates';
                     }
                 }
             }
+        },
+        bump: {
+            options: {
+                files: ['package.json', 'bower.json'],
+                updateConfigs: [],
+                commit: true,
+                commitMessage: 'Release v%VERSION%',
+                commitFiles: ['-a'],
+                createTag: true,
+                tagName: '%VERSION%',
+                tagMessage: 'Version %VERSION%',
+                push: true,
+                pushTo: 'origin',
+                gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+                globalReplace: false,
+                prereleaseName: false,
+                regExp: false
+            }
+        },
+        nodemon: {
+            dev: {
+                script: 'node_modules/unchatbar-server/app.js'
+            }
         }
+
     });
 
 
@@ -466,13 +548,8 @@ module.exports = function (grunt) {
             'autoprefixer',
             'ngdocs',
             'connect:livereload',
-            'watch'
+            'concurrent:dev'
         ]);
-    });
-
-    grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
-        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-        grunt.task.run(['serve:' + target]);
     });
 
     grunt.registerTask('test', [
@@ -486,6 +563,12 @@ module.exports = function (grunt) {
         'karma'
     ]);
     grunt.registerTask('doku', ['ngdocs']);
+
+    grunt.registerTask('tag', 'create new tag', function (version) {
+        grunt.task.run(['ngtemplates:dev', 'bump:' + version]);
+    });
+
+
     grunt.registerTask('build', [
         'clean:dist',
         'ngtemplates:dist',

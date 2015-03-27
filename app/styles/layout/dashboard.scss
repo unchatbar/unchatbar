@@ -1,0 +1,39 @@
+.dashboard {
+  position: relative;
+  width: inherit;
+  height: inherit;
+  overflow: hidden
+}
+
+.navbar {
+  margin-bottom: 0;
+  border-width: 0
+}
+
+.sidebar {
+  position: relative;
+  height: 100%
+}
+
+.sidebar-fixed-left {
+  position: fixed;
+  left: 0;
+  top: 0;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  z-index: 1020;
+}
+
+.content {
+  position: relative;
+  margin-top: 100px;
+  margin-bottom: 50px;
+  height: 100%
+}
+
+@media (min-width: 768px) {
+  .content {
+    margin-top: 50px;
+    margin-left: 250px
+  }
+}

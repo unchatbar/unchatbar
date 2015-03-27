@@ -5,7 +5,28 @@
     <file url="file://$PROJECT_DIR$/.gitignore" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/License" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Readme.md" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/styles/custom.css" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/favicon.ico" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/agent-coulson.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/black-widow.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/captain-america.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/giant-man.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/hawkeye.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/hulk.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/iron-man.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/logo-dark.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/logo-light.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/loki.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/nick-fury.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/thor.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/images/war-machine.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/styles/layout/chat.scss" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/styles/layout/custom.scss" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/styles/layout/dashboard.scss" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/styles/layout/footer.scss" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/styles/layout/header.scss" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/styles/layout/login.scss" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/styles/layout/sidebar.scss" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/peer/dashboard" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/views/peer/layout/chat/footer.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/views/peer/layout/chat/header.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/views/peer/layout/chat/index.html" charset="UTF-8" />

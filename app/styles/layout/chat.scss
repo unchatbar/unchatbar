@@ -1,0 +1,87 @@
+.content-container {
+  position: relative;
+  padding: 0 20px;
+  height: 100%;
+  width: 100%;
+  overflow: hidden
+}
+
+.content .page-header {
+  margin: 30px 0 20px;
+  border-bottom-color: #ccc
+}
+
+.page-content {
+  margin: 20px 0;
+}
+
+.page-content .media-left {
+  float: left
+}
+
+.page-content .media-right {
+  float: right
+}
+
+.speech {
+  position: relative;
+  background: #d9e6ff;
+  color: #444;
+  display: inline-block;
+  border-radius: 2px;
+  padding: 12px 20px
+}
+
+.speech .media-heading {
+  font-size: 1.2em;
+  color: #333;
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  font-weight: 300
+}
+
+.speech .media-heading:hover {
+  text-decoration: underline
+}
+
+.speech-time {
+  margin-top: 20px;
+  margin-bottom: 0;
+  font-size: .8em;
+  font-weight: 300
+}
+
+.speech-right {
+  text-align: right
+}
+
+.speech-right > .speech {
+  background: #ecffc9;
+  text-align: right
+}
+
+.speech:before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 0;
+  top: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-right: 7px solid #d9e6ff;
+  margin: 15px 0 0 -6px
+}
+
+.speech-right > .speech:before {
+  left: auto;
+  right: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 7px solid #ecffc9;
+  border-right: 0;
+  margin: 15px -6px 0 0
+}

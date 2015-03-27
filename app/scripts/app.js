@@ -19,7 +19,8 @@ angular.module('unchatbar', [
     'unchatbar-contact',
     'unchatbar-data-chat',
     'unchatbar-stream',
-    'unchatbar-notification'
+    'unchatbar-notification',
+    'gettext'
 
 
 ]);

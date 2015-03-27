@@ -137,7 +137,10 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams','$sta
         $scope.$on('$stateChangeSuccess', function () {
             $scope.stateName = $state.current.name;
             $scope.init();
+
         });
+
+
 
     }
 ]);

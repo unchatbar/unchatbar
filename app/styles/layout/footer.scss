@@ -1,0 +1,42 @@
+.navbar-container-bottom {
+  box-shadow: 0 -2px 0 -1px rgba(0, 0, 0, .1)
+}
+
+.navbar-container-bottom > .navbar-footer {
+  background-color: #292c33;
+  display: none
+}
+
+.navbar-container-bottom > .navbar-content {
+  position: relative;
+  left: 0;
+  background-color: #fff;
+  padding: 0 5px
+}
+
+.navbar-form {
+  margin: 0;
+  padding-top: 10px;
+  padding-bottom: 10px
+}
+
+.navbar-form .form-group,
+.navbar-form .input-group {
+  width: 100%
+}
+
+.navbar-form .input-group .input-group-btn {
+  width: 1%
+}
+
+@media (min-width: 768px) {
+  .navbar-container-bottom > .navbar-footer {
+    display: block;
+    float: left;
+    width: 250px
+  }
+
+  .navbar-container-bottom > .navbar-content {
+    margin-left: 250px
+  }
+}
