@@ -1,7 +1,8 @@
 <div class="sidebar-container">
 
   <tabset class="sidebar-tabset" justified="true">
-    <tab>
+    <tab active="selectedContactType.user">
+
       <tab-heading>
         <i class="fa fa-user fa-lg"></i>
         <un-contact-client-count addition-class="'badge-info'"></un-contact-client-count>
@@ -20,7 +21,7 @@
 
       <hr>
       <h4 class="pad-hor text-thin"> <span class="pull-right"><un-contact-client-count
-              addition-class="'badge-success'"
+              addition-class="'badge-info'"
               data-client-filter="{online:false}">
       </un-contact-client-count></span> Offline</h4>
 
@@ -29,7 +30,7 @@
       </div>
 
     </tab>
-    <tab>
+    <tab active="selectedContactType.group">
       <tab-heading>
         <i class="fa fa-users fa-lg"></i>
       </tab-heading>

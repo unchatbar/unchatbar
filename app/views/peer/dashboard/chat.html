@@ -1,4 +1,4 @@
-<div class="content-container">
+<div class="content-container" data-ng-init="showAdmin=false;">
 
   <!-- HEADER -->
   <div class="page-header">
@@ -11,10 +11,20 @@
     <div class="panel panel-default">
 
       <div class="panel-heading">
-        <h3 class="panel-title">War Machine</h3>
-      </div>
 
+        <h3 class="panel-title">
+            <un-contact-client-selected></un-contact-client-selected>
+            <un-contact-group-selected></un-contact-group-selected>
+            <span><i class="fa " data-ng-class="{'fa-arrow-circle-down' : !showAdmin, 'fa-arrow-circle-up' : showAdmin}"
+                     data-ng-click="showAdmin=!showAdmin"></i></span>
+        </h3>
+      </div>
       <div class="panel-body">
+          <ul data-ng-show="showAdmin" class="list-unstyled">
+              <li><un-contact-client-admin></un-contact-client-admin></li>
+              <li><un-contact-group-admin></un-contact-group-admin></li>
+          </ul>
+          <br>
         <ul class="list-unstyled">
           <li class="mar-btm">
             <div class="media-left">

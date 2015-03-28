@@ -11,8 +11,8 @@
  * client controller
  *
  */
-angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams','$state', 'Broker', 'PhoneBook','Profile',
-    function ($scope, $stateParams,$state, Broker, PhoneBook,Profile) {
+angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', '$state', 'Broker', 'PhoneBook', 'Profile',
+    function ($scope, $stateParams, $state, Broker, PhoneBook, Profile) {
 
         /**
          * @ngdoc property
@@ -21,6 +21,17 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams','$sta
          * @returns {String} name of channel
          */
         $scope.channel = '';
+
+        /**
+         * @ngdoc property
+         * @name selectedContactType
+         * @propertyOf unchatbar.controller:unChat
+         * @returns {Object} selected contact type
+         */
+        $scope.selectedContactType = {
+            user: true,
+            group: false
+        };
 
         /**
          * @ngdoc property
@@ -76,8 +87,8 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams','$sta
                 var users = PhoneBook.getGroup($stateParams.groupId).users;
                 $scope.clientFromChannelMap = {};
 
-                _.forEach(users,function(user){
-                    if(user.id !== Broker.getPeerId()) {
+                _.forEach(users, function (user) {
+                    if (user.id !== Broker.getPeerId()) {
                         $scope.clientFromChannelMap[user.id] = PhoneBook.getClient(user.id);
                     } else {
                         $scope.clientFromChannelMap[user.id] = Profile.get();
@@ -110,7 +121,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams','$sta
                 ];
 
                 clientMap = _.pluck(_.sortBy(clientList, 'peerId'), 'peerId');
-                $scope.channel =  $stateParams.channel;
+                $scope.channel = $stateParams.channel;
 
             }
         };
@@ -124,7 +135,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams','$sta
          * init controller
          *
          */
-        $scope.init = function(){
+        $scope.init = function () {
             $scope.getChannel();
             $scope.getClientsFromChannel();
             $scope.getClientAllClients();
@@ -139,7 +150,6 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams','$sta
             $scope.init();
 
         });
-
 
 
     }

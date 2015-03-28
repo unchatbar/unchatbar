@@ -2,9 +2,8 @@
 
   <!-- BRAND LOGO & TEXT -->
   <div class="navbar-footer">
-      <un-connection-dialer></un-connection-dialer>
-<br />
-      <un-contact-group-add></un-contact-group-add>
+      <un-connection-dialer data-ng-show="selectedContactType.user"></un-connection-dialer>
+      <un-contact-group-add data-ng-show="selectedContactType.group"></un-contact-group-add>
   </div>
   <!-- END OF BRAND LOGO & TEXT -->
 
