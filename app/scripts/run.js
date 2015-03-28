@@ -10,16 +10,17 @@
 angular.module('unchatbar').run(['$rootScope', '$window', '$state', 'Broker',
     function ($rootScope, $window, $state, Broker) {
         $rootScope.$on('$stateChangeStart', function (e, toState) {
-            var isLogin = toState.name === 'login';
-            if(isLogin){
-                return;
-            }
-            if (!Broker.getPeerIdFromStorage()) {
+            if (Broker.getPeerIdFromStorage() && toState.name === 'login') {
+                e.preventDefault();
+                $state.go('index');
+            }else if (!Broker.getPeerIdFromStorage() && toState.name !== 'login') {
                 e.preventDefault();
                 $state.go('login');
-                $rootScope.$on('BrokerPeerOpen', function () {
-                    $state.go('contact');
-                });
+            }
+        });
+        $rootScope.$on('BrokerPeerOpen', function () {
+            if ($state.current.name === 'login') {
+                $state.go('contact');
             }
         });
         if (Broker.getPeerIdFromStorage()) {
