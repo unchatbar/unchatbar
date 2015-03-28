@@ -102,7 +102,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams','$sta
         $scope.getChannel = function () {
             var clientMap, clientList;
             if ($stateParams.groupId) {
-                $scope.channel = $stateParams.groupId;
+                $scope.channel = $stateParams.channel;
             } else if ($stateParams.clientId) {
                 clientList = [
                     {'peerId': Broker.getPeerId()},
@@ -110,7 +110,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams','$sta
                 ];
 
                 clientMap = _.pluck(_.sortBy(clientList, 'peerId'), 'peerId');
-                $scope.channel = clientMap.toString().replace(',', '');
+                $scope.channel =  $stateParams.channel;
 
             }
         };
