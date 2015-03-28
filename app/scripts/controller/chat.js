@@ -115,14 +115,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', '$st
             if ($stateParams.groupId) {
                 $scope.channel = $stateParams.channel;
             } else if ($stateParams.clientId) {
-                clientList = [
-                    {'peerId': Broker.getPeerId()},
-                    {'peerId': $stateParams.clientId}
-                ];
-
-                clientMap = _.pluck(_.sortBy(clientList, 'peerId'), 'peerId');
                 $scope.channel = $stateParams.channel;
-
             }
         };
 
