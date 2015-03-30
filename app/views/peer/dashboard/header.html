@@ -27,36 +27,13 @@
       <li class="dropdown" dropdown>
 
         <!-- Dropdown button -->
-        <a href="#" class="dropdown-toggle" dropdown-toggle>
+        <a href="#" data-ng-click="showUnreadMessageList=!showUnreadMessageList" class="dropdown-toggle" dropdown-toggle>
           <i class="fa fa-envelope fa-lg"></i>
-          <span class="badge badge-primary">4</span>
+            <un-data-chat-count-unread-message></un-data-chat-count-unread-message>
         </a>
 
         <!-- Dropdown menu -->
-        <ul class="dropdown-menu dropdown-menu-left with-arrow" role="menu">
-          <li class="dropdown-header pad-all">
-            <span class="text-lg text-muted text-thin">You have 4 messages</span>
-          </li>
-          <li class="divider mar-no"></li>
-          <li data-ng-repeat="message in header.messages">
-            <a class="media" href="#">
-              <span class="media-left">
-                <img class="img-circle img-sm" src="images/thor.png" alt="{{ message.sender }}">
-              </span>
-
-              <div class="media-body">
-                <div class="text-sm text-nowrap">{{ message.text }}</div>
-                <small class="text-muted">{{ message.date }}</small>
-              </div>
-            </a>
-          </li>
-          <li class="divider mar-no"></li>
-          <li class="pad-all">
-            <div>
-              <a href="#" class="btn btn-sm btn-warning btn-labeled fa fa-trash icon-lg">Clear</a>
-            </div>
-          </li>
-        </ul>
+          <un-data-chat-unread-message data-user-map="clientMap" data-ng-show="showUnreadMessageList"></un-data-chat-unread-message>
 
       </li>
       <!-- END OF MESSAGES DROPDOWN -->

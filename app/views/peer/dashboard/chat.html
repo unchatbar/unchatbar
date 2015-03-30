@@ -15,7 +15,7 @@
                 <h3 class="panel-title">
                     <un-contact-client-selected></un-contact-client-selected>
                     <un-contact-group-selected></un-contact-group-selected>
-            <span><i class="fa " data-ng-class="{'fa-arrow-circle-down' : !showAdmin, 'fa-arrow-circle-up' : showAdmin}"
+            <span data-ng-show="channel"><i class="fa " data-ng-class="{'fa-arrow-circle-down' : !showAdmin, 'fa-arrow-circle-up' : showAdmin}"
                      data-ng-click="showAdmin=!showAdmin"></i></span>
                 </h3>
 
@@ -29,148 +29,8 @@
                         <un-contact-group-admin></un-contact-group-admin>
                     </li>
                 </ul>
-                <i data-ng-click="showDebug=!showDebug" class="fa fa-info"></i>
-
-                <div data-ng-show="showDebug">
-                    Channel
-                      <pre>
-                          channel:{{channel}}
-                      </pre>
-                                Clients
-                      <pre>
-                      {{clientFromChannelMap | json}}
-                      </pre>
-                </div>
-                <ul class="list-unstyled">
-                    <li class="mar-btm">
-                        <div class="media-left">
-                            <img src="images/thor.png" class="img-circle img-sm" alt="Profile Picture">
-                        </div>
-                        <div class="media-body pad-hor">
-                            <div class="speech">
-                                <a href="#" class="media-heading">Thor</a>
-
-                                <p>Hello War Machine, how can I help you today?</p>
-
-                                <p class="speech-time">
-                                    <i class="fa fa-clock-o fa-fw"></i> 09:23
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="mar-btm">
-                        <div class="media-right">
-                            <img src="images/war-machine.png" class="img-circle img-sm" alt="Profile Picture">
-                        </div>
-                        <div class="media-body pad-hor speech-right">
-                            <div class="speech">
-                                <a href="#" class="media-heading">War Machine</a>
-
-                                <p>Hi, I want to buy a new weapon.</p>
-
-                                <p class="speech-time">
-                                    <i class="fa fa-clock-o fa-fw"></i> 09:23
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="mar-btm">
-                        <div class="media-left">
-                            <img src="images/thor.png" class="img-circle img-sm" alt="Profile Picture">
-                        </div>
-                        <div class="media-body pad-hor">
-                            <div class="speech">
-                                <a href="#" class="media-heading">Thor</a>
-
-                                <p>Shipment is free. You'll get your weapon tomorrow!</p>
-
-                                <p class="speech-time">
-                                    <i class="fa fa-clock-o fa-fw"></i> 09:25
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="mar-btm">
-                        <div class="media-right">
-                            <img src="images/war-machine.png" class="img-circle img-sm" alt="Profile Picture">
-                        </div>
-                        <div class="media-body pad-hor speech-right">
-                            <div class="speech">
-                                <a href="#" class="media-heading">War Machine</a>
-
-                                <p>Wow, that's great!</p>
-
-                                <p class="speech-time">
-                                    <i class="fa fa-clock-o fa-fw"></i> 09:27
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="mar-btm">
-                        <div class="media-right">
-                            <img src="images/war-machine.png" class="img-circle img-sm" alt="Profile Picture">
-                        </div>
-                        <div class="media-body pad-hor speech-right">
-                            <div class="speech">
-                                <a href="#" class="media-heading">War Machine</a>
-
-                                <p>Ok. Thanks for the answer. Appreciated.</p>
-
-                                <p class="speech-time">
-                                    <i class="fa fa-clock-o fa-fw"></i> 09:28
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="mar-btm">
-                        <div class="media-left">
-                            <img src="images/thor.png" class="img-circle img-sm" alt="Profile Picture">
-                        </div>
-                        <div class="media-body pad-hor">
-                            <div class="speech">
-                                <a href="#" class="media-heading">Thor</a>
-
-                                <p>You are welcome! <br> Is there anything else I can do for you today?</p>
-
-                                <p class="speech-time">
-                                    <i class="fa fa-clock-o fa-fw"></i> 09:30
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="mar-btm">
-                        <div class="media-right">
-                            <img src="images/war-machine.png" class="img-circle img-sm" alt="Profile Picture">
-                        </div>
-                        <div class="media-body pad-hor speech-right">
-                            <div class="speech">
-                                <a href="#" class="media-heading">War Machine</a>
-
-                                <p>Nope, That's it.</p>
-
-                                <p class="speech-time">
-                                    <i class="fa fa-clock-o fa-fw"></i> 09:31
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="mar-btm">
-                        <div class="media-left">
-                            <img src="images/thor.png" class="img-circle img-sm" alt="Profile Picture">
-                        </div>
-                        <div class="media-body pad-hor">
-                            <div class="speech">
-                                <a href="#" class="media-heading">Thor</a>
-
-                                <p>Thank you for contacting us today</p>
-
-                                <p class="speech-time">
-                                    <i class="fa fa-clock-o fa-fw"></i> 09:32
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                <un-data-chat-message-box data-channel="{{channel}}"
+                                          data-user-map="clientFromChannelMap"></un-data-chat-message-box>
             </div>
 
         </div>

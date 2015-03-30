@@ -1,6 +1,6 @@
 /* VENDOR - Default fall-backs and external files.
 ========================================================================== */
-
+@import url("../../bower_components/ng-emoticons/dist/ng-emoticons.min.css");
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap";
 @import "components-font-awesome/scss/font-awesome";
 
@@ -38,3 +38,8 @@
   @import "unchatbar-contact/app/styles/components/group/_add";
   @import "unchatbar-contact/app/styles/components/group/_count";
   @import "unchatbar-contact/app/styles/components/group/_admin";
+  //Data Chat
+  @import "unchatbar-data-chat/app/styles/components/_message-box";
+  @import "unchatbar-data-chat/app/styles/components/_message-unread";
+  @import "unchatbar-data-chat/app/styles/components/_send-box";
+  @import "unchatbar-data-chat/app/styles/components/_count-unread-message";

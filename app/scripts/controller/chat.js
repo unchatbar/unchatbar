@@ -57,6 +57,8 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', '$st
          */
         $scope.clientMap = '';
 
+        $scope.showUnreadMessageList = false;
+
         /**
          * @ngdoc methode
          * @name getClientAllClients

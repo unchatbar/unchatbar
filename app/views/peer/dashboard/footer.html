@@ -9,19 +9,8 @@
 
   <!-- CONTENT -->
   <div class="navbar-content clearfix">
-    <form class="navbar-form">
-      <div class="form-group">
-        <label class="sr-only" for="input-message">Your message</label>
-
-        <div class="input-group">
-          <input type="text" class="form-control input-sm" id="input-message" placeholder="Enter your message"
-                 autocomplete="off">
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-inverse btn-sm"><i class="fa fa-comment"></i></button>
-          </span>
-        </div>
-      </div>
-    </form>
+      <un-data-chat-send-box data-channel="{{channel}}"
+                             data-user-map="clientFromChannelMap"></un-data-chat-send-box>
   </div>
   <!-- END OF CONTENT -->
 
