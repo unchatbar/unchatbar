@@ -11,24 +11,33 @@
         <div class="panel panel-default">
 
             <div class="panel-heading">
+                <div class="panel-control" >
+                    <a href="#"  class="btn btn-sm">
+                        <i class="fa fa-phone"></i>
+                    </a>
+                    <a href="#"  class="btn btn-sm">
+                        <i class="fa fa-video-camera"></i>
+                    </a>
+                    <div class="btn-group" dropdown>
+                        <a href="#" class="dropdown-toggle btn btn-sm" dropdown-toggle>
+                            <i class="fa fa-gear"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu" style="z-index:9999">
+                            <li>
+                                <un-contact-client-admin></un-contact-client-admin>
+                                <un-contact-group-admin></un-contact-group-admin>
+                            </li>
 
+                        </ul>
+                    </div>
+                </div>
                 <h3 class="panel-title">
                     <un-contact-client-selected></un-contact-client-selected>
                     <un-contact-group-selected></un-contact-group-selected>
-            <span data-ng-show="channel"><i class="fa " data-ng-class="{'fa-arrow-circle-down' : !showAdmin, 'fa-arrow-circle-up' : showAdmin}"
-                     data-ng-click="showAdmin=!showAdmin"></i></span>
                 </h3>
 
             </div>
             <div class="panel-body" data-ng-init="showDebug=false;">
-                <ul data-ng-show="showAdmin" class="list-unstyled">
-                    <li>
-                        <un-contact-client-admin></un-contact-client-admin>
-                    </li>
-                    <li>
-                        <un-contact-group-admin></un-contact-group-admin>
-                    </li>
-                </ul>
                 <un-data-chat-message-box data-channel="{{channel}}"
                                           data-user-map="clientFromChannelMap"></un-data-chat-message-box>
             </div>

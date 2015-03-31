@@ -7,8 +7,8 @@
  *
  * Main module of the application.
  */
-angular.module('unchatbar').run(['$rootScope', '$window', '$state', 'Broker',
-    function ($rootScope, $window, $state, Broker) {
+angular.module('unchatbar').run(['$rootScope', '$window', '$state', 'Broker','gettextCatalog',
+    function ($rootScope, $window, $state, Broker,gettextCatalog) {
         $rootScope.$on('$stateChangeStart', function (e, toState) {
             if (Broker.getPeerIdFromStorage() && toState.name === 'login') {
                 e.preventDefault();
@@ -31,6 +31,7 @@ angular.module('unchatbar').run(['$rootScope', '$window', '$state', 'Broker',
                 Broker.connectServer();
             }
         });
+        gettextCatalog.setCurrentLanguage('de');
 
     }
 ]);

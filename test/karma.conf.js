@@ -77,6 +77,7 @@ module.exports = function (config) {
             'bower_components/unchatbar-data-chat/app/scripts/constants.js',
             'bower_components/unchatbar-data-chat/app/scripts/run.js',
             'bower_components/unchatbar-data-chat/app/scripts/template.js',
+            'bower_components/unchatbar-data-chat/app/scripts/translations.js',
             'bower_components/unchatbar-data-chat/app/scripts/provider/message.js',
             'bower_components/unchatbar-data-chat/app/scripts/directive/count-unread.js',
             'bower_components/unchatbar-data-chat/app/scripts/directive/enter.js',

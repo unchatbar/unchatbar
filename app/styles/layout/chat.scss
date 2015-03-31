@@ -11,8 +11,44 @@
   border-bottom-color: #ccc
 }
 
-.page-content {
+.content .page-content {
   margin: 20px 0;
+}
+
+.panel-heading {
+  padding: 0;
+  height: 60px
+}
+
+.panel-control:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  left: -1em;
+  position: relative;
+}
+
+.panel-control {
+  position: relative;
+  float: right;
+  padding: 0 15px;
+  height: 100%
+}
+
+
+.panel-control .btn.active,
+.panel-control .btn:active,
+.panel-control .btn.focus,
+.panel-control .btn:focus,
+.panel-control .btn-group.open .dropdown-toggle {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.panel-title {
+  padding: 0 15px;
+  line-height: 60px
 }
 
 .page-content .media-left {
@@ -25,7 +61,7 @@
 
 .speech {
   position: relative;
-  background: #d9e6ff;
+  background: #dae4f2;
   color: #444;
   display: inline-block;
   border-radius: 2px;
@@ -43,7 +79,7 @@
 }
 
 .speech .media-heading:hover {
-  text-decoration: underline
+ // text-decoration: underline
 }
 
 .speech-time {
@@ -58,7 +94,7 @@
 }
 
 .speech-right > .speech {
-  background: #ecffc9;
+  background: #c6daf7;
   text-align: right
 }
 
@@ -72,7 +108,7 @@
   top: 0;
   border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
-  border-right: 7px solid #d9e6ff;
+  border-right: 7px solid #dae4f2;
   margin: 15px 0 0 -6px
 }
 
@@ -81,7 +117,7 @@
   right: 0;
   border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
-  border-left: 7px solid #ecffc9;
+  border-left: 7px solid #c6daf7;
   border-right: 0;
   margin: 15px -6px 0 0
 }
