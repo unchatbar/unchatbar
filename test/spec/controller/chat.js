@@ -55,25 +55,15 @@ describe('Controller: unChat', function () {
         describe('getChannel', function () {
             describe('group channel', function () {
                 it('should set `$scope.channel` to group id', function () {
-                    stateParams.groupId = 'testGroupId';
+                    stateParams.channel = 'testChannel';
 
                     scope.getChannel();
 
-                    expect(scope.channel).toBe('testGroupId');
+                    expect(scope.channel).toBe('testChannel');
 
                 });
             });
-            describe('user channel', function () {
-                it('should set `$scope.channel` to group id', function () {
-                    stateParams.clientId = 'testClientId';
-                    spyOn(BrokerService, 'getPeerId').and.returnValue('ownPeerId');
 
-                    scope.getChannel();
-
-                    expect(scope.channel).toBe('ownPeerIdtestClientId');
-
-                });
-            });
         });
 
         describe('getClientAllClients', function () {

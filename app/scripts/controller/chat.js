@@ -113,12 +113,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', '$st
          *
          */
         $scope.getChannel = function () {
-            var clientMap, clientList;
-            if ($stateParams.groupId) {
-                $scope.channel = $stateParams.channel;
-            } else if ($stateParams.clientId) {
-                $scope.channel = $stateParams.channel;
-            }
+            $scope.channel = $stateParams.channel;
         };
 
         /**
