@@ -1,5 +1,5 @@
 # Unchatbar
-[![Build Status](https://travis-ci.org/unchatbar/unchatbar.svg?branch=master)](https://travis-ci.org/unchatbar/unchatbar)
+[![Build Status](https://travis-ci.org/unchatbar/unchatbar.svg?branch=redesign)](https://travis-ci.org/unchatbar/unchatbar)
 
 Peer to peer chat application using WebRTC technologies
 
