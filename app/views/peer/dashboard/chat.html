@@ -8,6 +8,11 @@
 
     <!-- CONTENT -->
     <div class="page-content">
+        <un-stream-waiting-for-your-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-your-answer>
+        <un-stream-waiting-for-client-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-client-answer>
+        <un-stream-own></un-stream-own>
+        <un-stream-open data-channel="{{channel}}"
+                        data-user-map="clientFromChannelMap"></un-stream-open>
         <div class="panel panel-default">
 
             <div class="panel-heading">
@@ -16,17 +21,10 @@
                                           data-user-map="clientFromChannelMap"></un-stream-call-audio>
                     <un-stream-call-video class="pull-left" data-channel="{{channel}}"
                                           data-user-map="clientFromChannelMap"></un-stream-call-video>
-                    <div class="btn-group" class="pull-left" dropdown>
-                        <a href="#" class="dropdown-toggle btn btn-sm" dropdown-toggle>
+                    <div class="pull-left btn-group" dropdown>
+                        <a href="#" class="dropdown-toggle btn btn-sm" data-ng-click="showAdmin=!showAdmin">
                             <i class="fa fa-gear"></i>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            <li>
-                                <un-contact-client-admin></un-contact-client-admin>
-                                <un-contact-group-admin></un-contact-group-admin>
-                            </li>
-
-                        </ul>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -34,17 +32,14 @@
                     <un-contact-client-selected></un-contact-client-selected>
                     <un-contact-group-selected></un-contact-group-selected>
                 </h3>
-                <un-stream-waiting-for-your-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-your-answer>
-                <hr>
-                <un-stream-waiting-for-client-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-client-answer>
-                <hr>
-                <un-stream-own></un-stream-own>
-                <hr>
-                <un-stream-open data-channel="{{channel}}"
-                                data-user-map="clientFromChannelMap"></un-stream-open>
 
             </div>
             <div class="panel-body" data-ng-init="showDebug=false;">
+
+                <ul data-ng-show="showAdmin" class="list-unstyled">
+                    <li><un-contact-client-admin></un-contact-client-admin></li>
+                    <li><un-contact-group-admin></un-contact-group-admin></li>
+                </ul>
                 <un-data-chat-message-box data-channel="{{channel}}"
                                           data-user-map="clientFromChannelMap"></un-data-chat-message-box>
             </div>
