@@ -53,9 +53,7 @@
 }
 
 .navbar-nav-top > li.toggle-button {
-  position: absolute;
-  top: -100%;
-  right: 0
+  @extend .visible-xs-visible;
 }
 
 .navbar-nav-top > li > a {
@@ -154,7 +152,7 @@
   }
 
   .navbar-nav-top > li.toggle-button {
-    position: static
+
   }
 
   .navbar-nav-top > li.toggle-button > a {
