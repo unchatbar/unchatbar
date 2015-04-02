@@ -11,12 +11,12 @@
 /* Layout
 ========================================================================== */
 @import "_layout";
-@import "layout/chat";
-@import "layout/custom";
-@import "layout/dashboard";
-@import "layout/footer";
-@import "layout/header";
-@import "layout/sidebar";
+@import "layout/_chat";
+@import "layout/_custom";
+@import "layout/_dashboard";
+@import "layout/_footer";
+@import "layout/_header";
+@import "layout/_sidebar";
 
 
 
@@ -43,3 +43,9 @@
   @import "unchatbar-data-chat/app/styles/components/_message-unread";
   @import "unchatbar-data-chat/app/styles/components/_send-box";
   @import "unchatbar-data-chat/app/styles/components/_count-unread-message";
+  //Stream
+  @import "unchatbar-stream/app/styles/components/_open";
+  @import "unchatbar-stream/app/styles/components/_call";
+  @import "unchatbar-stream/app/styles/components/_own";
+  @import "unchatbar-stream/app/styles/components/_waiting-for-client-answer";
+  @import "unchatbar-stream/app/styles/components/_waiting-for-your-answer";

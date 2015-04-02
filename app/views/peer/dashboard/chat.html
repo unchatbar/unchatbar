@@ -12,13 +12,11 @@
 
             <div class="panel-heading">
                 <div class="panel-control" >
-                    <a href="#"  class="btn btn-sm">
-                        <i class="fa fa-phone"></i>
-                    </a>
-                    <a href="#"  class="btn btn-sm">
-                        <i class="fa fa-video-camera"></i>
-                    </a>
-                    <div class="btn-group" dropdown>
+                    <un-stream-call-audio class="pull-left" data-channel="{{channel}}"
+                                          data-user-map="clientFromChannelMap"></un-stream-call-audio>
+                    <un-stream-call-video class="pull-left" data-channel="{{channel}}"
+                                          data-user-map="clientFromChannelMap"></un-stream-call-video>
+                    <div class="btn-group" class="pull-left" dropdown>
                         <a href="#" class="dropdown-toggle btn btn-sm" dropdown-toggle>
                             <i class="fa fa-gear"></i>
                         </a>
@@ -30,11 +28,20 @@
 
                         </ul>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
                 <h3 class="panel-title">
                     <un-contact-client-selected></un-contact-client-selected>
                     <un-contact-group-selected></un-contact-group-selected>
                 </h3>
+                <un-stream-waiting-for-your-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-your-answer>
+                <hr>
+                <un-stream-waiting-for-client-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-client-answer>
+                <hr>
+                <un-stream-own></un-stream-own>
+                <hr>
+                <un-stream-open data-channel="{{channel}}"
+                                data-user-map="clientFromChannelMap"></un-stream-open>
 
             </div>
             <div class="panel-body" data-ng-init="showDebug=false;">
