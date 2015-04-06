@@ -1,15 +1,14 @@
 'use strict';
 
 angular.module('unchatbar')
-    .config(['BrokerProvider', 'PhoneBookProvider', 'ProfileProvider', 'MessageProvider', 'LOCALSTORAGE', 'DataConnectionProvider',
-        function (BrokerProvider, PhoneBookProvider, ProfileProvider, MessageProvider, LOCALSTORAGE, DataConnectionProvider) {
+    .config(['BrokerProvider', 'PhoneBookProvider', 'ProfileProvider',  'LOCALSTORAGE', 'DataConnectionProvider',
+        function (BrokerProvider, PhoneBookProvider, ProfileProvider,  LOCALSTORAGE, DataConnectionProvider) {
 
             if (LOCALSTORAGE === true) {
                 BrokerProvider.setLocalStorage();
                 DataConnectionProvider.setLocalStorage();
                 ProfileProvider.setLocalStorage();
                 PhoneBookProvider.setLocalStorage();
-                MessageProvider.setLocalStorage();
             }
             BrokerProvider.setHost('unchatbar-server.herokuapp.com');
             BrokerProvider.addIceServer({url: 'stun:23.21.150.121'});
