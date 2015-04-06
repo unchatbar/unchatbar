@@ -202,7 +202,7 @@ module.exports = function (grunt) {
                         },
                         replace: {
                             js: function (filePath) {
-                                return '\'' + filePath.replace("../", "") + '\',';
+                                return '\'' + filePath.replace('../', '') + '\',';
                             }
                         }
                     }
@@ -241,14 +241,14 @@ module.exports = function (grunt) {
             }
         },
 
-        nggettext_extract: {
+        'nggettext_extract': {
             pot: {
                 files: {
                     'po/template.pot': ['app/views/**/*.html']
                 }
             }
         },
-        nggettext_compile: {
+        'nggettext_compile': {
             all: {
                 files: {
                     'app/scripts/translations.js': ['po/*.po']
