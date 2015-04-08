@@ -1,32 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
-    <file url="file://$PROJECT_DIR$/.editorconfig" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/.gitignore" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/License" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Readme.md" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/favicon.ico" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/agent-coulson.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/black-widow.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/captain-america.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/giant-man.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/hawkeye.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/hulk.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/iron-man.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/logo-dark.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/logo-light.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/loki.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/nick-fury.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/thor.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/images/war-machine.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/styles/layout/_chat.scss" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/styles/layout/_custom.scss" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/styles/layout/_dashboard.scss" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/styles/layout/_footer.scss" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/styles/layout/_header.scss" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/styles/layout/_login.scss" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/styles/layout/_sidebar.scss" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/views/peer/dashboard" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/package.json" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
