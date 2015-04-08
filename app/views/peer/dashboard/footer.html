@@ -9,8 +9,16 @@
 
   <!-- CONTENT -->
   <div class="navbar-content clearfix">
+<div class="row">
+    <div  class="col-xs-2">
+      <un-data-chat-send-file data-channel="{{channel}}"
+                              data-user-map="clientFromChannelMap"></un-data-chat-send-file>
+    </div>
+    <div class="col-xs-9">
       <un-data-chat-send-box data-channel="{{channel}}"
                              data-user-map="clientFromChannelMap"></un-data-chat-send-box>
+    </div>
+</div>
   </div>
   <!-- END OF CONTENT -->
 
