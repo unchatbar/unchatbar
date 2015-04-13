@@ -1,0 +1,50 @@
+<div class="sidebar-container sidebar-container-xs-show">
+
+  <tabset class="sidebar-tabset" justified="true">
+    <tab active="selectedContactType.user">
+
+      <tab-heading>
+        <i class="fa fa-user fa-lg"></i>
+        <un-contact-client-count addition-class="'badge-info'"></un-contact-client-count>
+      </tab-heading>
+
+      <h4 class="pad-hor text-thin">
+          <span class="pull-right"><un-contact-client-count
+                  addition-class="'badge-success'"
+                  data-client-filter="{online:true}">
+          </un-contact-client-count></span>
+          Online</h4>
+
+      <div class="list-group">
+          <un-contact-client-list data-client-filter="{online:true}"></un-contact-client-list>
+      </div>
+
+      <hr>
+      <h4 class="pad-hor text-thin"> <span class="pull-right"><un-contact-client-count
+              addition-class="'badge-info'"
+              data-client-filter="{online:false}">
+      </un-contact-client-count></span> Offline</h4>
+
+      <div class="list-group">
+          <un-contact-client-list data-client-filter="{online:false}"></un-contact-client-list>
+      </div>
+
+    </tab>
+    <tab active="selectedContactType.group">
+      <tab-heading>
+        <i class="fa fa-users fa-lg"></i>
+      </tab-heading>
+
+        <h4 class="pad-hor text-thin">
+          <span class="pull-right">
+              <un-contact-group-count addition-class="'badge-success'">
+          </un-contact-group-count></span>
+            Online</h4>
+
+      <div class="list-group">
+          <un-contact-group-list data-ng-click="showAdminProfile=false;offcanvas=false"></un-contact-group-list>
+      </div>
+    </tab>
+  </tabset>
+
+</div>
