@@ -1,1 +1,147 @@
-My Page
+<html ng-app="unchatbar" class="no-js"><head>
+    <meta charset="utf-8">
+
+    <title></title>
+    <meta content="" name="description">
+    <meta content="width=device-width" name="viewport">
+
+    <!-- build:css(.tmp) styles/main.css -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style>
+        @font-face {
+            font-family: Gipsiero;
+            src: url("fonts/Gipsiero.otf") format("opentype");
+        }
+
+        body {
+            /*background: url('images/handy.jpeg') no-repeat center center fixed;*/
+            -webkit-background-size: cover;
+            background-size: 100% auto;
+
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            /*margin-top: 8%;*/
+            /*font-family: 'Gipsiero';*/
+            font-size: 14px;
+            line-height: 1.42857;
+
+        }
+
+        #headline {
+            bottom: 0;
+            color: #fff;
+            font-family: "Gipsiero", "ProximaNW01-AltLightReg", Helvetica, Arial, sans-serif;
+            font-size: 36px;
+            left: 0;
+            margin: auto;
+            text-align: center;
+            top: 0;
+            width: 100%;
+
+            font-size: 48px;
+        }
+
+        .contact {
+            background-color: #fff;
+            font-family: inherit;
+            font-size: 100%;
+            font-style: inherit;
+            font-weight: inherit;
+        }
+
+        .intro {
+            background-color: #fff;
+            border: 0 none;
+            font-family: inherit;
+            font-size: 100%;
+            font-style: inherit;
+            font-weight: inherit;
+        }
+
+        .feature {
+            background-color: cornsilk;
+            font-family: inherit;
+            font-size: 100%;
+            font-style: inherit;
+            font-weight: inherit;
+        }
+
+        .slogan {
+            z-index: 1;
+            margin-top: -50px;
+            color: white;
+        }
+
+        @media screen and (max-width: 768px) {
+            .slogan {
+                margin-top: -120px;
+            }
+
+        }
+    </style>
+    <!-- endbuild -->
+</head>
+<body>
+<div id="headline">
+    <div style="color:black" class="text-center"><a target="_blank" href="http://www.unchatbar.com">unchatbar.com</a></div>
+    <div style="max-height:560px;overflow: hidden;" id="movie">
+        <img style="" class="img-responsive" src="images/handy.jpeg">
+    </div>
+    <div class="slogan text-center">
+        <span>the private communication</span>
+    </div>
+
+</div>
+<div class="intro container">
+    <div class="row">
+        <div class="col-xs-12 col-md-1">
+            <img src="images/laptop.ico">
+        </div>
+        <div style="border-right: 2px solid black;height: 100px;" class="col-xs-3 col-sm-1 visible-sm-block  visible-xs-block"></div>
+        <div class="col-xs-9 col-sm-11 col-md-10 text-center">
+            <h3>Direkt Datenausgetauscht</h3>
+            <hr style="margin-top:0px;border: 2px solid black;" class="hidden-sm hidden-xs">
+
+        </div>
+        <div class="col-xs-12 col-md-1">
+            <img src="images/laptop.ico">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <h2>Es werden keine Daten zu einem Server übertragen</h2>
+
+            <p>Die Daten werden direkt zwischen den Nutzer ausgetauscht</p>
+        </div>
+    </div>
+    <hr>
+</div>
+<div class="feature">
+    <div class="container">
+        <h2>Features</h2>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="list-group">
+                    <li class="list-group-item"><i class="fa fa-weixin fa-3x"></i> Textchat</li>
+                    <li class="list-group-item"><i class="fa fa-folder fa-3x"></i> Datenübertragung</li>
+                    <li class="list-group-item"><i class="fa fa-video-camera fa-3x"></i> Videoanrufe</li>
+                    <li class="list-group-item"><i class="fa fa-microphone fa-3x"></i> Sprachanrufe</li>
+                    <li class="list-group-item"><i class="fa fa-users fa-3x"></i> Gruppenfunktion</li>
+                    <li class="list-group-item"><i class="fa fa-square-o fa-3x"></i> alle Funktionen sind als HTML Element verfügbar, und lassen sich in eigene Webseite integrieren</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="contact">
+    <div class="container">
+        <h1>Fragen/ Wünsche/ Unterstützung</h1>
+        Bitte schreibt an <a href="mailto:larswiedemann@gmx.net"> mich</a> oder schaut auf <a href="https://github.com/unchatbar">Github</a> vorbei
+    </div>
+</div>
+
+</body></html>
