@@ -1,4 +1,0 @@
-#!/bin/bash
-export GEM_HOME=$PWD/gems
-mkdir -p $GEM_HOME
-gem install compass

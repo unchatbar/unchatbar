@@ -569,7 +569,7 @@ module.exports = function (grunt) {
     });
 
 
-    grunt.registerTask('build', [
+    grunt.registerTask('heroku', [
         'clean:dist',
         'ngtemplates:dist',
         'ngconstant:dist',
