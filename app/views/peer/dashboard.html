@@ -1,11 +1,12 @@
-<div class="dashboard" data-ng-controller="unChat" data-ng-init="init()">
+<div class="dashboard" data-ng-controller="unChat" data-ng-init="init();showSidebar=false;">
 
     <!-- HEADER -->
-    <header class="navbar navbar-fixed-top" data-ui-view="header"></header>
+    <header class="navbar navbar-fixed-top" data-ui-view="header" ></header>
     <!-- END OF HEADER -->
 
     <!-- SIDEBAR -->
-    <aside class="sidebar sidebar-fixed-left" data-ui-view="sidebar"></aside>
+    <aside class="sidebar sidebar-fixed-left" data-ui-view="sidebar" style="z-index:1031"
+           data-ng-class="{'hidden-xs' : !showSidebar}"></aside>
     <!-- END OF SIDEBAR -->
 
     <!-- CONTENT -->
@@ -13,7 +14,7 @@
     <!-- END OF CONTENT -->
 
     <!-- FOOTER -->
-    <footer class="navbar navbar-fixed-bottom" data-ui-view="footer"></footer>
+    <footer class="navbar navbar-fixed-bottom" data-ui-view="footer" style="z-index:1032"></footer>
     <!-- END OF FOOTER -->
 
 </div>

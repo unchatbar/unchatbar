@@ -1,11 +1,4 @@
 <div class="content-container" data-ng-init="showAdmin=false;">
-
-    <!-- HEADER -->
-    <div class="page-header">
-        <h2>Chat</h2>
-    </div>
-    <!-- END OF HEADER -->
-
     <!-- CONTENT -->
     <div class="page-content">
         <un-stream-waiting-for-your-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-your-answer>
@@ -22,7 +15,7 @@
                     <un-stream-call-video class="pull-left" data-channel="{{channel}}"
                                           data-user-map="clientFromChannelMap"></un-stream-call-video>
                     <div class="pull-left btn-group" dropdown>
-                        <a href="#" class="dropdown-toggle btn btn-sm" data-ng-click="showAdmin=!showAdmin">
+                        <a href="#" class="dropdown-toggle btn btn-lg"  data-ng-click="showAdmin=!showAdmin">
                             <i class="fa fa-gear"></i>
                         </a>
                     </div>

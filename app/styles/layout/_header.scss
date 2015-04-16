@@ -145,14 +145,15 @@
   right: 0;
   margin: -6px 25px 0 0
 }
+.toggle-button {
+  font-size: 18px;
+  padding: 10px;
+  color:white;
+}
 
 @media (min-width: 768px) {
   .navbar-container-top > .navbar-content {
     margin-left: 250px
-  }
-
-  .navbar-nav-top > li.toggle-button {
-
   }
 
   .navbar-nav-top > li.toggle-button > a {

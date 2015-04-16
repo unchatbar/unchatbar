@@ -54,9 +54,6 @@
 .sidebar-tabset .list-group .list-group-item.disabled {
   opacity: .5
 }
-
-@media (min-width: 768px) {
-  .sidebar-container {
-    width: 250px
-  }
+.sidebar-container {
+  width: 250px
 }

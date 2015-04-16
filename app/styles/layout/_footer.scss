@@ -28,13 +28,13 @@
 .navbar-form .input-group .input-group-btn {
   width: 1%
 }
-
+.navbar-container-bottom > .navbar-footer {
+  display: block;
+  float: left;
+  width: 250px
+}
 @media (min-width: 768px) {
-  .navbar-container-bottom > .navbar-footer {
-    display: block;
-    float: left;
-    width: 250px
-  }
+
 
   .navbar-container-bottom > .navbar-content {
     margin-left: 250px

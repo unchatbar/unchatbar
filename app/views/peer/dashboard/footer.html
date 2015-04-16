@@ -1,25 +1,25 @@
-<div class="navbar-container navbar-container-bottom">
-
-  <!-- BRAND LOGO & TEXT -->
-  <div class="navbar-footer">
-      <un-connection-dialer data-ng-show="selectedContactType.user"></un-connection-dialer>
-      <un-contact-group-add data-ng-show="selectedContactType.group"></un-contact-group-add>
-  </div>
-  <!-- END OF BRAND LOGO & TEXT -->
-
-  <!-- CONTENT -->
-  <div class="navbar-content clearfix">
-<div class="row">
-    <div  class="col-xs-2">
-      <un-data-chat-send-file data-channel="{{channel}}"
-                              data-user-map="clientFromChannelMap"></un-data-chat-send-file>
+<div class="navbar-container navbar-container-bottom" >
+    <!-- BRAND LOGO & TEXT -->
+    <div class="navbar-footer" data-ng-class="{'hidden-xs' : $parent.showSidebar === false}" >
+        <un-connection-dialer data-ng-show="selectedContactType.user"></un-connection-dialer>
+        <un-contact-group-add data-ng-show="selectedContactType.group"></un-contact-group-add>
     </div>
-    <div class="col-xs-9">
-      <un-data-chat-send-box data-channel="{{channel}}"
-                             data-user-map="clientFromChannelMap"></un-data-chat-send-box>
+    <!-- END OF BRAND LOGO & TEXT -->
+
+    <!-- CONTENT -->
+    <div class="navbar-content" data-ng-class="{'hidden-xs' : $parent.showSidebar === true}" >
+        <div class="row">
+            <div class="col-xs-3 col-md-1">
+                <un-data-chat-send-file data-channel="{{channel}}"
+                                        data-user-map="clientFromChannelMap"></un-data-chat-send-file>
+            </div>
+            <div class="col-xs-9 col-md-10">
+                <un-data-chat-send-box data-channel="{{channel}}"
+                                       data-user-map="clientFromChannelMap"></un-data-chat-send-box>
+            </div>
+        </div>
     </div>
 </div>
-  </div>
-  <!-- END OF CONTENT -->
+<!-- END OF CONTENT -->
 
 </div>

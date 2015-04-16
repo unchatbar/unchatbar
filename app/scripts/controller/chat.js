@@ -14,6 +14,8 @@
 angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', '$state', 'Broker', 'PhoneBook', 'Profile',
     function ($scope, $stateParams, $state, Broker, PhoneBook, Profile) {
 
+        $scope.showSidebar = false;
+
         /**
          * @ngdoc property
          * @name clientMap
