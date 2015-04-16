@@ -1,12 +1,11 @@
 'use strict';
 
 angular.module('unchatbar')
-    .config(['BrokerProvider', 'PhoneBookProvider', 'ProfileProvider',  'LOCALSTORAGE', 'DataConnectionProvider',
-        function (BrokerProvider, PhoneBookProvider, ProfileProvider,  LOCALSTORAGE, DataConnectionProvider) {
+    .config(['BrokerProvider', 'PhoneBookProvider', 'ProfileProvider',  'LOCALSTORAGE',
+        function (BrokerProvider, PhoneBookProvider, ProfileProvider,  LOCALSTORAGE) {
 
             if (LOCALSTORAGE === true) {
                 BrokerProvider.setLocalStorage();
-                DataConnectionProvider.setLocalStorage();
                 ProfileProvider.setLocalStorage();
                 PhoneBookProvider.setLocalStorage();
             }
