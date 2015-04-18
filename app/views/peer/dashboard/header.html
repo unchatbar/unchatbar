@@ -9,67 +9,30 @@
               </span>
         </a>
         <!-- TOGGLE BUTTON -->
-        <div class="pull-right toggle-button" style="">
+        <div class="pull-right toggle-button">
             <a href="#" style="color:white" data-ng-click="$parent.showSidebar=!$parent.showSidebar">
                 <i class="fa fa-navicon fa-lg"></i>
             </a>
         </div>
     </div>
-
-    <!-- END OF BRAND LOGO & TEXT -->
-
-    <!-- CONTENT -->
     <div class="navbar-content clearfix">
-
-        <ul class="nav navbar-nav navbar-nav-top pull-left">
-
-
-            <!-- END OF TOGGLE BUTTON -->
-
-            <!-- MESSAGES DROPDOWN -->
-            <li class="dropdown" dropdown>
-
-                <!-- Dropdown button -->
-                <a href="#" data-ng-click="showUnreadMessageList=!showUnreadMessageList" class="dropdown-toggle"
-                   dropdown-toggle>
+        <div class="nav navbar-nav navbar-nav-top pull-left text-center"
+             popover-placement="bottom"
+             popover-html-template="views/peer/popover/new-message.html"
+             style="padding-top:10px;width:180px;font-size:15pt">
+            <div >
                     <i class="fa fa-envelope fa-lg"></i>
                     <un-data-chat-count-unread-message></un-data-chat-count-unread-message>
-                </a>
+            </div>
 
-                <!-- Dropdown menu -->
-                <un-data-chat-unread-message data-user-map="clientMap"
-                                             data-ng-show="showUnreadMessageList"></un-data-chat-unread-message>
-
-            </li>
-            <!-- END OF MESSAGES DROPDOWN -->
-
-        </ul>
-        <ul class="nav navbar-nav navbar-nav-top pull-right">
-
-            <!-- USER DROPDOWN -->
-            <li class="dropdown dropdown-user" dropdown>
-
-                <!-- Dropdown button -->
-                <a href="#" class="dropdown-toggle" dropdown-toggle>
-                    <un-profile-label></un-profile-label>
-                </a>
-
-                <!-- Dropdown menu -->
-                <ul class="dropdown-menu dropdown-menu-right with-arrow" role="menu">
-                    <li>
-                        <a ui-sref="profile">
-                            <i class="fa fa-user fa-fw fa-lg"></i>
-                            <span class="text-nowrap">Profile</span>
-                        </a>
-                    </li>
-                    <li class="divider mar-no"></li>
-                </ul>
-
-            </li>
-            <!-- END OF USER DROPDOWN -->
-
-        </ul>
+        </div>
+        <div class="nav navbar-nav navbar-nav-top pull-right text-center">
+            <div lass="nav navbar-nav navbar-nav-top pull-left text-center"
+                 popover-placement="bottom"
+                 popover-html-template="views/peer/popover/profile.html"
+                 style="min-width:180px;font-size:15pt">
+                <un-profile-label></un-profile-label>
+            </div>
+        </div>
     </div>
-    <!-- END OF CONTENT -->
-
 </div>

@@ -1,5 +1,5 @@
 angular.module('constants', [])
 
-.constant('LOCALSTORAGE', true)
+.constant('LOCALSTORAGE', false)
 
 ;
