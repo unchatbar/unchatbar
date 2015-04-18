@@ -105,52 +105,6 @@
 .navbar-nav-top > li > .dropdown-menu > li > a {
   padding: 10px 15px
 }
-
-.navbar-nav-top > li > .dropdown-menu.with-arrow:before {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 0;
-  height: 0;
-  left: 0;
-  top: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-bottom: 7px solid #d0d0d0;
-  margin: -7px 0 0 15px
-}
-
-.navbar-nav-top > li > .dropdown-menu.with-arrow:after {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 0;
-  height: 0;
-  left: 0;
-  top: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-bottom: 7px solid #fff;
-  margin: -6px 0 0 15px
-}
-
-.navbar-nav-top > li > .dropdown-menu-right.dropdown-menu.with-arrow:before {
-  left: auto;
-  right: 0;
-  margin: -7px 25px 0 0
-}
-
-.navbar-nav-top > li > .dropdown-menu-right.dropdown-menu.with-arrow:after {
-  left: auto;
-  right: 0;
-  margin: -6px 25px 0 0
-}
-.toggle-button {
-  font-size: 18px;
-  padding: 10px;
-  color:white;
-}
-
 @media (min-width: 768px) {
   .navbar-container-top > .navbar-content {
     margin-left: 250px

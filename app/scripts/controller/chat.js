@@ -57,7 +57,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', '$st
          * @propertyOf unchatbar.controller:unChat
          * @returns {Object} client map from phone-book
          */
-        $scope.clientMap = '';
+        $scope.clientMap = {};
 
         $scope.showUnreadMessageList = false;
 
@@ -74,6 +74,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', '$st
 
         $scope.getClientAllClients = function () {
             $scope.clientMap = PhoneBook.getClientMap();
+
         };
 
         /**
