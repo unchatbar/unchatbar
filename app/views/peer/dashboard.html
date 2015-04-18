@@ -5,16 +5,16 @@
     <!-- END OF HEADER -->
 
     <!-- SIDEBAR -->
-    <aside class="sidebar sidebar-fixed-left" data-ui-view="sidebar"
+    <aside class="sidebar sidebar-fixed-left" data-ui-view="sidebar" style="width:100%;z-index:1031"
            data-ng-class="{'hidden-xs' : !showSidebar}"></aside>
     <!-- END OF SIDEBAR -->
 
     <!-- CONTENT -->
-    <div class="content" data-ui-view="content"></div>
+    <div class="content" data-ui-view="content" data-ng-class="{'hidden-xs' : showSidebar}"></div>
     <!-- END OF CONTENT -->
 
     <!-- FOOTER -->
-    <footer class="navbar navbar-fixed-bottom" data-ui-view="footer" style="z-index:1032"></footer>
+    <footer class="navbar navbar-fixed-bottom" data-ui-view="footer" ></footer>
     <!-- END OF FOOTER -->
 
 </div>

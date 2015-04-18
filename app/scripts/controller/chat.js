@@ -132,6 +132,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', '$st
             $scope.getChannel();
             $scope.getClientsFromChannel();
             $scope.getClientAllClients();
+            $scope.showSidebar = false;
         };
 
         $scope.$on('PhoneBookUpdate', function () {
