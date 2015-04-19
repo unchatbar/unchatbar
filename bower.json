@@ -11,11 +11,11 @@
     "lodash": "^2.4.1",
     "angular-bootstrap": "^0.12.0",
     "angular-ui-router": "^0.2.13",
-    "unchatbar-user": "https://github.com/unchatbar/unchatbar-user.git#redesign",
-    "unchatbar-connection": "https://github.com/unchatbar/unchatbar-connection.git#redesign",
-    "unchatbar-contact": "https://github.com/unchatbar/unchatbar-contact.git#redesign",
-    "unchatbar-data-chat": "https://github.com/unchatbar/unchatbar-data-chat.git#redesign",
-    "unchatbar-stream": "https://github.com/unchatbar/unchatbar-stream.git#redesign",
+    "unchatbar-user": "https://github.com/unchatbar/unchatbar-user.git#0.1.x",
+    "unchatbar-connection": "https://github.com/unchatbar/unchatbar-connection.git#0.1.x",
+    "unchatbar-contact": "https://github.com/unchatbar/unchatbar-contact.git#0.1.x",
+    "unchatbar-data-chat": "https://github.com/unchatbar/unchatbar-data-chat.git#0.1.x",
+    "unchatbar-stream": "https://github.com/unchatbar/unchatbar-stream.git#0.1.x",
     "unchatbar-notification": "https://github.com/unchatbar/unchatbar-notification.git#0.0.x"
   },
   "devDependencies": {

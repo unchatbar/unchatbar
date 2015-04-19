@@ -11,7 +11,11 @@ describe('Controller: unChat', function () {
         PhoneBookService = PhoneBook;
         ProfileService = Profile;
         stateParams = {};
-        state = {};
+        state = {
+            $current: {
+                name: 'test'
+            }
+        };
         BrokerService = Broker;
         scope = $rootScope.$new();
         chatCTRL = function () {
@@ -143,8 +147,8 @@ describe('Controller: unChat', function () {
         describe('$stateChangeSuccess', function () {
             beforeEach(function () {
                 state = {
-                    current : {
-                        name : 'testState'
+                    current: {
+                        name: 'testState'
                     }
                 };
                 chatCTRL();
