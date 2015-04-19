@@ -14,7 +14,21 @@
 angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', '$state', 'Broker', 'PhoneBook', 'Profile',
     function ($scope, $stateParams, $state, Broker, PhoneBook, Profile) {
 
+        /**
+         * @ngdoc property
+         * @name showSidebar
+         * @propertyOf unchatbar.controller:unChat
+         * @returns {Boolean} shoud show sidebar
+         */
         $scope.showSidebar = false;
+
+        /**
+         * @ngdoc property
+         * @name currentStateName
+         * @propertyOf unchatbar.controller:unChat
+         * @returns {String} name current state
+         */
+        $scope.currentStateName = '';
 
         /**
          * @ngdoc property
@@ -133,6 +147,7 @@ angular.module('unchatbar').controller('unChat', ['$scope', '$stateParams', '$st
             $scope.getClientsFromChannel();
             $scope.getClientAllClients();
             $scope.showSidebar = false;
+            $scope.currentStateName = $state.$current.name;
         };
 
         $scope.$on('PhoneBookUpdate', function () {

@@ -31,6 +31,12 @@
   height: 100%
 }
 
+@media (max-width: $screen-xs-max) {
+  .content {
+    margin-top: 46px;
+  }
+}
+
 @media (min-width: 768px) {
   .content {
     margin-top: 50px;

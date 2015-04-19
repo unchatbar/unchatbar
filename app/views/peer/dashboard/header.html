@@ -4,18 +4,37 @@
     <div class="navbar-header">
         <a ui-sref="chat" class="navbar-brand">
             <img alt="unchatbar" src="images/logo-light.png" class="brand-icon">
-              <span class="brand-title">
+              <span class="hidden-xs brand-title">
                 <span class="brand-text">unchatbar</span>
               </span>
         </a>
+        <div class="visible-xs-block pull-left"
+             popover-placement="bottom"
+             popover-html-template="views/peer/popover/new-message.html"
+             style="padding-top:10px;width:70px;height:50px;font-size:12pt;color:white;overflow: hidden">
+            <div >
+                <i class="fa fa-envelope fa-lg"></i>
+                <un-data-chat-count-unread-message></un-data-chat-count-unread-message>
+            </div>
+        </div>
+        <div class="visible-xs-block pull-left">
+            <div lass="nav navbar-nav navbar-nav-top pull-left text-center"
+                 popover-placement="bottom"
+
+                 popover-html-template="views/peer/popover/profile.html"
+                 style="min-width:50px;font-size:12pt;overflow: hidden">
+                <un-profile-label></un-profile-label>
+            </div>
+        </div>
         <!-- TOGGLE BUTTON -->
-        <div class="pull-right toggle-button" style="font-size: 17pt; padding: 8px;">
+        <div class="visible-xs-block pull-right toggle-button" style="font-size: 17pt; padding: 8px;">
             <a href="#" style="color:white" data-ng-click="$parent.showSidebar=!$parent.showSidebar">
                 <i class="fa fa-navicon fa-lg"></i>
             </a>
         </div>
     </div>
-    <div class="navbar-content clearfix">
+    <div class="navbar-content clearfix hidden-xs"
+        >
         <div class="nav navbar-nav navbar-nav-top pull-left text-center"
              popover-placement="bottom"
              popover-html-template="views/peer/popover/new-message.html"

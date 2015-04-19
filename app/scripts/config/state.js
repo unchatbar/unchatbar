@@ -23,7 +23,7 @@ angular.module('unchatbar')
                             templateUrl: 'views/peer/dashboard/sidebar.html'
                         },
                         content: {
-                            templateUrl: 'views/peer/dashboard/chat.html'
+                            //templateUrl: 'views/peer/dashboard/chat.html'
                         },
                         footer: {
                             templateUrl: 'views/peer/dashboard/footer.html'

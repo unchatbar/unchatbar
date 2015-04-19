@@ -1,38 +1,40 @@
-<div class="content-container" data-ng-init="showAdmin=false;">
+<div class="content-container" style="width:100%" data-ng-init="showAdmin=false;"
+     data-ng-show="currentStateName === 'channel'">
     <!-- CONTENT -->
-    <div class="page-content">
+
+    <div class="page-content" >
         <un-stream-waiting-for-your-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-your-answer>
         <un-stream-waiting-for-client-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-client-answer>
         <un-stream-own></un-stream-own>
         <un-stream-open data-channel="{{channel}}"
                         data-user-map="clientFromChannelMap"></un-stream-open>
+
         <div class="panel panel-default">
 
-            <div class="panel-heading">
+            <div class="panel-heading" style="position: fixed;z-index:1035">
                 <div class="panel-control" >
+                    <div  class="pull-left" >
+                        <a href="#" style="font-size: 12pt;"class="btn btn-lg"  popover-placement="bottom"
+                           popover-html-template="views/peer/popover/admin-chat.html">
+                            <i class="fa fa-gear"></i>
+                        </a>
+                    </div>
+                    <un-data-chat-send-file  class="pull-left" data-channel="{{channel}}"
+                                            data-user-map="clientFromChannelMap"></un-data-chat-send-file>
                     <un-stream-call-audio class="pull-left" data-channel="{{channel}}"
                                           data-user-map="clientFromChannelMap"></un-stream-call-audio>
                     <un-stream-call-video class="pull-left" data-channel="{{channel}}"
                                           data-user-map="clientFromChannelMap"></un-stream-call-video>
-                    <div class="pull-left btn-group" dropdown>
-                        <a href="#" class="dropdown-toggle btn btn-lg"  data-ng-click="showAdmin=!showAdmin">
-                            <i class="fa fa-gear"></i>
-                        </a>
-                    </div>
+
                     <div class="clearfix"></div>
                 </div>
-                <h3 class="panel-title">
+                <h3 class="panel-title" >
                     <un-contact-client-selected></un-contact-client-selected>
                     <un-contact-group-selected></un-contact-group-selected>
                 </h3>
 
             </div>
-            <div class="panel-body" data-ng-init="showDebug=false;">
-
-                <ul data-ng-show="showAdmin" class="list-unstyled">
-                    <li><un-contact-client-admin></un-contact-client-admin></li>
-                    <li><un-contact-group-admin></un-contact-group-admin></li>
-                </ul>
+            <div class="panel-body chat-content"  >
                 <un-data-chat-message-box data-channel="{{channel}}"
                                           data-user-map="clientFromChannelMap"></un-data-chat-message-box>
             </div>

@@ -105,11 +105,15 @@
 .navbar-nav-top > li > .dropdown-menu > li > a {
   padding: 10px 15px
 }
+@media (max-width: $screen-xs-max) {
+  .navbar-brand {
+    width: 100px
+  }
+}
 @media (min-width: 768px) {
   .navbar-container-top > .navbar-content {
     margin-left: 250px
   }
-
   .navbar-nav-top > li.toggle-button > a {
     color: #404040
   }
