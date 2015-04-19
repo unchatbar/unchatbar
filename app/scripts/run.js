@@ -31,7 +31,9 @@ angular.module('unchatbar').run(['$rootScope', '$window', '$state', 'Broker','ge
                 Broker.connectServer();
             }
         });
-        gettextCatalog.setCurrentLanguage('de');
+        var userLang = navigator.language || navigator.userLanguage;
+
+        gettextCatalog.setCurrentLanguage(userLang);
 
     }
 ]);

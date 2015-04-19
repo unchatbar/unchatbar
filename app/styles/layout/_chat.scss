@@ -12,7 +12,11 @@
 
 .panel-heading {
   padding: 0;
-  height: 60px
+  height: 60px;
+  position: fixed;
+  z-index: 1035;
+  right: 0px;
+  left: 251px;
 }
 
 .panel-control:before {
@@ -121,11 +125,16 @@
   overflow-y: scroll;
   position: fixed;
   top: 111px;
+  right: 0px;
+  left: 251px;
 
 }
-/*
+
 @media (max-width: $screen-xs-max) {
-  .chat-content {
-    top: 111px;
+  .panel-heading {
+    left:0px;
   }
-}*/
+  .chat-content {
+    left:0px;
+  }
+}

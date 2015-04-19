@@ -1,5 +1,5 @@
 <div class="content-container" style="width:100%" data-ng-init="showAdmin=false;"
-     data-ng-show="currentStateName === 'channel'">
+     >
     <!-- CONTENT -->
 
     <div class="page-content">
@@ -9,7 +9,7 @@
             <div class="panel-heading" style="position: fixed;z-index:1035;">
                 <div class="panel-control">
                     <div class="pull-left">
-                        <a href="#" style="font-size: 12pt;" class="btn btn-lg" popover-placement="bottom"
+                        <a href="#" class="btn btn-lg" popover-placement="bottom"
                            popover-html-template="views/peer/popover/admin-chat.html">
                             <i class="fa fa-gear"></i>
                         </a>
@@ -29,9 +29,9 @@
                     <un-contact-group-selected></un-contact-group-selected>
                 </div>
             </div>
-            <div style="z-index:1034;background-color:black;color:white;position:relative;height:auto;width:100%;" class="text-center">
-                <un-stream-waiting-for-your-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-your-answer>
-                <un-stream-waiting-for-client-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-client-answer>
+            <div style="z-index:1034;background-color:black;margin-top:55px;color:white;position:relative;height:auto;width:100%;" class="text-center">
+                <un-stream-waiting-for-your-answer style="color:white"data-user-map="clientFromChannelMap"></un-stream-waiting-for-your-answer>
+                <un-stream-waiting-for-client-answer style="color:white" data-user-map="clientFromChannelMap"></un-stream-waiting-for-client-answer>
 
             </div>
             <div class="panel-body chat-content">
