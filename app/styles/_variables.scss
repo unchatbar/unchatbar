@@ -1,0 +1,59 @@
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$fa-font-path: "../bower_components/components-font-awesome/fonts";
+
+$gray-base: #000;
+
+$brand-default: #fff;
+$brand-inverse: #444;
+$brand-primary: #3d85cc; // 210 70 80
+$brand-success: #86bf4d; // 90 60 75
+$brand-info: #39ace5; // 200 75 90
+$brand-warning: #ffa526; // 35 85 100
+$brand-danger: #e55639; // 10 75 90
+
+$body-bg: #e6eaf2; // 220 5 95
+$text-color: lighten($gray-base, 25%);
+$link-color: lighten($gray-base, 26.5%);
+$link-hover-color: lighten($gray-base, 20%);
+$link-hover-decoration: none;
+
+$hr-border: rgba(0, 0, 0, .15);
+
+$font-family-sans-serif: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-size-base: 12px;
+
+$btn-default-color: $brand-inverse;
+$btn-default-bg: $brand-default;
+$btn-default-border: darken($btn-default-bg, 5%);
+
+$btn-inverse-color: #fff;
+$btn-inverse-bg: $brand-inverse;
+$btn-inverse-border: darken($btn-inverse-bg, 5%);
+
+$btn-primary-color: #fff;
+$btn-primary-bg: $brand-primary;
+$btn-primary-border: darken($btn-primary-bg, 5%);
+
+$btn-success-color: #fff;
+$btn-success-bg: $brand-success;
+$btn-success-border: darken($btn-success-bg, 5%);
+
+$btn-info-color: #fff;
+$btn-info-bg: $brand-info;
+$btn-info-border: darken($btn-info-bg, 5%);
+
+$btn-warning-color: #fff;
+$btn-warning-bg: $brand-warning;
+$btn-warning-border: darken($btn-warning-bg, 5%);
+
+$btn-danger-color: #fff;
+$btn-danger-bg: $brand-danger;
+$btn-danger-border: darken($btn-danger-bg, 5%);
+
+$sidebar-bg-dark: #2e3033; // 220 10 20
+$sidebar-bg-light: #3d424d; // 220 20 30
+$sidebar-text-color: #fff;
+$sidebar-link-color: #aaadb3; // 220 5 70
+
+$speech-left-bg: #dae2f2; // 220 10 95
+$speech-right-bg: #daeaf2; // 200 10 95

@@ -1,52 +1,63 @@
-/* VENDOR - Default fall-backs and external files.
+/* Fonts
 ========================================================================== */
-@import url("../../bower_components/ng-emoticons/dist/ng-emoticons.min.css");
-@import "bootstrap-sass-official/assets/stylesheets/_bootstrap";
-@import "components-font-awesome/scss/font-awesome";
+@import url("http://fonts.googleapis.com/css?family=Roboto");
 
-/* Variable
+/* Variables
 ========================================================================== */
-@import "_variables";
+@import "variables";
+
+/* Vendors
+========================================================================== */
+// bower:scss
+@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+@import "components-font-awesome/scss/font-awesome.scss";
+@import "unchatbar-connection/app/styles/main.scss";
+@import "unchatbar-user/app/styles/_layout.scss";
+@import "unchatbar-user/app/styles/_variables.scss";
+@import "unchatbar-user/app/styles/components/_profile-admin.scss";
+@import "unchatbar-user/app/styles/components/_profile.scss";
+@import "unchatbar-user/app/styles/main.scss";
+// endbower
 
 /* Layout
 ========================================================================== */
-@import "_layout";
-@import "layout/_chat";
-@import "layout/_custom";
-@import "layout/_dashboard";
-@import "layout/_footer";
-@import "layout/_header";
-@import "layout/_sidebar";
-
-
+@import "layout";
 
 /* Components
 ========================================================================== */
-  //connection
-  @import "unchatbar-connection/app/styles/components/_dialer";
-  @import "unchatbar-connection/app/styles/components/_login";
-  //user
-  @import "unchatbar-user/app/styles/components/_profile";
-  @import "unchatbar-user/app/styles/components/_profile-admin";
-  //contact
-  @import "unchatbar-contact/app/styles/components/client/_list";
-  @import "unchatbar-contact/app/styles/components/client/_selected";
-  @import "unchatbar-contact/app/styles/components/client/_count";
-  @import "unchatbar-contact/app/styles/components/client/_admin";
-  @import "unchatbar-contact/app/styles/components/group/_list";
-  @import "unchatbar-contact/app/styles/components/group/_selected";
-  @import "unchatbar-contact/app/styles/components/group/_add";
-  @import "unchatbar-contact/app/styles/components/group/_count";
-  @import "unchatbar-contact/app/styles/components/group/_admin";
-  //Data Chat
-  @import "unchatbar-data-chat/app/styles/components/_message-box";
-  @import "unchatbar-data-chat/app/styles/components/_message-unread";
-  @import "unchatbar-data-chat/app/styles/components/_send-box";
-  @import "unchatbar-data-chat/app/styles/components/_send-file";
-  @import "unchatbar-data-chat/app/styles/components/_count-unread-message";
-  //Stream
-  @import "unchatbar-stream/app/styles/components/_open";
-  @import "unchatbar-stream/app/styles/components/_call";
-  @import "unchatbar-stream/app/styles/components/_own";
-  @import "unchatbar-stream/app/styles/components/_waiting-for-client-answer";
-  @import "unchatbar-stream/app/styles/components/_waiting-for-your-answer";
+@import "components/chat";
+@import "components/custom";
+@import "components/dashboard";
+@import "components/footer";
+@import "components/header";
+@import "components/login";
+@import "components/sidebar";
+
+// user
+@import "unchatbar-user/app/styles/components/profile";
+@import "unchatbar-user/app/styles/components/profile-admin";
+
+// contact
+@import "unchatbar-contact/app/styles/components/client/list";
+@import "unchatbar-contact/app/styles/components/client/selected";
+@import "unchatbar-contact/app/styles/components/client/count";
+@import "unchatbar-contact/app/styles/components/client/admin";
+@import "unchatbar-contact/app/styles/components/group/list";
+@import "unchatbar-contact/app/styles/components/group/selected";
+@import "unchatbar-contact/app/styles/components/group/add";
+@import "unchatbar-contact/app/styles/components/group/count";
+@import "unchatbar-contact/app/styles/components/group/admin";
+
+// sata chat
+@import "unchatbar-data-chat/app/styles/components/message-box";
+@import "unchatbar-data-chat/app/styles/components/message-unread";
+@import "unchatbar-data-chat/app/styles/components/send-box";
+@import "unchatbar-data-chat/app/styles/components/send-file";
+@import "unchatbar-data-chat/app/styles/components/count-unread-message";
+
+// stream
+@import "unchatbar-stream/app/styles/components/open";
+@import "unchatbar-stream/app/styles/components/call";
+@import "unchatbar-stream/app/styles/components/own";
+@import "unchatbar-stream/app/styles/components/waiting-for-client-answer";
+@import "unchatbar-stream/app/styles/components/waiting-for-your-answer";

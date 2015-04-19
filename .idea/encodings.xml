@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$/../unchatbar-connection/.gitignore" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-connection/Gruntfile.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-connection/app/index.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-connection/app/styles/main.scss" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-connection/bower.json" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-user/.gitignore" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-user/Gruntfile.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-user/app/index.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-user/app/styles/main.scss" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../unchatbar-user/bower.json" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Gruntfile.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/index.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/styles/_variables.scss" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/styles/main.scss" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
