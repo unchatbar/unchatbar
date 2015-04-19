@@ -2,39 +2,47 @@
      data-ng-show="currentStateName === 'channel'">
     <!-- CONTENT -->
 
-    <div class="page-content" >
-        <un-stream-waiting-for-your-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-your-answer>
-        <un-stream-waiting-for-client-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-client-answer>
-        <un-stream-own></un-stream-own>
-        <un-stream-open data-channel="{{channel}}"
-                        data-user-map="clientFromChannelMap"></un-stream-open>
+    <div class="page-content">
 
         <div class="panel panel-default">
 
-            <div class="panel-heading" style="position: fixed;z-index:1035">
-                <div class="panel-control" >
-                    <div  class="pull-left" >
-                        <a href="#" style="font-size: 12pt;"class="btn btn-lg"  popover-placement="bottom"
+            <div class="panel-heading" style="position: fixed;z-index:1035;overflow: hidden">
+                <div class="panel-control">
+                    <div class="pull-left">
+                        <a href="#" style="font-size: 12pt;" class="btn btn-lg" popover-placement="bottom"
                            popover-html-template="views/peer/popover/admin-chat.html">
                             <i class="fa fa-gear"></i>
                         </a>
                     </div>
-                    <un-data-chat-send-file  class="pull-left" data-channel="{{channel}}"
+                    <un-data-chat-send-file class="pull-left" data-channel="{{channel}}"
                                             data-user-map="clientFromChannelMap"></un-data-chat-send-file>
-                    <un-stream-call-audio class="pull-left" data-channel="{{channel}}"
-                                          data-user-map="clientFromChannelMap"></un-stream-call-audio>
-                    <un-stream-call-video class="pull-left" data-channel="{{channel}}"
+                    <un-stream-call-video class="pull-right" style="padding-top:5px;" data-channel="{{channel}}"
                                           data-user-map="clientFromChannelMap"></un-stream-call-video>
+
+                    <un-stream-call-audio class="pull-right" style="padding-top:5px;" data-channel="{{channel}}"
+                                          data-user-map="clientFromChannelMap"></un-stream-call-audio>
 
                     <div class="clearfix"></div>
                 </div>
-                <h3 class="panel-title" >
+                <div class="panel-title" style="overflow: hidden">
                     <un-contact-client-selected></un-contact-client-selected>
                     <un-contact-group-selected></un-contact-group-selected>
-                </h3>
+                </div>
 
             </div>
-            <div class="panel-body chat-content"  >
+            <div style="z-index:1040;background-color:black;color:white;position:relative;height:auto;width:100%;" class="text-center">
+                <un-stream-waiting-for-your-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-your-answer>
+                <un-stream-waiting-for-client-answer data-user-map="clientFromChannelMap"></un-stream-waiting-for-client-answer>
+
+            </div>
+            <div class="panel-body chat-content">
+                <div class="pull-left">
+                    <un-stream-own></un-stream-own>
+                </div>
+                <div class="pull-right">
+                    <un-stream-open data-channel="{{channel}}"
+                                    data-user-map="clientFromChannelMap"></un-stream-open>
+                </div>
                 <un-data-chat-message-box data-channel="{{channel}}"
                                           data-user-map="clientFromChannelMap"></un-data-chat-message-box>
             </div>
