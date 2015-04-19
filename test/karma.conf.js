@@ -45,7 +45,6 @@ module.exports = function (config) {
             'bower_components/blockies/blockies.js',
             'bower_components/unchatbar-user/app/scripts/app.js',
             'bower_components/unchatbar-user/app/scripts/run.js',
-            'bower_components/unchatbar-user/app/scripts/template.js',
             'bower_components/unchatbar-user/app/scripts/translations.js',
             'bower_components/unchatbar-user/app/scripts/provider/profile.js',
             'bower_components/unchatbar-user/app/scripts/controller/profile.js',
