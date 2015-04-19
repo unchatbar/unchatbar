@@ -1,6 +1,8 @@
 # Unchatbar
 [![Build Status](https://travis-ci.org/unchatbar/unchatbar.svg?branch=master)](https://travis-ci.org/unchatbar/unchatbar)
 
+for infos visit unchatbar.github.io/unchatbar
+
 Peer to peer chat application using WebRTC technologies
 
 ## Requirements
