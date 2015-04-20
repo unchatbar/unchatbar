@@ -11,8 +11,8 @@
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/angular-notify/dist/angular-notify.css" />
   <link rel="stylesheet" href="bower_components/ng-img-crop/compile/minified/ng-img-crop.css" />
-  <link rel="stylesheet" href="bower_components/ng-emoticons/src/ng-emoticons.css" />
   <link rel="stylesheet" href="bower_components/highlightjs/styles/default.css" />
+  <link rel="stylesheet" href="bower_components/ng-emoticons/src/ng-emoticons.css" />
   <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.css" />
   <!-- endbower -->
   <!-- endbuild -->
@@ -39,13 +39,12 @@
 <!-- build:js(.) scripts/vendor.js -->
 <!-- bower:js -->
 <script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-notify/dist/angular-notify.js"></script>
-<script src="bower_components/lodash/dist/lodash.compat.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-notify/dist/angular-notify.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-<script src="bower_components/ngstorage/ngStorage.js"></script>
-<script src="bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+<script src="bower_components/lodash/dist/lodash.compat.js"></script>
 <script src="bower_components/peerjs/peer.js"></script>
+<script src="bower_components/ngstorage/ngStorage.js"></script>
 <script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
 <script src="bower_components/dexie/dist/latest/Dexie.min.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/app.js"></script>
@@ -59,6 +58,8 @@
 <script src="bower_components/unchatbar-connection/app/scripts/directive/login.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/controller/dialer.js"></script>
 <script src="bower_components/unchatbar-connection/app/scripts/controller/model-password.js"></script>
+<script src="bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js"></script>
+<script src="bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>
 <script src="bower_components/blockies/blockies.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/app.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/run.js"></script>
@@ -68,10 +69,8 @@
 <script src="bower_components/unchatbar-user/app/scripts/directive/fileModel.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/directive/profile-admin.js"></script>
 <script src="bower_components/unchatbar-user/app/scripts/directive/profile.js"></script>
-<script src="bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js"></script>
 <script src="bower_components/unchatbar-contact/app/scripts/app.js"></script>
 <script src="bower_components/unchatbar-contact/app/scripts/run.js"></script>
-<script src="bower_components/unchatbar-contact/app/scripts/template.js"></script>
 <script src="bower_components/unchatbar-contact/app/scripts/translations.js"></script>
 <script src="bower_components/unchatbar-contact/app/scripts/provider/phone-book.js"></script>
 <script src="bower_components/unchatbar-contact/app/scripts/directive/client/admin.js"></script>
@@ -85,15 +84,13 @@
 <script src="bower_components/unchatbar-contact/app/scripts/directive/group/selected.js"></script>
 <script src="bower_components/unchatbar-contact/app/scripts/controller/client.js"></script>
 <script src="bower_components/unchatbar-contact/app/scripts/controller/group.js"></script>
+<script src="bower_components/angular-elastic/elastic.js"></script>
 <script src="bower_components/angular-scroll-glue/src/scrollglue.js"></script>
+<script src="bower_components/highlightjs/highlight.pack.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 <script src="bower_components/ng-emoticons/src/ng-emoticons.js"></script>
-<script src="bower_components/highlightjs/highlight.pack.js"></script>
-<script src="bower_components/angular-elastic/elastic.js"></script>
 <script src="bower_components/unchatbar-data-chat/app/scripts/app.js"></script>
-<script src="bower_components/unchatbar-data-chat/app/scripts/constants.js"></script>
 <script src="bower_components/unchatbar-data-chat/app/scripts/run.js"></script>
-<script src="bower_components/unchatbar-data-chat/app/scripts/template.js"></script>
 <script src="bower_components/unchatbar-data-chat/app/scripts/translations.js"></script>
 <script src="bower_components/unchatbar-data-chat/app/scripts/service/message.js"></script>
 <script src="bower_components/unchatbar-data-chat/app/scripts/directive/count-unread.js"></script>
@@ -105,9 +102,12 @@
 <script src="bower_components/unchatbar-data-chat/app/scripts/directive/send-file.js"></script>
 <script src="bower_components/unchatbar-data-chat/app/scripts/directive/unread-message.js"></script>
 <script src="bower_components/unchatbar-data-chat/app/scripts/controller/text.js"></script>
+<script src="bower_components/unchatbar-notification/app/scripts/app.js"></script>
+<script src="bower_components/unchatbar-notification/app/scripts/run.js"></script>
+<script src="bower_components/unchatbar-notification/app/scripts/template.js"></script>
+<script src="bower_components/unchatbar-notification/app/scripts/service/notify.js"></script>
 <script src="bower_components/unchatbar-stream/app/scripts/app.js"></script>
 <script src="bower_components/unchatbar-stream/app/scripts/run.js"></script>
-<script src="bower_components/unchatbar-stream/app/scripts/template.js"></script>
 <script src="bower_components/unchatbar-stream/app/scripts/translations.js"></script>
 <script src="bower_components/unchatbar-stream/app/scripts/service/Connection.js"></script>
 <script src="bower_components/unchatbar-stream/app/scripts/directive/call-audio.js"></script>
@@ -117,10 +117,6 @@
 <script src="bower_components/unchatbar-stream/app/scripts/directive/waiting-for-client-answer.js"></script>
 <script src="bower_components/unchatbar-stream/app/scripts/directive/waiting-for-your-answer.js"></script>
 <script src="bower_components/unchatbar-stream/app/scripts/controller/connection.js"></script>
-<script src="bower_components/unchatbar-notification/app/scripts/app.js"></script>
-<script src="bower_components/unchatbar-notification/app/scripts/run.js"></script>
-<script src="bower_components/unchatbar-notification/app/scripts/template.js"></script>
-<script src="bower_components/unchatbar-notification/app/scripts/service/notify.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 

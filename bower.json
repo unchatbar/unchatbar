@@ -2,29 +2,29 @@
   "name": "unchatbar",
   "version": "0.0.2",
   "dependencies": {
-    "angular": "^1.3.0",
-    "json3": "^3.3.0",
-    "es5-shim": "^4.0.0",
+    "angular": "^1.3.15",
+    "angular-bootstrap": "^0.12.0",
     "angular-notify": "^2.0.2",
+    "angular-ui-router": "^0.2.13",
     "bootstrap-sass-official": "^3.2.0",
     "components-font-awesome": "^4.3.0",
+    "es5-shim": "^4.0.0",
+    "json3": "^3.3.0",
     "lodash": "^2.4.1",
-    "angular-bootstrap": "^0.12.0",
-    "angular-ui-router": "^0.2.13",
-    "unchatbar-user": "https://github.com/unchatbar/unchatbar-user.git#0.1.x",
     "unchatbar-connection": "https://github.com/unchatbar/unchatbar-connection.git#0.1.x",
     "unchatbar-contact": "https://github.com/unchatbar/unchatbar-contact.git#0.1.x",
     "unchatbar-data-chat": "https://github.com/unchatbar/unchatbar-data-chat.git#0.1.x",
+    "unchatbar-notification": "https://github.com/unchatbar/unchatbar-notification.git#0.0.x",
     "unchatbar-stream": "https://github.com/unchatbar/unchatbar-stream.git#0.1.x",
-    "unchatbar-notification": "https://github.com/unchatbar/unchatbar-notification.git#0.0.x"
+    "unchatbar-user": "https://github.com/unchatbar/unchatbar-user.git#0.1.x"
   },
   "devDependencies": {
-    "angular-mocks": "^1.3.0",
-    "angular-scenario": "^1.3.0"
+    "angular-mocks": "^1.3.15",
+    "angular-scenario": "^1.3.15"
   },
   "appPath": "app",
   "resolutions": {
-    "angular": "^1.3.0",
+    "angular": "^1.3.15",
     "components-font-awesome": "^4.3.0"
   }
 }

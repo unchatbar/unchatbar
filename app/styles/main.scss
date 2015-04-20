@@ -13,9 +13,12 @@
 @import "components-font-awesome/scss/font-awesome.scss";
 @import "unchatbar-connection/app/styles/main.scss";
 @import "unchatbar-user/app/styles/main.scss";
+@import "unchatbar-contact/app/styles/main.scss";
+@import "unchatbar-data-chat/app/styles/main.scss";
+@import "unchatbar-stream/app/styles/main.scss";
 // endbower
 
-/* Layout
+/* Layouts
 ========================================================================== */
 @import "layout";
 
@@ -28,28 +31,3 @@
 @import "components/header";
 @import "components/login";
 @import "components/sidebar";
-
-// contact
-@import "unchatbar-contact/app/styles/components/client/list";
-@import "unchatbar-contact/app/styles/components/client/selected";
-@import "unchatbar-contact/app/styles/components/client/count";
-@import "unchatbar-contact/app/styles/components/client/admin";
-@import "unchatbar-contact/app/styles/components/group/list";
-@import "unchatbar-contact/app/styles/components/group/selected";
-@import "unchatbar-contact/app/styles/components/group/add";
-@import "unchatbar-contact/app/styles/components/group/count";
-@import "unchatbar-contact/app/styles/components/group/admin";
-
-// sata chat
-@import "unchatbar-data-chat/app/styles/components/message-box";
-@import "unchatbar-data-chat/app/styles/components/message-unread";
-@import "unchatbar-data-chat/app/styles/components/send-box";
-@import "unchatbar-data-chat/app/styles/components/send-file";
-@import "unchatbar-data-chat/app/styles/components/count-unread-message";
-
-// stream
-@import "unchatbar-stream/app/styles/components/open";
-@import "unchatbar-stream/app/styles/components/call";
-@import "unchatbar-stream/app/styles/components/own";
-@import "unchatbar-stream/app/styles/components/waiting-for-client-answer";
-@import "unchatbar-stream/app/styles/components/waiting-for-your-answer";
