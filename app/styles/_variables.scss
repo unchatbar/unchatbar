@@ -1,6 +1,5 @@
-$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
-$fa-font-path: "../bower_components/components-font-awesome/fonts";
-
+/* Colors
+========================================================================== */
 $gray-base: #000;
 
 $brand-default: #fff;
@@ -11,17 +10,27 @@ $brand-info: #39ace5; // 200 75 90
 $brand-warning: #ffa526; // 35 85 100
 $brand-danger: #e55639; // 10 75 90
 
+/* Scaffolding
+========================================================================== */
 $body-bg: #e6eaf2; // 220 5 95
 $text-color: lighten($gray-base, 25%);
+
 $link-color: lighten($gray-base, 26.5%);
 $link-hover-color: lighten($gray-base, 20%);
 $link-hover-decoration: none;
 
-$hr-border: rgba(0, 0, 0, .15);
-
+/* Typography
+========================================================================== */
 $font-family-sans-serif: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-size-base: 12px;
 
+/* Iconography
+========================================================================== */
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$fa-font-path: "../bower_components/components-font-awesome/fonts";
+
+/* Buttons
+========================================================================== */
 $btn-default-color: $brand-inverse;
 $btn-default-bg: $brand-default;
 $btn-default-border: darken($btn-default-bg, 5%);
@@ -50,10 +59,6 @@ $btn-danger-color: #fff;
 $btn-danger-bg: $brand-danger;
 $btn-danger-border: darken($btn-danger-bg, 5%);
 
-$sidebar-bg-dark: #2e3033; // 220 10 20
-$sidebar-bg-light: #3d424d; // 220 20 30
-$sidebar-text-color: #fff;
-$sidebar-link-color: #aaadb3; // 220 5 70
-
-$speech-left-bg: #dae2f2; // 220 10 95
-$speech-right-bg: #daeaf2; // 200 10 95
+/* Type
+========================================================================== */
+$hr-border: rgba(0, 0, 0, .15);

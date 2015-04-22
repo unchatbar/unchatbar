@@ -2,7 +2,6 @@
 .sass-cache/
 .tmp/
 app/scripts/constants.js
-app/scripts/template.js
 bower_components/
 dist/
 node_modules/

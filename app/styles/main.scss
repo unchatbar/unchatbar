@@ -6,28 +6,18 @@
 ========================================================================== */
 @import "variables";
 
-/* Vendors
+/* Vendor
 ========================================================================== */
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 @import "components-font-awesome/scss/font-awesome.scss";
-@import "unchatbar-connection/app/styles/main.scss";
-@import "unchatbar-user/app/styles/main.scss";
-@import "unchatbar-contact/app/styles/main.scss";
-@import "unchatbar-data-chat/app/styles/main.scss";
-@import "unchatbar-stream/app/styles/main.scss";
+@import "unchatbar-connection/app/styles/_components.scss";
+@import "unchatbar-user/app/styles/_components.scss";
+@import "unchatbar-contact/app/styles/_components.scss";
+@import "unchatbar-data-chat/app/styles/_components.scss";
+@import "unchatbar-stream/app/styles/_components.scss";
 // endbower
-
-/* Layouts
-========================================================================== */
-@import "layout";
 
 /* Components
 ========================================================================== */
-@import "components/chat";
-@import "components/custom";
-@import "components/dashboard";
-@import "components/footer";
-@import "components/header";
-@import "components/login";
-@import "components/sidebar";
+@import "components";

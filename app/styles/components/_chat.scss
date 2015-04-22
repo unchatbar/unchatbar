@@ -2,12 +2,12 @@
   position: relative;
   height: 100%;
   width: 100%;
-  overflow: hidden
+  overflow: hidden;
 }
 
 .content .page-header {
   margin: 30px 0 20px;
-  border-bottom-color: #ccc
+  border-bottom-color: #ccc;
 }
 
 .panel-heading {
@@ -15,7 +15,7 @@
   height: 60px;
   position: fixed;
   z-index: 1035;
-  right: 0px;
+  right: 0;
   left: 251px;
 }
 
@@ -32,7 +32,7 @@
   position: relative;
   float: right;
   padding: 0 15px;
-  height: 100%
+  height: 100%;
 }
 
 .panel-control .btn.active,
@@ -46,15 +46,15 @@
 
 .panel-title {
   padding: 0 15px;
-  line-height: 60px
+  line-height: 60px;
 }
 
 .page-content .media-left {
-  float: left
+  float: left;
 }
 
 .page-content .media-right {
-  float: right
+  float: right;
 }
 
 .speech {
@@ -63,7 +63,7 @@
   color: #444;
   display: inline-block;
   border-radius: 2px;
-  padding: 12px 20px
+  padding: 12px 20px;
 }
 
 .speech .media-heading {
@@ -73,18 +73,18 @@
   border-bottom: 1px solid rgba(0, 0, 0, .1);
   margin-bottom: 10px;
   padding-bottom: 5px;
-  font-weight: 300
+  font-weight: 300;
 }
 
 .speech .media-heading:hover {
-  // text-decoration: underline
+  // text-decoration: underline;
 }
 
 .speech-time {
   margin-top: 20px;
   margin-bottom: 0;
   font-size: .8em;
-  font-weight: 300
+  font-weight: 300;
 }
 
 .speech-right {
@@ -93,7 +93,7 @@
 
 .speech-right > .speech {
   background: #c6daf7;
-  text-align: right
+  text-align: right;
 }
 
 .speech:before {
@@ -107,7 +107,7 @@
   border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
   border-right: 7px solid #dae4f2;
-  margin: 15px 0 0 -6px
+  margin: 15px 0 0 -6px;
 }
 
 .speech-right > .speech:before {
@@ -117,7 +117,7 @@
   border-bottom: 7px solid transparent;
   border-left: 7px solid #c6daf7;
   border-right: 0;
-  margin: 15px -6px 0 0
+  margin: 15px -6px 0 0;
 }
 
 .chat-content {
@@ -125,16 +125,16 @@
   overflow-y: scroll;
   position: fixed;
   top: 111px;
-  right: 0px;
+  right: 0;
   left: 251px;
-
 }
 
 @media (max-width: $screen-xs-max) {
   .panel-heading {
-    left:0px;
+    left: 0;
   }
+
   .chat-content {
-    left:0px;
+    left: 0;
   }
 }

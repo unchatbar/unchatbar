@@ -450,9 +450,12 @@ module.exports = function (grunt) {
 
     // Run some tasks in parallel to speed up the build process
     concurrent: {
-      server: [
-        'compass:server'
-      ],
+      server: {
+        tasks: ['compass:server'],
+        options: {
+          logConcurrentOutput: true
+        }
+      },
       test: [
         'compass'
       ],

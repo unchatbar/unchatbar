@@ -7,33 +7,31 @@
  *
  * Main module of the application.
  */
-angular.module('unchatbar').run(['$rootScope', '$window', '$state', 'Broker','gettextCatalog',
-    function ($rootScope, $window, $state, Broker,gettextCatalog) {
-        $rootScope.$on('$stateChangeStart', function (e, toState) {
-            if (Broker.getPeerIdFromStorage() && toState.name === 'login') {
-                e.preventDefault();
-                $state.go('index');
-            }else if (!Broker.getPeerIdFromStorage() && toState.name !== 'login') {
-                e.preventDefault();
-                $state.go('login');
-            }
-        });
-        $rootScope.$on('BrokerPeerOpen', function () {
-            if ($state.current.name === 'login') {
-                $state.go('contact');
-            }
-        });
-        if (Broker.getPeerIdFromStorage()) {
-            Broker.connectServer();
+angular.module('unchatbar')
+  .run(['$rootScope', '$window', '$state', 'Broker', 'gettextCatalog',
+    function ($rootScope, $window, $state, Broker, gettextCatalog) {
+      $rootScope.$on('$stateChangeStart', function (e, toState) {
+        if (Broker.getPeerIdFromStorage() && toState.name === 'login') {
+          e.preventDefault();
+          $state.go('index');
+        } else if (!Broker.getPeerIdFromStorage() && toState.name !== 'login') {
+          e.preventDefault();
+          $state.go('login');
         }
-        $window.addEventListener('online', function () {
-            if (Broker.getPeerIdFromStorage()) {
-                Broker.connectServer();
-            }
-        });
-        var userLang = navigator.language || navigator.userLanguage;
-
-        gettextCatalog.setCurrentLanguage(userLang);
-
+      });
+      $rootScope.$on('BrokerPeerOpen', function () {
+        if ($state.current.name === 'login') {
+          $state.go('contact');
+        }
+      });
+      if (Broker.getPeerIdFromStorage()) {
+        Broker.connectServer();
+      }
+      $window.addEventListener('online', function () {
+        if (Broker.getPeerIdFromStorage()) {
+          Broker.connectServer();
+        }
+      });
+      gettextCatalog.setCurrentLanguage(navigator.language || navigator.userLanguage);
     }
-]);
+  ]);

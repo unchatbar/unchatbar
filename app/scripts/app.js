@@ -21,6 +21,4 @@ angular.module('unchatbar', [
     'unchatbar-stream',
     'unchatbar-notification',
     'gettext'
-
-
 ]);
