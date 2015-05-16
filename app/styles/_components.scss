@@ -2,10 +2,22 @@
 ========================================================================== */
 @import "components/variables";
 
+/* Customized components
+========================================================================== */
+@import "components/scaffolding";
+@import "components/grid";
+@import "components/forms";
+@import "components/buttons";
+
+@import "components/badges";
+@import "components/images";
+@import "components/texts";
+
+@import "components/custom";
+
 /* Components
 ========================================================================== */
 @import "components/chat";
-@import "components/custom";
 @import "components/dashboard";
 @import "components/footer";
 @import "components/header";

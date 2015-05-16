@@ -1,0 +1,38 @@
+.badge-default {
+  background-color: $brand-default;
+  color: $brand-inverse;
+}
+
+.badge-inverse {
+  background-color: $brand-inverse;
+}
+
+.badge-primary {
+  background-color: $brand-primary;
+}
+
+.badge-success {
+  background-color: $brand-success;
+}
+
+.badge-info {
+  background-color: $brand-info;
+}
+
+.badge-warning {
+  background-color: $brand-warning
+}
+
+.badge-danger {
+  background-color: $brand-danger;
+}
+
+.badge:empty.badge-icon {
+  display: inline-block;
+  width: .7em;
+  height: .7em;
+  padding: 0;
+  min-width: 5px;
+  margin: .3em .9em .3em .3em;
+  border-radius: 50%;
+}

@@ -1,0 +1,74 @@
+.btn-inverse {
+  @include button-variant($btn-inverse-color, $btn-inverse-bg, $btn-inverse-border);
+}
+
+.btn-labeled {
+  overflow: hidden;
+  font-weight: 300;
+
+  &:before {
+    background-color: rgba(0, 0, 0, .05);
+    display: inline-block;
+  }
+
+  &.fa:before {
+    font-family: FontAwesome;
+  }
+
+  &.btn-block:not(.form-icon):before {
+    float: left;
+  }
+
+  &:not(.btn-block):not(.form-icon) {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+
+  &.btn-lg {
+    font-size: 18px;
+    line-height: 1.33;
+
+    &:before {
+      margin-left: -16px;
+      margin-right: 10px;
+      padding: 10px 16px;
+    }
+
+    &.btn-block:not(.form-icon):before {
+      margin-top: -10px;
+      margin-bottom: -10px;
+    }
+  }
+
+  &.btn-sm {
+    font-size: 12px;
+    line-height: 1.5;
+
+    &:before {
+      margin-left: -10px;
+      margin-right: 5px;
+      padding: 5px 10px;
+    }
+
+    &.btn-block:not(.form-icon):before {
+      margin-top: -5px;
+      margin-bottom: -5px;
+    }
+  }
+
+  &.btn-xs {
+    font-size: 10px;
+    line-height: 1.66;
+
+    &:before {
+      margin-left: -5px;
+      margin-right: 1px;
+      padding: 1px 5px;
+    }
+
+    &.btn-block:not(.form-icon):before {
+      margin-top: -1px;
+      margin-bottom: -1px;
+    }
+  }
+}
