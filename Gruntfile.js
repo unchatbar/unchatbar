@@ -300,15 +300,15 @@ module.exports = function (grunt) {
         // By default, your `index.html`'s <!-- Usemin block --> will take care of
         // minification. These next options are pre-configured if you do not wish
         // to use the Usemin blocks.
-        // cssmin: {
-        //   dist: {
-        //     files: {
-        //       '<%= yeoman.dist %>/styles/main.css': [
-        //         '.tmp/styles/{,*/}*.css'
-        //       ]
-        //     }
-        //   }
-        // },
+         cssmin: {
+             dist: {
+             files: {
+               '<%= yeoman.dist %>/styles/main.css': [
+                 '<%= yeoman.app %>/styles/*.css'
+               ]
+             }
+           }
+         },
         // uglify: {
         //   dist: {
         //     files: {
@@ -448,7 +448,7 @@ module.exports = function (grunt) {
                 'compass'
             ],
             dist: [
-                'compass:dist',
+                //'compass:dist',
                 'imagemin',
                 'svgmin'
             ],
@@ -574,13 +574,13 @@ module.exports = function (grunt) {
         'ngconstant:dist',
         'wiredep',
         'useminPrepare',
+        'copy:dist',
         'concurrent:dist',
         'autoprefixer',
         'concat',
         'ngAnnotate',
-        'copy:dist',
         'cdnify',
-        'cssmin',
+        'cssmin:dist',
         'uglify',
         'filerev',
         'usemin',
