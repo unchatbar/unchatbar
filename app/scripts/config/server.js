@@ -11,17 +11,7 @@ angular.module('unchatbar')
             }
             BrokerProvider.setHost('unchatbar-server.herokuapp.com');
 
-            BrokerProvider.setSecureConnection(true);
-            window.turnserversDotComAPI.iceServers(function(iceServers) {
-                _.forEach(iceServers,function(server){
-                    var username;
-                    if (username = server.url.match(/turn:(.*)@/)){
-                        server.username= username[1];
-                        server.url = server.url.replace(server.username + '@','');
-                    }
-                    BrokerProvider.addIceServer(server);
-                });
-            });
+            BrokerProvider.setSecureConnection(true);          
             BrokerProvider.addIceServer({
                 url:"turn:192.155.86.24:3478",
                 username:"easyRTC",
@@ -32,7 +22,7 @@ angular.module('unchatbar')
                 "credential": "muazkh",
                 "username": "webrtc@live.com"
             });
-            
+
               BrokerProvider.addIceServer({
                "username":"e7db750a-2fcc-40c6-8415-cab22743a68a",
                 "url":"turn:turn1.xirsys.com:443?transport=udp",
